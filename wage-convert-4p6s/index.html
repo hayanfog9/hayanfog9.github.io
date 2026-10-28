@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>시급·월급·연봉 환산기 - JW의 AI 작업실</title>
+<meta name="description" content="시급, 월급, 연봉 중 하나만 넣으면 나머지를 세전 기준으로 환산해 주는 무료 계산기예요. 월 환산 시간은 직접 확인해서 넣을 수 있어요. 입력한 내용은 저장하거나 전송하지 않아요.">
+<link rel="canonical" href="https://hayanfog9.github.io/wage-convert-4p6s/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR"><meta property="og:title" content="시급·월급·연봉 환산기"><meta property="og:description" content="시급, 월급, 연봉 중 하나만 넣으면 나머지를 세전 기준으로 환산해 주는 무료 계산기예요. 월 환산 시간은 직접 확인해서 넣을 수 있어요. 입력한 내용은 저장하거나 전송하지 않아요."><meta property="og:url" content="https://hayanfog9.github.io/wage-convert-4p6s/"><meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1220;--bg2:#111c33;--card:#15213d;--line:#27385f;--text:#eef3ff;--sub:#aab7d4;--acc:#22d3ee;--gold:#ffd98a;--red:#ff8a8a;--in:#0c1730}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,var(--bg),#0f1830 60%,var(--bg2));color:var(--text);font:16px/1.65 "Noto Sans KR","Malgun Gothic",sans-serif;min-height:100vh}
+a{color:var(--acc)}.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header{padding:34px 0 10px}
+h1{font:700 clamp(26px,5vw,38px)/1.25 "Gowun Batang",serif;margin:0 0 8px}h1 span{color:var(--acc)}
+.lead{color:var(--sub);margin:0;max-width:680px}
+.pill{display:inline-block;margin:12px 8px 0 0;font-size:13.5px;color:var(--gold);border:1px solid rgba(255,217,138,.5);border-radius:999px;padding:3px 12px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:18px 0}
+h2{font:700 20px "Gowun Batang",serif;margin:0 0 4px}.hint{color:var(--sub);font-size:13.5px;margin:0 0 10px}
+label.f{display:block;margin:12px 0 4px;font-weight:700;font-size:14.5px}
+input,select,textarea{background:var(--in);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;font-size:15px;min-width:0}
+input[type=text],input[type=number],input[type=time],select{width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:0}
+input[type=checkbox]{accent-color:var(--acc);width:18px;height:18px}
+.row{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:6px 6px;text-align:left;border-bottom:1px solid var(--line);font-size:14.5px;vertical-align:middle}
+th{color:var(--sub);font-weight:500;font-size:13px;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+button{font:inherit;font-weight:700;font-size:14.5px;border-radius:999px;padding:8px 16px;border:1px solid var(--acc);background:transparent;color:var(--acc);cursor:pointer}
+button.fill{background:var(--acc);color:#07202a}button:hover{filter:brightness(1.15)}
+button.sm{padding:3px 10px;font-size:13px;border-color:var(--line);color:var(--sub);white-space:nowrap}
+.res{background:var(--in);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px}
+.big{font:700 28px "Gowun Batang",serif;color:var(--acc);font-variant-numeric:tabular-nums}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px dashed var(--line);font-variant-numeric:tabular-nums}.kv:last-child{border:0}
+.kv span:first-child{color:var(--sub)}
+.warn{display:none;margin:10px 0 0;background:rgba(255,138,138,.12);border:1px solid var(--red);color:var(--red);border-radius:10px;padding:8px 12px;font-size:14px}
+.ex{background:rgba(255,217,138,.1);border:1px dashed rgba(255,217,138,.6);color:var(--gold);border-radius:10px;padding:8px 12px;font-size:14px;margin:0 0 10px}
+.about{margin:0 0 30px;color:var(--sub);font-size:14.5px}.about b{color:var(--text)}.about ul{margin:8px 0 0;padding-left:20px}
+footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:var(--sub);font-size:13px;text-align:center}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#07202a;font-weight:700;border-radius:999px;padding:8px 18px;opacity:0;transition:opacity .2s;pointer-events:none}
+@media(max-width:560px){.wrap{padding:0 16px}}
+@media print{body{background:#fff;color:#000}.noprint{display:none!important}.panel{border:0;background:#fff;padding:0}.res,input,select{background:#fff;color:#000;border-color:#999}.big{color:#000}th,td{border-color:#999}}
+</style></head><body><div class="wrap">
+<header><h1>시급·월급·연봉 <span>환산기</span></h1><p class="lead">하나만 넣으면 나머지 둘을 세전 금액으로 바꿔 줘요. 월 환산 시간은 아래에서 보고 고칠 수 있어요.</p>
+<span class="pill">입력한 내용은 이 브라우저에서만 처리하고 저장하거나 전송하지 않아요</span><span class="pill">세전 단순 환산 · 참고용, 법적 효력 없음</span></header>
+<main>
+<section class="panel" aria-label="입력"><h2>1. 넣을 값</h2>
+<p class="ex" id="exnote">시급 12,000원은 가상 예시예요. 주 근로시간과 주휴 시간은 기본값 없이 직접 입력해야 계산돼요.</p>
+<div class="row"><div><label class="f" for="mode">내가 아는 값</label><select id="mode"><option value="h">시급</option><option value="m">월급</option><option value="y">연봉</option></select></div>
+<div><label class="f" for="val">금액(원, 세전)</label><input type="number" id="val" min="0" step="100" value="12000"></div></div>
+<h2 style="margin-top:18px">2. 월 환산 시간</h2><p class="hint">시급과 월급을 바꿀 때 쓰는 한 달 시간이에요. 기본값은 없어요. 내 근로계약 기준으로 직접 입력하거나, 입력한 주 시간으로 계산해요.</p>
+<div class="row"><div><label class="f" for="wk">주 근로시간</label><input type="number" id="wk" min="0" step="0.5" placeholder="직접 입력"></div>
+<div><label class="f" for="ho">주 유급휴일(주휴) 시간</label><input type="number" id="ho" min="0" step="0.5" placeholder="직접 입력 (없으면 0)"></div>
+<div><label class="f" for="mh">월 환산 시간 직접 입력 (비우면 자동 계산)</label><input type="number" id="mh" min="0" step="0.01" placeholder="예: 209"></div></div>
+<p class="hint" style="margin-top:8px">자동 계산 = (주 근로시간 + 주휴 시간) × 365 ÷ 7 ÷ 12 (입력한 시간 기준의 단순 산수예요). 주휴 시간을 0으로 두면 근로시간만으로 계산해요. 어떤 시간이 맞는지는 공식 안내나 내 근로계약으로 직접 확인하세요.</p>
+<div class="btns noprint"><button type="button" id="ex">예시 넣기 (40시간 + 8시간, 가상 값)</button></div></section>
+<section class="panel" aria-label="결과"><h2>3. 환산 결과 (세전)</h2><div class="warn" id="warn" role="alert"></div><div class="res" id="res"></div>
+<div class="btns noprint"><button type="button" class="fill" id="copy">결과 복사</button></div></section></main>
+<div class="about"><b>이 도구에 대해</b><ul><li>세금과 4대보험을 뺀 실수령액이 아니라 세전 금액끼리의 환산이에요. 실수령액은 월급 실수령액 계산기에서 볼 수 있어요.</li>
+<li>월급 = 시급 × 월 환산 시간, 연봉 = 월급 × 12예요. 상여금이나 수당이 따로 있으면 이 환산에 들어 있지 않아요.</li>
+<li>법에서 정한 최저임금이나 주휴수당 대상인지는 판단하지 않아요. 공식 기준은 고용노동부 등에서 직접 확인하세요. 이 도구는 참고용이고 법적 효력이 없어요.</li>
+<li>시급 12,000원은 지어낸 가상 예시예요. 주 근로시간과 주휴 시간은 기본값을 두지 않았어요. 월 환산 시간의 공식 기준은 직접 확인하세요.</li></ul></div>
+<footer>© JW의 AI 작업실 · <a href="https://hayanfog9.github.io/">다른 도구 보기</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요</footer>
+</div><div id="toast" role="status"></div>
+<script>
+function $(i){return document.getElementById(i)}
+function n(v){v=parseFloat(String(v).replace(/,/g,''));return isFinite(v)?v:0}
+function won(v){return Math.round(v).toLocaleString('ko-KR')+'원'}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;setTimeout(function(){e.style.opacity=0},1600)}
+function copyText(t){
+  function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('복사했어요')}catch(e){toast('복사하지 못했어요. 직접 선택해서 복사하세요')}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},fb)}else fb()}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+
+function monthHours(wk,ho,override){if(override>0)return override;return (wk+ho)*365/7/12}
+function convert(mode,val,mhours){var h,m,y;if(mode==='h'){h=val;m=h*mhours;y=m*12}else if(mode==='m'){m=val;h=mhours>0?m/mhours:0;y=m*12}else{y=val;m=y/12;h=mhours>0?m/mhours:0}return {h:h,m:m,y:y}}
+function update(){var mh=monthHours(n($('wk').value),n($('ho').value),n($('mh').value));var w=$('warn');
+ if(!(mh>0)){w.style.display='block';w.textContent='월 환산 시간을 직접 넣거나, 주 근로시간(과 주휴 시간)을 입력해 주세요. 기본값은 없어요.';$('res').innerHTML='';return}w.style.display='none';
+ var r=convert($('mode').value,n($('val').value),mh);
+ $('res').innerHTML='<div class="big">'+won(r.h)+' / 시간</div><div class="kv"><span>시급</span><span>'+won(r.h)+'</span></div><div class="kv"><span>월급</span><span>'+won(r.m)+'</span></div><div class="kv"><span>연봉</span><span>'+won(r.y)+'</span></div><div class="kv"><span>월 환산 시간</span><span>'+(Math.round(mh*100)/100)+'시간</span></div>';
+ window._txt='시급 '+won(r.h)+' / 월급 '+won(r.m)+' / 연봉 '+won(r.y)+' (세전, 월 환산 '+(Math.round(mh*100)/100)+'시간)'}
+document.addEventListener('input',update);document.addEventListener('change',update);
+$('ex').onclick=function(){$('mode').value='h';$('val').value=12000;$('wk').value=40;$('ho').value=8;$('mh').value='';$('exnote').style.display='block';update()};
+$('copy').onclick=function(){copyText(window._txt||'')};
+$('val').addEventListener('input',function(){$('exnote').style.display='none'});
+update();window.convert=convert;window.monthHours=monthHours;
+</script></body></html>

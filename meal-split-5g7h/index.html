@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>회식·모임비 정산기 - JW의 AI 작업실</title>
+<meta name="description" content="인원, 불참자, 1차·2차 금액을 넣으면 사람마다 낼 금액을 나눠 주고 끝전도 처리해 주는 무료 정산기예요. 입력한 내용은 저장하거나 전송하지 않아요.">
+<link rel="canonical" href="https://hayanfog9.github.io/meal-split-5g7h/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR"><meta property="og:title" content="회식·모임비 정산기"><meta property="og:description" content="인원, 불참자, 1차·2차 금액을 넣으면 사람마다 낼 금액을 나눠 주고 끝전도 처리해 주는 무료 정산기예요. 입력한 내용은 저장하거나 전송하지 않아요."><meta property="og:url" content="https://hayanfog9.github.io/meal-split-5g7h/"><meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1220;--bg2:#111c33;--card:#15213d;--line:#27385f;--text:#eef3ff;--sub:#aab7d4;--acc:#22d3ee;--gold:#ffd98a;--red:#ff8a8a;--in:#0c1730}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,var(--bg),#0f1830 60%,var(--bg2));color:var(--text);font:16px/1.65 "Noto Sans KR","Malgun Gothic",sans-serif;min-height:100vh}
+a{color:var(--acc)}.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header{padding:34px 0 10px}
+h1{font:700 clamp(26px,5vw,38px)/1.25 "Gowun Batang",serif;margin:0 0 8px}h1 span{color:var(--acc)}
+.lead{color:var(--sub);margin:0;max-width:680px}
+.pill{display:inline-block;margin:12px 8px 0 0;font-size:13.5px;color:var(--gold);border:1px solid rgba(255,217,138,.5);border-radius:999px;padding:3px 12px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:18px 0}
+h2{font:700 20px "Gowun Batang",serif;margin:0 0 4px}.hint{color:var(--sub);font-size:13.5px;margin:0 0 10px}
+label.f{display:block;margin:12px 0 4px;font-weight:700;font-size:14.5px}
+input,select,textarea{background:var(--in);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;font-size:15px;min-width:0}
+input[type=text],input[type=number],input[type=time],select{width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:0}
+input[type=checkbox]{accent-color:var(--acc);width:18px;height:18px}
+.row{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:6px 6px;text-align:left;border-bottom:1px solid var(--line);font-size:14.5px;vertical-align:middle}
+th{color:var(--sub);font-weight:500;font-size:13px;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+button{font:inherit;font-weight:700;font-size:14.5px;border-radius:999px;padding:8px 16px;border:1px solid var(--acc);background:transparent;color:var(--acc);cursor:pointer}
+button.fill{background:var(--acc);color:#07202a}button:hover{filter:brightness(1.15)}
+button.sm{padding:3px 10px;font-size:13px;border-color:var(--line);color:var(--sub);white-space:nowrap}
+.res{background:var(--in);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px}
+.big{font:700 28px "Gowun Batang",serif;color:var(--acc);font-variant-numeric:tabular-nums}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px dashed var(--line);font-variant-numeric:tabular-nums}.kv:last-child{border:0}
+.kv span:first-child{color:var(--sub)}
+.warn{display:none;margin:10px 0 0;background:rgba(255,138,138,.12);border:1px solid var(--red);color:var(--red);border-radius:10px;padding:8px 12px;font-size:14px}
+.ex{background:rgba(255,217,138,.1);border:1px dashed rgba(255,217,138,.6);color:var(--gold);border-radius:10px;padding:8px 12px;font-size:14px;margin:0 0 10px}
+.about{margin:0 0 30px;color:var(--sub);font-size:14.5px}.about b{color:var(--text)}.about ul{margin:8px 0 0;padding-left:20px}
+footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:var(--sub);font-size:13px;text-align:center}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#07202a;font-weight:700;border-radius:999px;padding:8px 18px;opacity:0;transition:opacity .2s;pointer-events:none}
+@media(max-width:560px){.wrap{padding:0 16px}}
+@media print{body{background:#fff;color:#000}.noprint{display:none!important}.panel{border:0;background:#fff;padding:0}.res,input,select{background:#fff;color:#000;border-color:#999}.big{color:#000}th,td{border-color:#999}}
+</style></head><body><div class="wrap">
+<header><h1>회식·모임비 <span>정산기</span></h1><p class="lead">1차, 2차마다 함께한 사람을 체크하면 사람별로 낼 금액이 나와요. 안 마신 사람은 술값에서만 빼면 돼요.</p>
+<span class="pill">입력한 내용은 이 브라우저에서만 처리하고 저장하거나 전송하지 않아요</span><span class="pill">끝전 올림 · 걷는 합계와 차이 표시</span></header>
+<main>
+<section class="panel" aria-label="사람"><h2>1. 사람 이름</h2><p class="hint">쉼표나 줄바꿈으로 나눠 적어요. 이름 대신 별명도 돼요.</p>
+<p class="ex" id="exnote">가상 예시 값이 들어 있어요. "비우기"를 누르고 내 모임을 넣으세요.</p>
+<textarea id="names" rows="2" style="width:100%"></textarea>
+</section>
+<section class="panel" aria-label="항목"><h2>2. 차수별 금액과 함께한 사람</h2>
+<div class="tw"><table id="tbl"></table></div>
+<div class="btns noprint"><button type="button" id="add">차수 추가</button><button type="button" id="clr">비우기</button><button type="button" id="ex">예시 다시 넣기</button></div>
+<div class="row" style="margin-top:12px"><div><label class="f" for="unit">끝전 올림 단위</label><select id="unit"><option value="1">1원 (올림 없음)</option><option value="10">10원 단위로 올림</option><option value="100" selected>100원 단위로 올림</option><option value="1000">1,000원 단위로 올림</option></select></div></div>
+</section>
+<section class="panel" aria-label="결과"><h2>3. 사람별로 낼 금액</h2>
+<div class="warn" id="warn" role="alert"></div><div class="res" id="res"></div>
+<div class="btns noprint"><button type="button" class="fill" id="copy">결과 복사</button></div></section></main>
+<div class="about"><b>이 도구에 대해</b><ul><li>차수마다 "함께한 사람 수"로 똑같이 나눠요. 예: 2차 60,000원에 3명이 함께했으면 20,000원씩이에요.</li>
+<li>사람별 합계를 고른 단위로 올림해서, 걷는 돈이 총액보다 모자라지 않게 해요. 걷는 합계와 총액의 차이를 같이 보여 드려요.</li>
+<li>한 차수에 함께한 사람이 없으면 그 차수는 계산에서 빼고 알려 드려요.</li>
+<li>예시 이름과 금액은 모두 지어낸 가상 값이에요.</li></ul></div>
+<footer>© JW의 AI 작업실 · <a href="https://hayanfog9.github.io/">다른 도구 보기</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요</footer>
+</div><div id="toast" role="status"></div>
+<script>
+function $(i){return document.getElementById(i)}
+function n(v){v=parseFloat(String(v).replace(/,/g,''));return isFinite(v)?v:0}
+function won(v){return Math.round(v).toLocaleString('ko-KR')+'원'}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;setTimeout(function(){e.style.opacity=0},1600)}
+function copyText(t){
+  function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('복사했어요')}catch(e){toast('복사하지 못했어요. 직접 선택해서 복사하세요')}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},fb)}else fb()}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+
+var people=[],items=[];
+var EXN='A, B, C, D, E';var EXI=[['1차 식당',150000,[0,1,2,3,4]],['2차 술집',90000,[0,1,2]],['3차 커피',20000,[0,3]]];
+function parseNames(s){return s.split(/[,\n]/).map(function(x){return x.trim()}).filter(Boolean)}
+function splitCalc(its,np,unit){var tot=[];for(var i=0;i<np;i++)tot.push(0);var sum=0,skipped=[];
+ its.forEach(function(it,k){var w=it.who.filter(function(x){return x<np});if(!(it.amount>0))return;if(!w.length){skipped.push(k);return}sum+=it.amount;var sh=it.amount/w.length;w.forEach(function(p){tot[p]+=sh})});
+ var paid=tot.map(function(t){t=Math.round(t*1e6)/1e6;return Math.ceil(t/unit)*unit});var col=paid.reduce(function(a,b){return a+b},0);
+ return {raw:tot,paid:paid,total:sum,collected:col,diff:col-sum,skipped:skipped}}
+function readItems(){items=[];document.querySelectorAll('tr.it').forEach(function(tr){var k=tr.dataset.k;var who=[];people.forEach(function(p,i){var c=$('c'+k+'_'+i);if(c&&c.checked)who.push(i)});items.push({name:$('in'+k).value,amount:n($('ia'+k).value),who:who})})}
+var cnt=0;
+function render(its){people=parseNames($('names').value);var h='<thead><tr><th>차수</th><th class="num">금액(원)</th>'+people.map(function(p){return '<th>'+esc(p)+'</th>'}).join('')+'<th></th></tr></thead><tbody>';
+ its.forEach(function(it){var k=cnt++;h+='<tr class="it" data-k="'+k+'"><td><input type="text" id="in'+k+'" value="'+esc(it.name)+'" aria-label="차수 이름" style="min-width:90px"></td><td><input type="number" id="ia'+k+'" min="0" step="1000" value="'+(it.amount||'')+'" aria-label="금액" style="min-width:100px;text-align:right"></td>'+people.map(function(p,i){return '<td><input type="checkbox" id="c'+k+'_'+i+'"'+(it.who.indexOf(i)>-1?' checked':'')+' aria-label="'+esc(p)+' 참여"></td>'}).join('')+'<td><button type="button" class="sm" data-del="'+k+'">삭제</button></td></tr>'});
+ h+='</tbody>';$('tbl').innerHTML=h;update()}
+function update(){var np=parseNames($('names').value).length;if(np!==people.length){readItems();var keep=items.map(function(it){return {name:it.name,amount:it.amount,who:it.who.filter(function(x){return x<np})}});render(keep);return}
+ readItems();var r=splitCalc(items,people.length,n($('unit').value));
+ var w=$('warn');if(r.skipped.length){w.style.display='block';w.textContent=r.skipped.map(function(k){return (items[k].name||'차수'+(k+1))}).join(', ')+': 함께한 사람이 없어서 계산에서 뺐어요.'}else w.style.display='none';
+ var h='<div class="big">총 '+won(r.total)+'</div>';people.forEach(function(p,i){h+='<div class="kv"><span>'+esc(p)+'</span><span>'+won(r.paid[i])+'</span></div>'});
+ h+='<div class="kv"><span>걷는 합계</span><span>'+won(r.collected)+'</span></div><div class="kv"><span>총액과 차이(올림 때문에 생김)</span><span>'+(r.diff>=0?'+':'-')+won(Math.abs(r.diff))+'</span></div>';$('res').innerHTML=h;
+ window._txt='총 '+won(r.total)+'\n'+people.map(function(p,i){return p+' '+won(r.paid[i])}).join('\n')+'\n걷는 합계 '+won(r.collected)+' (총액과 차이 '+(r.diff>=0?'+':'-')+won(Math.abs(r.diff))+')'}
+function setEx(on){$('names').value=on?EXN:'';people=parseNames($('names').value);cnt=0;render(on?EXI.map(function(x){return {name:x[0],amount:x[1],who:x[2].slice()}}):[{name:'1차',amount:0,who:[]}]);$('exnote').style.display=on?'block':'none'}
+document.addEventListener('input',function(e){if(e.target.id==='names'){update()}else update()});document.addEventListener('change',update);
+document.addEventListener('click',function(e){var d=e.target.getAttribute&&e.target.getAttribute('data-del');if(d!==null&&d!==undefined){readItems();var ks=[];document.querySelectorAll('tr.it').forEach(function(tr){ks.push(tr.dataset.k)});var idx=ks.indexOf(d);items.splice(idx,1);render(items)}});
+$('add').onclick=function(){readItems();items.push({name:(items.length+1)+'차',amount:0,who:people.map(function(_,i){return i})});render(items)};
+$('clr').onclick=function(){setEx(false)};$('ex').onclick=function(){setEx(true)};$('copy').onclick=function(){copyText(window._txt||'')};
+setEx(true);window.splitCalc=splitCalc;
+</script></body></html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>근무시간 합계표 - JW의 AI 작업실</title>
+<meta name="description" content="출근·퇴근 시각과 휴게시간을 넣으면 하루와 한 주 근무시간을 합계해 주는 무료 계산기예요. 자정을 넘긴 근무도 계산해요. 입력한 내용은 저장하거나 전송하지 않아요.">
+<link rel="canonical" href="https://hayanfog9.github.io/work-hours-2c9d/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR"><meta property="og:title" content="근무시간 합계표"><meta property="og:description" content="출근·퇴근 시각과 휴게시간을 넣으면 하루와 한 주 근무시간을 합계해 주는 무료 계산기예요. 자정을 넘긴 근무도 계산해요. 입력한 내용은 저장하거나 전송하지 않아요."><meta property="og:url" content="https://hayanfog9.github.io/work-hours-2c9d/"><meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1220;--bg2:#111c33;--card:#15213d;--line:#27385f;--text:#eef3ff;--sub:#aab7d4;--acc:#22d3ee;--gold:#ffd98a;--red:#ff8a8a;--in:#0c1730}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,var(--bg),#0f1830 60%,var(--bg2));color:var(--text);font:16px/1.65 "Noto Sans KR","Malgun Gothic",sans-serif;min-height:100vh}
+a{color:var(--acc)}.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header{padding:34px 0 10px}
+h1{font:700 clamp(26px,5vw,38px)/1.25 "Gowun Batang",serif;margin:0 0 8px}h1 span{color:var(--acc)}
+.lead{color:var(--sub);margin:0;max-width:680px}
+.pill{display:inline-block;margin:12px 8px 0 0;font-size:13.5px;color:var(--gold);border:1px solid rgba(255,217,138,.5);border-radius:999px;padding:3px 12px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:18px 0}
+h2{font:700 20px "Gowun Batang",serif;margin:0 0 4px}.hint{color:var(--sub);font-size:13.5px;margin:0 0 10px}
+label.f{display:block;margin:12px 0 4px;font-weight:700;font-size:14.5px}
+input,select,textarea{background:var(--in);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;font-size:15px;min-width:0}
+input[type=text],input[type=number],input[type=time],select{width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:0}
+input[type=checkbox]{accent-color:var(--acc);width:18px;height:18px}
+.row{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:6px 6px;text-align:left;border-bottom:1px solid var(--line);font-size:14.5px;vertical-align:middle}
+th{color:var(--sub);font-weight:500;font-size:13px;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+button{font:inherit;font-weight:700;font-size:14.5px;border-radius:999px;padding:8px 16px;border:1px solid var(--acc);background:transparent;color:var(--acc);cursor:pointer}
+button.fill{background:var(--acc);color:#07202a}button:hover{filter:brightness(1.15)}
+button.sm{padding:3px 10px;font-size:13px;border-color:var(--line);color:var(--sub);white-space:nowrap}
+.res{background:var(--in);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px}
+.big{font:700 28px "Gowun Batang",serif;color:var(--acc);font-variant-numeric:tabular-nums}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px dashed var(--line);font-variant-numeric:tabular-nums}.kv:last-child{border:0}
+.kv span:first-child{color:var(--sub)}
+.warn{display:none;margin:10px 0 0;background:rgba(255,138,138,.12);border:1px solid var(--red);color:var(--red);border-radius:10px;padding:8px 12px;font-size:14px}
+.ex{background:rgba(255,217,138,.1);border:1px dashed rgba(255,217,138,.6);color:var(--gold);border-radius:10px;padding:8px 12px;font-size:14px;margin:0 0 10px}
+.about{margin:0 0 30px;color:var(--sub);font-size:14.5px}.about b{color:var(--text)}.about ul{margin:8px 0 0;padding-left:20px}
+footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:var(--sub);font-size:13px;text-align:center}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#07202a;font-weight:700;border-radius:999px;padding:8px 18px;opacity:0;transition:opacity .2s;pointer-events:none}
+@media(max-width:560px){.wrap{padding:0 16px}}
+@media print{body{background:#fff;color:#000}.noprint{display:none!important}.panel{border:0;background:#fff;padding:0}.res,input,select{background:#fff;color:#000;border-color:#999}.big{color:#000}th,td{border-color:#999}}
+</style></head><body><div class="wrap">
+<header><h1>근무시간 <span>합계표</span></h1><p class="lead">요일별 출근, 퇴근, 휴게시간을 넣으면 하루와 한 주 합계가 나와요. 자정을 넘겨 퇴근해도 계산해요.</p>
+<span class="pill">입력한 내용은 이 브라우저에서만 처리하고 저장하거나 전송하지 않아요</span><span class="pill">단순 시간 계산 · 법적 판단 아님</span></header>
+<main>
+<section class="panel" aria-label="입력"><h2>1. 시간 넣기</h2>
+<p class="ex" id="exnote">가상 예시 값이 들어 있어요. 아래 "비우기"를 누르고 내 시간을 넣으세요.</p>
+<div class="tw"><table><thead><tr><th>요일</th><th>출근</th><th>퇴근</th><th>휴게(분)</th><th class="num">근무시간</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="row" style="margin-top:12px"><div><label class="f" for="base">비교할 주 기준 시간 (직접 입력)</label><input type="number" id="base" min="0" step="0.5" value="40"></div></div>
+<div class="btns noprint"><button type="button" id="clr">비우기</button><button type="button" id="ex">예시 다시 넣기</button></div>
+</section>
+<section class="panel" aria-label="결과"><h2>2. 합계</h2>
+<div class="warn" id="warn" role="alert"></div>
+<div class="res" id="res"></div>
+<div class="btns noprint"><button type="button" class="fill" id="copy">결과 복사</button></div>
+</section></main>
+<div class="about"><b>이 도구에 대해</b><ul><li>퇴근 시각이 출근 시각보다 빠르면 다음 날 퇴근한 것으로 계산해요. (예: 22:00 출근, 06:00 퇴근 = 8시간)</li>
+<li>근무시간 = 퇴근 - 출근 - 휴게시간이에요. 휴게시간이 근무시간보다 길면 0으로 보고 알려 드려요.</li>
+<li>주 기준 시간은 비교용으로 직접 넣는 값이고, 법에서 정한 근로시간 기준이나 수당 대상인지를 판단하지 않아요.</li>
+<li>예시 시간은 모두 지어낸 가상 값이에요. 회사 기록이 아니에요.</li></ul></div>
+<footer>© JW의 AI 작업실 · <a href="https://hayanfog9.github.io/">다른 도구 보기</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요</footer>
+</div><div id="toast" role="status"></div>
+<script>
+function $(i){return document.getElementById(i)}
+function n(v){v=parseFloat(String(v).replace(/,/g,''));return isFinite(v)?v:0}
+function won(v){return Math.round(v).toLocaleString('ko-KR')+'원'}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;setTimeout(function(){e.style.opacity=0},1600)}
+function copyText(t){
+  function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('복사했어요')}catch(e){toast('복사하지 못했어요. 직접 선택해서 복사하세요')}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},fb)}else fb()}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+
+var DAYS=['월','화','수','목','금','토','일'];
+var EX=[['09:00','18:00',60],['09:30','19:00',60],['09:00','18:30',60],['10:00','18:00',60],['09:00','22:00',90],['',''  ,0],['','',0]];
+function tm(s){if(!s||s.indexOf(':')<0)return null;var p=s.split(':');return +p[0]*60+ +p[1]}
+function calcMinutes(start,end,brk){var s=tm(start),e=tm(end);if(s===null||e===null)return null;if(e<s)e+=1440;var m=e-s-(brk||0);return m}
+function fmt(m){var h=Math.floor(m/60),r=m%60;return h+'시간 '+(r<10?'0':'')+r+'분'}
+function dec(m){return (Math.round(m/60*100)/100).toFixed(2)}
+function build(rows){var h='';DAYS.forEach(function(d,i){h+='<tr><td>'+d+'</td><td><input type="time" id="s'+i+'" aria-label="'+d+' 출근"></td><td><input type="time" id="e'+i+'" aria-label="'+d+' 퇴근"></td><td><input type="number" id="b'+i+'" min="0" step="5" value="0" aria-label="'+d+' 휴게 분"></td><td class="num" id="m'+i+'"></td></tr>'});$('rows').innerHTML=h}
+function fill(ex){EX.forEach(function(r,i){$('s'+i).value=ex?r[0]:'';$('e'+i).value=ex?r[1]:'';$('b'+i).value=ex?r[2]:0});$('exnote').style.display=ex?'block':'none';update()}
+function totals(list,baseH){var tot=0,days=0;list.forEach(function(m){if(m!==null&&m>0){tot+=m;days++}});var base=Math.round(baseH*60);return {total:tot,days:days,avg:days?Math.round(tot/days):0,diff:tot-base}}
+function update(){var list=[],neg=[];DAYS.forEach(function(d,i){var m=calcMinutes($('s'+i).value,$('e'+i).value,n($('b'+i).value));if(m!==null&&m<0){neg.push(d);m=0}list.push(m);$('m'+i).textContent=m===null?'-':fmt(m)+' ('+dec(m)+')'});
+ var w=$('warn');if(neg.length){w.style.display='block';w.textContent=neg.join(', ')+'요일은 휴게시간이 근무시간보다 길어서 0으로 계산했어요.'}else w.style.display='none';
+ var t=totals(list,n($('base').value));var sign=t.diff>=0?'+':'-';var ad=Math.abs(t.diff);
+ $('res').innerHTML='<div class="big">'+fmt(t.total)+'</div><div class="kv"><span>소수 시간</span><span>'+dec(t.total)+'시간</span></div><div class="kv"><span>근무한 날</span><span>'+t.days+'일</span></div><div class="kv"><span>하루 평균</span><span>'+(t.days?fmt(t.avg):'-')+'</span></div><div class="kv"><span>기준 '+n($('base').value)+'시간과 차이</span><span>'+sign+fmt(ad)+'</span></div>';
+ window._txt=DAYS.map(function(d,i){return d+' '+($('s'+i).value||'-')+'~'+($('e'+i).value||'-')+' (휴게 '+n($('b'+i).value)+'분) '+(list[i]===null?'-':fmt(list[i]))}).join('\n')+'\n합계 '+fmt(t.total)+' ('+dec(t.total)+'시간), 기준 '+n($('base').value)+'시간과 차이 '+sign+fmt(ad)}
+build();fill(true);
+document.addEventListener('input',update);
+$('clr').onclick=function(){fill(false)};$('ex').onclick=function(){fill(true)};$('copy').onclick=function(){copyText(window._txt||'')};
+window.calcMinutes=calcMinutes;window.totals=totals;
+</script></body></html>
