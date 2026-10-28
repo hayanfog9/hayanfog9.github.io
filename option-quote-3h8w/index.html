@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>할인·옵션 견적 계산기 - JW의 AI 작업실</title>
+<meta name="description" content="기본 단가와 수량에 옵션, 정률 할인, 정액 할인을 적용해 합계를 계산하는 무료 견적 계산기예요. 반올림 방식도 고를 수 있어요. 입력한 값은 저장하거나 전송하지 않으며 방문 횟수 통계만 수집해요.">
+<link rel="canonical" href="https://hayanfog9.github.io/option-quote-3h8w/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR"><meta property="og:title" content="할인·옵션 견적 계산기"><meta property="og:description" content="기본 단가와 수량에 옵션, 정률 할인, 정액 할인을 적용해 합계를 계산하는 무료 견적 계산기예요. 반올림 방식도 고를 수 있어요. 입력한 값은 저장하거나 전송하지 않으며 방문 횟수 통계만 수집해요."><meta property="og:url" content="https://hayanfog9.github.io/option-quote-3h8w/"><meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1220;--bg2:#111c33;--card:#15213d;--line:#27385f;--text:#eef3ff;--sub:#aab7d4;--acc:#22d3ee;--gold:#ffd98a;--red:#ff8a8a;--in:#0c1730}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,var(--bg),#0f1830 60%,var(--bg2));color:var(--text);font:16px/1.65 "Noto Sans KR","Malgun Gothic",sans-serif;min-height:100vh}
+a{color:var(--acc)}.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header{padding:34px 0 10px}
+h1{font:700 clamp(26px,5vw,38px)/1.25 "Gowun Batang",serif;margin:0 0 8px}h1 span{color:var(--acc)}
+.lead{color:var(--sub);margin:0;max-width:680px}
+.pill{display:inline-block;margin:12px 8px 0 0;font-size:13.5px;color:var(--gold);border:1px solid rgba(255,217,138,.5);border-radius:999px;padding:3px 12px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:18px 0}
+h2{font:700 20px "Gowun Batang",serif;margin:0 0 4px}.hint{color:var(--sub);font-size:13.5px;margin:0 0 10px}
+label.f{display:block;margin:12px 0 4px;font-weight:700;font-size:14.5px}
+input,select,textarea{background:var(--in);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;font-size:15px;min-width:0}
+input[type=text],input[type=number],input[type=time],select{width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:0}
+input[type=checkbox]{accent-color:var(--acc);width:18px;height:18px}
+.row{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:6px 6px;text-align:left;border-bottom:1px solid var(--line);font-size:14.5px;vertical-align:middle}
+th{color:var(--sub);font-weight:500;font-size:13px;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+button{font:inherit;font-weight:700;font-size:14.5px;border-radius:999px;padding:8px 16px;border:1px solid var(--acc);background:transparent;color:var(--acc);cursor:pointer}
+button.fill{background:var(--acc);color:#07202a}button:hover{filter:brightness(1.15)}
+button.sm{padding:3px 10px;font-size:13px;border-color:var(--line);color:var(--sub);white-space:nowrap}
+.res{background:var(--in);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px}
+.big{font:700 28px "Gowun Batang",serif;color:var(--acc);font-variant-numeric:tabular-nums}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px dashed var(--line);font-variant-numeric:tabular-nums}.kv:last-child{border:0}
+.kv span:first-child{color:var(--sub)}
+.warn{display:none;margin:10px 0 0;background:rgba(255,138,138,.12);border:1px solid var(--red);color:var(--red);border-radius:10px;padding:8px 12px;font-size:14px}
+.ex{background:rgba(255,217,138,.1);border:1px dashed rgba(255,217,138,.6);color:var(--gold);border-radius:10px;padding:8px 12px;font-size:14px;margin:0 0 10px}
+.about{margin:0 0 30px;color:var(--sub);font-size:14.5px}.about b{color:var(--text)}.about ul{margin:8px 0 0;padding-left:20px}
+footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:var(--sub);font-size:13px;text-align:center}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#07202a;font-weight:700;border-radius:999px;padding:8px 18px;opacity:0;transition:opacity .2s;pointer-events:none}
+@media(max-width:560px){.wrap{padding:0 16px}}
+@media print{body{background:#fff;color:#000}.noprint{display:none!important}.panel{border:0;background:#fff;padding:0}.res,input,select{background:#fff;color:#000;border-color:#999}.big{color:#000}th,td{border-color:#999}}
+[hidden]{display:none!important}</style></head><body><div class="wrap">
+<header><h1>할인·옵션 <span>견적 계산기</span></h1><p class="lead">기본 금액에 옵션을 더하고 할인을 빼면 합계가 나와요. 단가와 할인율은 내 방식대로 직접 넣어요.</p>
+<span class="pill">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 브라우저·운영체제 종류, 접속 국가, 화면 너비)만 수집해요</span><span class="pill">단가·할인율은 직접 입력 · 단계별 계산 표시</span></header>
+<main>
+<section class="panel" aria-label="기본"><h2>1. 기본 금액</h2>
+<p class="ex" id="exnote">가상 예시 값이에요. 단가, 옵션, 할인율은 모두 지어낸 것이에요.</p>
+<div class="row"><div><label class="f" for="price">기본 단가(원)</label><input type="number" id="price" min="0" step="100"></div>
+<div><label class="f" for="qty">수량(인원)</label><input type="number" id="qty" min="0" step="1"></div>
+<div><label class="f" for="rnd">원 미만 처리</label><select id="rnd"><option value="floor">버림</option><option value="round">반올림</option><option value="ceil">올림</option></select></div></div></section>
+<section class="panel" aria-label="옵션"><h2>2. 옵션</h2><p class="hint">체크한 옵션만 더해요. "개당"은 수량만큼 곱하고, "1회"는 한 번만 더해요.</p>
+<div class="tw"><table><thead><tr><th>사용</th><th>옵션 이름</th><th class="num">금액(원)</th><th>방식</th></tr></thead><tbody id="opts"></tbody></table></div></section>
+<section class="panel" aria-label="할인"><h2>3. 할인</h2>
+<div class="row"><div><label class="f" for="rate">정률 할인 %</label><input type="number" id="rate" min="0" max="100" step="0.1"></div>
+<div><label class="f" for="min">정률 할인 적용 최소 수량</label><input type="number" id="min" min="0" step="1"></div>
+<div><label class="f" for="fix">정액 할인(원)</label><input type="number" id="fix" min="0" step="1000"></div></div>
+<div class="btns noprint"><button type="button" id="ex">예시 넣기</button><button type="button" id="clr">비우기</button></div></section>
+<section class="panel" aria-label="결과"><h2>4. 계산 결과</h2><div class="warn" id="warn" role="alert"></div><div class="res" id="res"></div>
+<div class="btns noprint"><button type="button" class="fill" id="copy">결과 복사</button></div></section></main>
+<div class="about"><b>이 도구에 대해</b><ul><li>계산 순서: 기본 금액(단가 × 수량) + 옵션 = 소계 → 정률 할인(최소 수량 이상일 때) → 정액 할인 → 합계예요.</li>
+<li>정률 할인은 소계에 곱하고, 원 미만은 고른 방식(버림, 반올림, 올림)으로 처리해요. 합계는 0원 아래로 내려가지 않아요.</li>
+<li>할인율, 최소 수량, 옵션 금액은 모두 내가 정하는 값이에요. 법으로 정해진 요율을 자동으로 넣지 않아요.</li>
+<li>결과는 참고용 견적이고, 세금이나 거래 조건은 따로 확인하세요.</li></ul></div>
+<footer>© JW의 AI 작업실 · <a href="https://hayanfog9.github.io/">다른 도구 보기</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
+</div><div id="toast" role="status"></div>
+<script>
+function $(i){return document.getElementById(i)}
+function n(v){v=parseFloat(String(v).replace(/,/g,''));return isFinite(v)?v:0}
+function won(v){return Math.round(v).toLocaleString('ko-KR')+'원'}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;setTimeout(function(){e.style.opacity=0},1600)}
+function copyText(t){
+  function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('복사했어요')}catch(e){toast('복사하지 못했어요. 직접 선택해서 복사하세요')}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},fb)}else fb()}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+
+var OPTS=[['',0,'each'],['',0,'each'],['',0,'once']];
+function rnd(v,m){return m==='ceil'?Math.ceil(v-1e-9):m==='round'?Math.round(v):Math.floor(v+1e-9)}
+function calc(o){var qty=o.qty,base=o.price*qty,optSum=0;o.opts.forEach(function(p){if(p.on)optSum+=p.mode==='each'?p.amt*qty:p.amt});var sub=base+optSum;var rd=(o.rate>0&&qty>=o.min)?rnd(sub*o.rate/100,o.rnd):0;var raw=sub-rd-o.fix;return {base:base,opt:optSum,sub:sub,rateDisc:rd,fix:o.fix,total:Math.max(0,raw),clipped:raw<0}}
+function addOpt(i,r){var tr=document.createElement('tr');tr.innerHTML='<td><input type="checkbox" id="oc'+i+'"'+(r[3]?' checked':'')+' aria-label="옵션 사용"></td><td><input type="text" id="on'+i+'" value="'+esc(r[0])+'" aria-label="옵션 이름" style="min-width:110px"></td><td><input type="number" id="oa'+i+'" min="0" step="100" value="'+(r[1]||'')+'" aria-label="옵션 금액" style="min-width:90px;text-align:right"></td><td><select id="om'+i+'" aria-label="옵션 방식"><option value="each"'+(r[2]==='each'?' selected':'')+'>개당</option><option value="once"'+(r[2]==='once'?' selected':'')+'>1회</option></select></td>';$('opts').appendChild(tr)}
+function read(){var opts=[];for(var i=0;i<3;i++)opts.push({on:$('oc'+i).checked,name:$('on'+i).value,amt:n($('oa'+i).value),mode:$('om'+i).value});return {price:n($('price').value),qty:n($('qty').value),rnd:$('rnd').value,rate:n($('rate').value),min:n($('min').value),fix:n($('fix').value),opts:opts}}
+function update(){var o=read(),w=$('warn'),msg=[];if(o.rate<0||o.rate>100)msg.push('정률 할인은 0~100% 사이로 넣어 주세요.');if(o.price<0||o.qty<0||o.fix<0)msg.push('음수는 넣을 수 없어요.');
+ if(msg.length){w.style.display='block';w.textContent=msg.join(' ');$('res').innerHTML='';return}w.style.display='none';
+ var r=calc(o);var h='<div class="big">'+won(r.total)+'</div><div class="kv"><span>기본 (단가 × 수량)</span><span>'+won(r.base)+'</span></div><div class="kv"><span>옵션 합계</span><span>'+won(r.opt)+'</span></div><div class="kv"><span>소계</span><span>'+won(r.sub)+'</span></div><div class="kv"><span>정률 할인'+(o.rate>0?' ('+o.rate+'%'+(o.min>0?', '+o.min+' 이상':'')+')':'')+'</span><span>-'+won(r.rateDisc)+'</span></div><div class="kv"><span>정액 할인</span><span>-'+won(r.fix)+'</span></div><div class="kv"><span>합계</span><span>'+won(r.total)+'</span></div>'+(r.clipped?'<div class="hint">할인이 소계보다 커서 합계를 0원으로 했어요.</div>':'');$('res').innerHTML=h;
+ window._txt='기본 '+won(r.base)+' + 옵션 '+won(r.opt)+' = 소계 '+won(r.sub)+' / 정률 할인 -'+won(r.rateDisc)+' / 정액 할인 -'+won(r.fix)+' / 합계 '+won(r.total)}
+function setEx(on){$('opts').innerHTML='';(on?[['포장',3000,'each',true],['현장 세팅',50000,'once',true],['사진 촬영',0,'each',false]]:OPTS).forEach(function(r,i){addOpt(i,r)});$('price').value=on?28000:'';$('qty').value=on?12:'';$('rate').value=on?10:'';$('min').value=on?10:'';$('fix').value=on?5000:'';$('rnd').value='floor';$('exnote').style.display=on?'block':'none';update()}
+document.addEventListener('input',update);document.addEventListener('change',update);$('ex').onclick=function(){setEx(true)};$('clr').onclick=function(){setEx(false)};$('copy').onclick=function(){copyText(window._txt||'')};
+setEx(true);window.calc=calc;
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body></html>

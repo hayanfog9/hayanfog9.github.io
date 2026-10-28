@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>시급·월급·연봉 환산기 - JW의 AI 작업실</title>
-<meta name="description" content="시급, 월급, 연봉 중 하나만 넣으면 나머지를 세전 기준으로 환산해 주는 무료 계산기예요. 월 환산 시간은 직접 확인해서 넣을 수 있어요. 입력한 내용은 저장하거나 전송하지 않아요.">
+<meta name="description" content="시급, 월급, 연봉 중 하나만 넣으면 나머지를 세전 기준으로 환산해 주는 무료 계산기예요. 월 환산 시간은 직접 확인해서 넣을 수 있어요. 입력한 값은 저장하거나 전송하지 않으며 방문 횟수 통계만 수집해요.">
 <link rel="canonical" href="https://hayanfog9.github.io/wage-convert-4p6s/">
-<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR"><meta property="og:title" content="시급·월급·연봉 환산기"><meta property="og:description" content="시급, 월급, 연봉 중 하나만 넣으면 나머지를 세전 기준으로 환산해 주는 무료 계산기예요. 월 환산 시간은 직접 확인해서 넣을 수 있어요. 입력한 내용은 저장하거나 전송하지 않아요."><meta property="og:url" content="https://hayanfog9.github.io/wage-convert-4p6s/"><meta name="twitter:card" content="summary">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR"><meta property="og:title" content="시급·월급·연봉 환산기"><meta property="og:description" content="시급, 월급, 연봉 중 하나만 넣으면 나머지를 세전 기준으로 환산해 주는 무료 계산기예요. 월 환산 시간은 직접 확인해서 넣을 수 있어요. 입력한 값은 저장하거나 전송하지 않으며 방문 횟수 통계만 수집해요."><meta property="og:url" content="https://hayanfog9.github.io/wage-convert-4p6s/"><meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -44,7 +44,7 @@ footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:v
 @media print{body{background:#fff;color:#000}.noprint{display:none!important}.panel{border:0;background:#fff;padding:0}.res,input,select{background:#fff;color:#000;border-color:#999}.big{color:#000}th,td{border-color:#999}}
 </style></head><body><div class="wrap">
 <header><h1>시급·월급·연봉 <span>환산기</span></h1><p class="lead">하나만 넣으면 나머지 둘을 세전 금액으로 바꿔 줘요. 월 환산 시간은 아래에서 보고 고칠 수 있어요.</p>
-<span class="pill">입력한 내용은 이 브라우저에서만 처리하고 저장하거나 전송하지 않아요</span><span class="pill">세전 단순 환산 · 참고용, 법적 효력 없음</span></header>
+<span class="pill">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 브라우저·운영체제 종류, 접속 국가, 화면 너비)만 수집해요</span><span class="pill">세전 단순 환산 · 참고용, 법적 효력 없음</span></header>
 <main>
 <section class="panel" aria-label="입력"><h2>1. 넣을 값</h2>
 <p class="ex" id="exnote">시급 12,000원은 가상 예시예요. 주 근로시간과 주휴 시간은 기본값 없이 직접 입력해야 계산돼요.</p>
@@ -62,7 +62,7 @@ footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:v
 <li>월급 = 시급 × 월 환산 시간, 연봉 = 월급 × 12예요. 상여금이나 수당이 따로 있으면 이 환산에 들어 있지 않아요.</li>
 <li>법에서 정한 최저임금이나 주휴수당 대상인지는 판단하지 않아요. 공식 기준은 고용노동부 등에서 직접 확인하세요. 이 도구는 참고용이고 법적 효력이 없어요.</li>
 <li>시급 12,000원은 지어낸 가상 예시예요. 주 근로시간과 주휴 시간은 기본값을 두지 않았어요. 월 환산 시간의 공식 기준은 직접 확인하세요.</li></ul></div>
-<footer>© JW의 AI 작업실 · <a href="https://hayanfog9.github.io/">다른 도구 보기</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요</footer>
+<footer>© JW의 AI 작업실 · <a href="https://hayanfog9.github.io/">다른 도구 보기</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
 </div><div id="toast" role="status"></div>
 <script>
 function $(i){return document.getElementById(i)}
@@ -87,4 +87,6 @@ $('ex').onclick=function(){$('mode').value='h';$('val').value=12000;$('wk').valu
 $('copy').onclick=function(){copyText(window._txt||'')};
 $('val').addEventListener('input',function(){$('exnote').style.display='none'});
 update();window.convert=convert;window.monthHours=monthHours;
-</script></body></html>
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body></html>

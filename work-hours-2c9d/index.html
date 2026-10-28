@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>근무시간 합계표 - JW의 AI 작업실</title>
-<meta name="description" content="출근·퇴근 시각과 휴게시간을 넣으면 하루와 한 주 근무시간을 합계해 주는 무료 계산기예요. 자정을 넘긴 근무도 계산해요. 입력한 내용은 저장하거나 전송하지 않아요.">
+<meta name="description" content="출근·퇴근 시각과 휴게시간을 넣으면 하루와 한 주 근무시간을 합계해 주는 무료 계산기예요. 자정을 넘긴 근무도 계산해요. 입력한 값은 저장하거나 전송하지 않으며 방문 횟수 통계만 수집해요.">
 <link rel="canonical" href="https://hayanfog9.github.io/work-hours-2c9d/">
-<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR"><meta property="og:title" content="근무시간 합계표"><meta property="og:description" content="출근·퇴근 시각과 휴게시간을 넣으면 하루와 한 주 근무시간을 합계해 주는 무료 계산기예요. 자정을 넘긴 근무도 계산해요. 입력한 내용은 저장하거나 전송하지 않아요."><meta property="og:url" content="https://hayanfog9.github.io/work-hours-2c9d/"><meta name="twitter:card" content="summary">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR"><meta property="og:title" content="근무시간 합계표"><meta property="og:description" content="출근·퇴근 시각과 휴게시간을 넣으면 하루와 한 주 근무시간을 합계해 주는 무료 계산기예요. 자정을 넘긴 근무도 계산해요. 입력한 값은 저장하거나 전송하지 않으며 방문 횟수 통계만 수집해요."><meta property="og:url" content="https://hayanfog9.github.io/work-hours-2c9d/"><meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -44,7 +44,7 @@ footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:v
 @media print{body{background:#fff;color:#000}.noprint{display:none!important}.panel{border:0;background:#fff;padding:0}.res,input,select{background:#fff;color:#000;border-color:#999}.big{color:#000}th,td{border-color:#999}}
 </style></head><body><div class="wrap">
 <header><h1>근무시간 <span>합계표</span></h1><p class="lead">요일별 출근, 퇴근, 휴게시간을 넣으면 하루와 한 주 합계가 나와요. 자정을 넘겨 퇴근해도 계산해요.</p>
-<span class="pill">입력한 내용은 이 브라우저에서만 처리하고 저장하거나 전송하지 않아요</span><span class="pill">단순 시간 계산 · 법적 판단 아님</span></header>
+<span class="pill">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 브라우저·운영체제 종류, 접속 국가, 화면 너비)만 수집해요</span><span class="pill">단순 시간 계산 · 법적 판단 아님</span></header>
 <main>
 <section class="panel" aria-label="입력"><h2>1. 시간 넣기</h2>
 <p class="ex" id="exnote">가상 예시 값이 들어 있어요. 아래 "비우기"를 누르고 내 시간을 넣으세요.</p>
@@ -61,7 +61,7 @@ footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:v
 <li>근무시간 = 퇴근 - 출근 - 휴게시간이에요. 휴게시간이 근무시간보다 길면 0으로 보고 알려 드려요.</li>
 <li>주 기준 시간은 비교용으로 직접 넣는 값이고, 법에서 정한 근로시간 기준이나 수당 대상인지를 판단하지 않아요.</li>
 <li>예시 시간은 모두 지어낸 가상 값이에요. 회사 기록이 아니에요.</li></ul></div>
-<footer>© JW의 AI 작업실 · <a href="https://hayanfog9.github.io/">다른 도구 보기</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요</footer>
+<footer>© JW의 AI 작업실 · <a href="https://hayanfog9.github.io/">다른 도구 보기</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
 </div><div id="toast" role="status"></div>
 <script>
 function $(i){return document.getElementById(i)}
@@ -92,4 +92,6 @@ build();fill(true);
 document.addEventListener('input',update);
 $('clr').onclick=function(){fill(false)};$('ex').onclick=function(){fill(true)};$('copy').onclick=function(){copyText(window._txt||'')};
 window.calcMinutes=calcMinutes;window.totals=totals;
-</script></body></html>
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body></html>

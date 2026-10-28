@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>영업일 계산기 - JW의 AI 작업실</title>
+<meta name="description" content="시작일에서 영업일 N일 뒤(또는 앞) 날짜를 구하거나, 두 날짜 사이 영업일 수를 세는 무료 계산기예요. 쉬는 요일과 공휴일은 직접 고를 수 있어요. 입력한 값은 저장하거나 전송하지 않으며 방문 횟수 통계만 수집해요.">
+<link rel="canonical" href="https://hayanfog9.github.io/biz-days-6t2k/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR"><meta property="og:title" content="영업일 계산기"><meta property="og:description" content="시작일에서 영업일 N일 뒤(또는 앞) 날짜를 구하거나, 두 날짜 사이 영업일 수를 세는 무료 계산기예요. 쉬는 요일과 공휴일은 직접 고를 수 있어요. 입력한 값은 저장하거나 전송하지 않으며 방문 횟수 통계만 수집해요."><meta property="og:url" content="https://hayanfog9.github.io/biz-days-6t2k/"><meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1220;--bg2:#111c33;--card:#15213d;--line:#27385f;--text:#eef3ff;--sub:#aab7d4;--acc:#22d3ee;--gold:#ffd98a;--red:#ff8a8a;--in:#0c1730}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,var(--bg),#0f1830 60%,var(--bg2));color:var(--text);font:16px/1.65 "Noto Sans KR","Malgun Gothic",sans-serif;min-height:100vh}
+a{color:var(--acc)}.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header{padding:34px 0 10px}
+h1{font:700 clamp(26px,5vw,38px)/1.25 "Gowun Batang",serif;margin:0 0 8px}h1 span{color:var(--acc)}
+.lead{color:var(--sub);margin:0;max-width:680px}
+.pill{display:inline-block;margin:12px 8px 0 0;font-size:13.5px;color:var(--gold);border:1px solid rgba(255,217,138,.5);border-radius:999px;padding:3px 12px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:18px 0}
+h2{font:700 20px "Gowun Batang",serif;margin:0 0 4px}.hint{color:var(--sub);font-size:13.5px;margin:0 0 10px}
+label.f{display:block;margin:12px 0 4px;font-weight:700;font-size:14.5px}
+input,select,textarea{background:var(--in);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;font-size:15px;min-width:0}
+input[type=text],input[type=number],input[type=time],select{width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:0}
+input[type=checkbox]{accent-color:var(--acc);width:18px;height:18px}
+.row{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:6px 6px;text-align:left;border-bottom:1px solid var(--line);font-size:14.5px;vertical-align:middle}
+th{color:var(--sub);font-weight:500;font-size:13px;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+button{font:inherit;font-weight:700;font-size:14.5px;border-radius:999px;padding:8px 16px;border:1px solid var(--acc);background:transparent;color:var(--acc);cursor:pointer}
+button.fill{background:var(--acc);color:#07202a}button:hover{filter:brightness(1.15)}
+button.sm{padding:3px 10px;font-size:13px;border-color:var(--line);color:var(--sub);white-space:nowrap}
+.res{background:var(--in);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px}
+.big{font:700 28px "Gowun Batang",serif;color:var(--acc);font-variant-numeric:tabular-nums}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px dashed var(--line);font-variant-numeric:tabular-nums}.kv:last-child{border:0}
+.kv span:first-child{color:var(--sub)}
+.warn{display:none;margin:10px 0 0;background:rgba(255,138,138,.12);border:1px solid var(--red);color:var(--red);border-radius:10px;padding:8px 12px;font-size:14px}
+.ex{background:rgba(255,217,138,.1);border:1px dashed rgba(255,217,138,.6);color:var(--gold);border-radius:10px;padding:8px 12px;font-size:14px;margin:0 0 10px}
+.about{margin:0 0 30px;color:var(--sub);font-size:14.5px}.about b{color:var(--text)}.about ul{margin:8px 0 0;padding-left:20px}
+footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:var(--sub);font-size:13px;text-align:center}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#07202a;font-weight:700;border-radius:999px;padding:8px 18px;opacity:0;transition:opacity .2s;pointer-events:none}
+@media(max-width:560px){.wrap{padding:0 16px}}
+@media print{body{background:#fff;color:#000}.noprint{display:none!important}.panel{border:0;background:#fff;padding:0}.res,input,select{background:#fff;color:#000;border-color:#999}.big{color:#000}th,td{border-color:#999}}
+[hidden]{display:none!important}</style></head><body><div class="wrap">
+<header><h1>영업일 <span>계산기</span></h1><p class="lead">마감일이 영업일 기준이면 달력을 넘기며 세기 번거로워요. 시작일과 영업일 수를 넣으면 날짜가 나와요.</p>
+<span class="pill">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 브라우저·운영체제 종류, 접속 국가, 화면 너비)만 수집해요</span><span class="pill">쉬는 요일 선택 · 공휴일은 직접 입력</span></header>
+<main>
+<section class="panel" aria-label="설정"><h2>1. 쉬는 날 정하기</h2>
+<p class="ex" id="exnote">시작일과 날짜는 가상 예시예요. 공휴일은 자동으로 반영하지 않으니 아래에 직접 적어 주세요.</p>
+<label class="f">쉬는 요일</label><div id="rest" class="row" style="grid-template-columns:repeat(7,minmax(0,1fr));gap:4px"></div>
+<label class="f" for="hol">쉬는 날짜 (공휴일 등, 한 줄에 하나, 예: 2026-11-04)</label><textarea id="hol" rows="3" style="width:100%" placeholder="2026-11-04"></textarea>
+</section>
+<section class="panel" aria-label="계산"><h2>2. 무엇을 구할까요</h2>
+<div class="row"><div><label class="f" for="mode">계산 방식</label><select id="mode"><option value="add">영업일 N일 뒤(앞) 날짜 구하기</option><option value="count">두 날짜 사이 영업일 수 세기</option></select></div>
+<div><label class="f" for="d1">시작일</label><input type="date" id="d1"></div>
+<div id="wn"><label class="f" for="n">영업일 수 (앞으로는 음수)</label><input type="number" id="n" step="1" value="5"></div>
+<div id="wd2" hidden><label class="f" for="d2">종료일</label><input type="date" id="d2"></div></div>
+<label class="chk" id="winc" hidden style="display:none;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" id="inc"><span>시작일도 센다</span></label>
+<div class="btns noprint"><button type="button" id="ex">예시 넣기</button></div>
+<div class="warn" id="warn" role="alert"></div><div class="res" id="res"></div>
+<div class="btns noprint"><button type="button" class="fill" id="copy">결과 복사</button></div></section></main>
+<div class="about"><b>이 도구에 대해</b><ul><li>시작일은 세지 않고 다음 날부터 세요. 예: 월요일 시작, 영업일 1일 뒤 = 화요일. 금요일 시작이면 월요일이에요.</li>
+<li>쉬는 요일은 체크로 바꿀 수 있어요. 토요일도 일하는 곳이라면 토요일 체크를 빼세요.</li>
+<li>공휴일, 대체공휴일, 회사 휴무일은 자동 반영하지 않아요. 해당 날짜를 직접 적어 주세요. 공휴일 날짜는 공식 달력에서 확인하세요.</li>
+<li>계약상 영업일이나 법정 기한 계산 방식은 다를 수 있어서, 이 도구는 참고용이에요. 법적 효력이 없어요.</li>
+<li>예시 날짜는 모두 가상 값이에요.</li></ul></div>
+<footer>© JW의 AI 작업실 · <a href="https://hayanfog9.github.io/">다른 도구 보기</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
+</div><div id="toast" role="status"></div>
+<script>
+function $(i){return document.getElementById(i)}
+function n(v){v=parseFloat(String(v).replace(/,/g,''));return isFinite(v)?v:0}
+function won(v){return Math.round(v).toLocaleString('ko-KR')+'원'}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;setTimeout(function(){e.style.opacity=0},1600)}
+function copyText(t){
+  function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('복사했어요')}catch(e){toast('복사하지 못했어요. 직접 선택해서 복사하세요')}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},fb)}else fb()}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+
+var DAY=86400000,NAMES=['일','월','화','수','목','금','토'];
+function pd(s){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s).trim());if(!m)return null;var t=Date.UTC(+m[1],+m[2]-1,+m[3]),d=new Date(t);if(d.getUTCMonth()!==+m[2]-1)return null;return t}
+function p2(v){return (v<10?'0':'')+v}
+function iso(t){var d=new Date(t);return d.getUTCFullYear()+'-'+p2(d.getUTCMonth()+1)+'-'+p2(d.getUTCDate())}
+function dow(t){return new Date(t).getUTCDay()}
+function isBiz(t,rest,hol){return rest.indexOf(dow(t))<0&&!hol[iso(t)]}
+function addBiz(t,n,rest,hol){if(rest.length>=7)return null;var step=n>=0?1:-1,c=Math.abs(n),g=0;while(c>0){t+=step*DAY;if(isBiz(t,rest,hol))c--;if(++g>200000)return null}return t}
+function countBiz(a,b,inc,rest,hol){var c=0;for(var t=inc?a:a+DAY;t<=b;t+=DAY)if(isBiz(t,rest,hol))c++;return c}
+function fmt(t){return iso(t)+' ('+NAMES[dow(t)]+')'}
+var h='';[1,2,3,4,5,6,0].forEach(function(d){h+='<label class="chk" style="display:flex;flex-direction:column;align-items:center;gap:2px;margin:0"><span>'+NAMES[d]+'</span><input type="checkbox" name="rest" value="'+d+'"'+((d===0||d===6)?' checked':'')+' aria-label="'+NAMES[d]+'요일 쉼"></label>'});$('rest').innerHTML=h;
+function rest(){var r=[];document.querySelectorAll('input[name=rest]:checked').forEach(function(c){r.push(+c.value)});return r}
+function holidays(){var o={},bad=[];$('hol').value.split(/\r?\n/).forEach(function(l){l=l.trim();if(!l)return;var t=pd(l);if(t===null)bad.push(l);else o[iso(t)]=1});return {map:o,bad:bad}}
+function update(){var mode=$('mode').value;$('wn').hidden=mode!=='add';$('wd2').hidden=mode!=='count';$('winc').style.display=mode==='count'?'flex':'none';
+ var w=$('warn'),msg=[],H=holidays();if(H.bad.length)msg.push('날짜 형식이 맞지 않아 뺐어요: '+H.bad.join(', ')+' (예: 2026-11-04)');
+ var r=rest(),a=pd($('d1').value),out='';
+ if(r.length>=7)msg.push('모든 요일이 쉬는 날이라 계산할 수 없어요.');
+ else if(a===null)msg.push('시작일을 골라 주세요.');
+ else if(mode==='add'){var raw=$('n').value,n=Number(raw);if(raw===''||!Number.isInteger(n))msg.push('영업일 수는 정수로 넣어 주세요.');else if(Math.abs(n)>3650)msg.push('영업일 수는 3650 이하로 넣어 주세요.');else{var t=addBiz(a,n,r,H.map);if(t===null)msg.push('날짜를 구할 수 없어요. 쉬는 날 설정을 확인하세요.');else out='<div class="big">'+fmt(t)+'</div><div class="kv"><span>시작일</span><span>'+fmt(a)+'</span></div><div class="kv"><span>영업일 수</span><span>'+n+'일 '+(n>=0?'뒤':'앞')+'</span></div><div class="kv"><span>달력으로는</span><span>'+Math.round(Math.abs(t-a)/DAY)+'일 '+(n>=0?'뒤':'앞')+'</span></div>';window._txt='시작 '+fmt(a)+' 기준 영업일 '+n+'일 '+(n>=0?'뒤':'앞')+' = '+(t===null?'-':fmt(t))}}
+ else{var b=pd($('d2').value);if(b===null)msg.push('종료일을 골라 주세요.');else if(b<a)msg.push('종료일이 시작일보다 빨라요. 날짜를 바꿔 주세요.');else{var c=countBiz(a,b,$('inc').checked,r,H.map);out='<div class="big">영업일 '+c+'일</div><div class="kv"><span>기간</span><span>'+fmt(a)+' ~ '+fmt(b)+'</span></div><div class="kv"><span>시작일</span><span>'+($('inc').checked?'센다':'세지 않는다')+'</span></div><div class="kv"><span>달력 일수</span><span>'+(Math.round((b-a)/DAY)+($('inc').checked?1:0))+'일</span></div>';window._txt=fmt(a)+' ~ '+fmt(b)+' 영업일 '+c+'일 (시작일 '+($('inc').checked?'포함':'제외')+')'}}
+ if(msg.length){w.style.display='block';w.textContent=msg.join(' / ')}else w.style.display='none';$('res').innerHTML=out}
+function ex(){$('mode').value='add';$('d1').value='2026-11-02';$('n').value=5;$('d2').value='2026-11-13';$('inc').checked=false;$('hol').value='2026-11-04';document.querySelectorAll('input[name=rest]').forEach(function(c){c.checked=(+c.value===0||+c.value===6)});$('exnote').style.display='block';update()}
+document.addEventListener('input',update);document.addEventListener('change',update);$('ex').onclick=ex;$('copy').onclick=function(){copyText(window._txt||'')};
+ex();window.pd=pd;window.addBiz=addBiz;window.countBiz=countBiz;window.iso=iso;
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body></html>

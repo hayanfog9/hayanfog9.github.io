@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>환율 환산 계산기 - JW의 AI 작업실</title>
+<meta name="description" content="외화 금액을 원화로, 원화를 외화로 내가 넣은 환율로 환산하는 무료 계산기예요. 환전 수수료와 환율 기준 단위(예: 100엔)도 넣을 수 있어요. 실시간 환율은 가져오지 않아요.">
+<link rel="canonical" href="https://hayanfog9.github.io/fx-convert-7q5m/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR"><meta property="og:title" content="환율 환산 계산기"><meta property="og:description" content="외화 금액을 원화로, 원화를 외화로 내가 넣은 환율로 환산하는 무료 계산기예요. 환전 수수료와 환율 기준 단위(예: 100엔)도 넣을 수 있어요. 실시간 환율은 가져오지 않아요."><meta property="og:url" content="https://hayanfog9.github.io/fx-convert-7q5m/"><meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1220;--bg2:#111c33;--card:#15213d;--line:#27385f;--text:#eef3ff;--sub:#aab7d4;--acc:#22d3ee;--gold:#ffd98a;--red:#ff8a8a;--in:#0c1730}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,var(--bg),#0f1830 60%,var(--bg2));color:var(--text);font:16px/1.65 "Noto Sans KR","Malgun Gothic",sans-serif;min-height:100vh}
+a{color:var(--acc)}.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header{padding:34px 0 10px}
+h1{font:700 clamp(26px,5vw,38px)/1.25 "Gowun Batang",serif;margin:0 0 8px}h1 span{color:var(--acc)}
+.lead{color:var(--sub);margin:0;max-width:680px}
+.pill{display:inline-block;margin:12px 8px 0 0;font-size:13.5px;color:var(--gold);border:1px solid rgba(255,217,138,.5);border-radius:999px;padding:3px 12px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:18px 0}
+h2{font:700 20px "Gowun Batang",serif;margin:0 0 4px}.hint{color:var(--sub);font-size:13.5px;margin:0 0 10px}
+label.f{display:block;margin:12px 0 4px;font-weight:700;font-size:14.5px}
+input,select,textarea{background:var(--in);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;font-size:15px;min-width:0}
+input[type=text],input[type=number],input[type=time],select{width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:0}
+input[type=checkbox]{accent-color:var(--acc);width:18px;height:18px}
+.row{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:6px 6px;text-align:left;border-bottom:1px solid var(--line);font-size:14.5px;vertical-align:middle}
+th{color:var(--sub);font-weight:500;font-size:13px;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+button{font:inherit;font-weight:700;font-size:14.5px;border-radius:999px;padding:8px 16px;border:1px solid var(--acc);background:transparent;color:var(--acc);cursor:pointer}
+button.fill{background:var(--acc);color:#07202a}button:hover{filter:brightness(1.15)}
+button.sm{padding:3px 10px;font-size:13px;border-color:var(--line);color:var(--sub);white-space:nowrap}
+.res{background:var(--in);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px}
+.big{font:700 28px "Gowun Batang",serif;color:var(--acc);font-variant-numeric:tabular-nums}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px dashed var(--line);font-variant-numeric:tabular-nums}.kv:last-child{border:0}
+.kv span:first-child{color:var(--sub)}
+.warn{display:none;margin:10px 0 0;background:rgba(255,138,138,.12);border:1px solid var(--red);color:var(--red);border-radius:10px;padding:8px 12px;font-size:14px}
+.ex{background:rgba(255,217,138,.1);border:1px dashed rgba(255,217,138,.6);color:var(--gold);border-radius:10px;padding:8px 12px;font-size:14px;margin:0 0 10px}
+.about{margin:0 0 30px;color:var(--sub);font-size:14.5px}.about b{color:var(--text)}.about ul{margin:8px 0 0;padding-left:20px}
+footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:var(--sub);font-size:13px;text-align:center}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#07202a;font-weight:700;border-radius:999px;padding:8px 18px;opacity:0;transition:opacity .2s;pointer-events:none}
+@media(max-width:560px){.wrap{padding:0 16px}}
+@media print{body{background:#fff;color:#000}.noprint{display:none!important}.panel{border:0;background:#fff;padding:0}.res,input,select{background:#fff;color:#000;border-color:#999}.big{color:#000}th,td{border-color:#999}}
+[hidden]{display:none!important}</style></head><body><div class="wrap">
+<header><h1>환율 환산 <span>계산기</span></h1><p class="lead">환율은 직접 넣어요. 금액과 환율, 수수료만 정하면 원화와 외화를 서로 바꿔 줘요.</p>
+<span class="pill">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 브라우저·운영체제 종류, 접속 국가, 화면 너비)만 수집해요</span><span class="pill">실시간 환율 아님 · 내가 넣은 환율로 계산</span></header>
+<main>
+<section class="panel" aria-label="입력"><h2>1. 값 넣기</h2>
+<p class="ex" id="exnote">환율 1,400원은 가상 예시예요. 실제 환율은 은행이나 환전 앱에서 확인해서 직접 넣어 주세요.</p>
+<div class="row"><div><label class="f" for="dir">바꾸는 방향</label><select id="dir"><option value="f2k">외화 → 원화</option><option value="k2f">원화 → 외화</option></select></div>
+<div><label class="f" for="amt">금액</label><input type="number" id="amt" min="0" step="any"></div>
+<div><label class="f" for="cur">통화 이름(표시용)</label><input type="text" id="cur" value="USD" maxlength="8"></div></div>
+<div class="row" style="margin-top:6px"><div><label class="f" for="rate">환율 (원)</label><input type="number" id="rate" min="0" step="any" placeholder="직접 입력"></div>
+<div><label class="f" for="unit">환율 기준 수량</label><input type="number" id="unit" min="0" step="any" value="1"></div>
+<div><label class="f" for="fee">환전 수수료 % (받는 금액에서 뺌)</label><input type="number" id="fee" min="0" max="100" step="0.01" value="0"></div>
+<div><label class="f" for="dec">소수점 자리 (외화 결과)</label><select id="dec"><option value="0">0</option><option value="2" selected>2</option><option value="4">4</option></select></div></div>
+<div class="btns noprint"><button type="button" id="ex">예시 넣기</button></div></section>
+<section class="panel" aria-label="결과"><h2>2. 환산 결과</h2><div class="warn" id="warn" role="alert"></div><div class="res" id="res"></div>
+<div class="btns noprint"><button type="button" class="fill" id="copy">결과 복사</button></div></section></main>
+<div class="about"><b>이 도구에 대해</b><ul><li>환율 기준 수량은 "1달러 = 1,400원"이면 1, "100엔 = 940원"이면 100으로 넣어요.</li>
+<li>외화 → 원화는 금액 × 환율 ÷ 기준 수량이고, 원화 → 외화는 금액 ÷ (환율 ÷ 기준 수량)이에요.</li>
+<li>환전 수수료는 받는 금액에서 그 비율만큼 빼요. 은행마다 수수료 방식이 달라서, 정확한 금액은 환전하는 곳에서 확인하세요.</li>
+<li>원화 결과는 원 단위로 반올림해서 보여 줘요. 이 도구는 실시간 환율을 가져오지 않는 참고용 계산기예요.</li></ul></div>
+<footer>© JW의 AI 작업실 · <a href="https://hayanfog9.github.io/">다른 도구 보기</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
+</div><div id="toast" role="status"></div>
+<script>
+function $(i){return document.getElementById(i)}
+function n(v){v=parseFloat(String(v).replace(/,/g,''));return isFinite(v)?v:0}
+function won(v){return Math.round(v).toLocaleString('ko-KR')+'원'}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;setTimeout(function(){e.style.opacity=0},1600)}
+function copyText(t){
+  function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('복사했어요')}catch(e){toast('복사하지 못했어요. 직접 선택해서 복사하세요')}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},fb)}else fb()}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+
+function conv(o){if(!(o.rate>0)||!(o.unit>0))return null;var per=o.rate/o.unit,fee=1-o.fee/100;var r=o.dir==='f2k'?o.amt*per*fee:o.amt/per*fee;return {per:per,out:r}}
+function updatefn(){var o={dir:$('dir').value,amt:n($('amt').value),rate:n($('rate').value),unit:n($('unit').value),fee:n($('fee').value)};var w=$('warn'),cur=($('cur').value||'외화').trim();
+ var msg=[];if($('rate').value==='')msg.push('환율을 직접 넣어 주세요. (실시간 환율은 가져오지 않아요)');else if(!(o.rate>0))msg.push('환율은 0보다 커야 해요.');if(!(o.unit>0))msg.push('환율 기준 수량은 0보다 커야 해요.');if(o.amt<0)msg.push('금액은 음수일 수 없어요.');if(o.fee<0||o.fee>=100)msg.push('수수료는 0 이상 100 미만으로 넣어 주세요.');
+ if(msg.length){w.style.display='block';w.textContent=msg.join(' ');$('res').innerHTML='';return}w.style.display='none';
+ var r=conv(o),d=+$('dec').value;var s=o.dir==='f2k'?won(r.out):(r.out.toLocaleString('ko-KR',{minimumFractionDigits:d,maximumFractionDigits:d})+' '+cur);
+ var inS=o.dir==='f2k'?(o.amt.toLocaleString('ko-KR')+' '+cur):won(o.amt);
+ $('res').innerHTML='<div class="big">'+s+'</div><div class="kv"><span>입력</span><span>'+inS+'</span></div><div class="kv"><span>적용 환율</span><span>1 '+cur+' = '+(Math.round(r.per*10000)/10000).toLocaleString('ko-KR')+'원</span></div><div class="kv"><span>수수료</span><span>'+o.fee+'%</span></div>';
+ window._txt=inS+' → '+s+' (환율 1 '+cur+' = '+(Math.round(r.per*10000)/10000)+'원, 수수료 '+o.fee+'%, 내가 넣은 환율 기준)'}
+document.addEventListener('input',updatefn);document.addEventListener('change',updatefn);
+$('ex').onclick=function(){$('dir').value='f2k';$('amt').value=100;$('cur').value='USD';$('rate').value=1400;$('unit').value=1;$('fee').value=0;$('dec').value='2';$('exnote').style.display='block';updatefn()};
+$('rate').addEventListener('input',function(){$('exnote').style.display='none'});$('copy').onclick=function(){copyText(window._txt||'')};
+$('amt').value=100;updatefn();window.conv=conv;
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body></html>
