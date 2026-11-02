@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>나만의 로또 번호 생성기 | JW의 AI 작업실</title>
+<meta name="description" content="생일과 행운의 숫자를 넣으면 숫자마다 이유가 붙은 로또 6/45 번호 5게임을 만들어 줘요. 재미용이며 당첨 확률은 모든 번호가 같아요. 입력한 내용은 저장하거나 전송하지 않아요.">
+<link rel="canonical" href="https://hayanfog9.github.io/lotto-pick-5n8c/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="나만의 로또 번호 생성기">
+<meta property="og:description" content="생일과 행운의 숫자로 숫자마다 이유가 붙은 5게임을 만들어요. 재미용이며 당첨 확률은 모든 번호가 같아요.">
+<meta property="og:url" content="https://hayanfog9.github.io/lotto-pick-5n8c/">
+<meta name="robots" content="index,follow">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"나만의 로또 번호 생성기","url":"https://hayanfog9.github.io/lotto-pick-5n8c/","applicationCategory":"EntertainmentApplication","operatingSystem":"Web","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"author":{"@type":"Person","name":"JW"}}</script>
+<style>
+:root{color-scheme:light dark;--desk:#E4E9F0;--paper:#FFFFFF;--ink:#1B2447;--ink2:#58627F;--rule:#CBD2DF;--hl:#FFE45C;--stamp:#B3261E;--warn:#B3261E;--focus:#3F528F;--acc:#3F528F;--bar:#7385C4;--barhi:#D98E1F;--barlo:#3F528F}
+@media (prefers-color-scheme:dark){:root{--desk:#0D1220;--paper:#151B2D;--ink:#E8ECF8;--ink2:#A2ACC6;--rule:#2A3552;--hl:#5A4B00;--stamp:#FF8A80;--warn:#FF8A80;--focus:#AAB7E8;--acc:#AAB7E8;--bar:#556AB6;--barhi:#F0A93A;--barlo:#7E90D6}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--desk);color:var(--ink);font:16px/1.6 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.desk{max-width:980px;margin:0 auto;padding:22px 16px 56px}
+h1{font-size:clamp(22px,4.4vw,30px);line-height:1.2;margin:0;letter-spacing:-.02em;font-weight:800}
+.base{margin:4px 0 0;color:var(--ink2);font-size:14px}
+.fun{display:inline-block;margin:12px 0 0;padding:4px 10px;border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;font-weight:800;font-size:14.5px;transform:rotate(-1.2deg)}
+.age{margin:8px 0 0;color:var(--ink2);font-size:13.5px}
+.priv{margin:8px 0 0;color:var(--ink2);font-size:12.5px;line-height:1.5}
+.sheet{display:grid;gap:18px;grid-template-columns:minmax(0,1fr);margin-top:18px}
+@media (min-width:860px){.sheet{grid-template-columns:minmax(300px,360px) minmax(0,1fr);align-items:start}.in{position:sticky;top:16px}}
+.in{background:var(--paper);border:1px solid var(--ink);border-radius:3px;padding:6px 16px 18px}
+label{display:block;font-size:14px;font-weight:600;margin:14px 0 5px}
+input{width:100%;padding:11px 12px;border:1px solid var(--ink);border-radius:3px;background:var(--paper);color:var(--ink);font:inherit;font-size:17px}
+input:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.hint{font-size:13px;color:var(--ink2);margin-top:4px;line-height:1.5}
+.err{color:var(--warn);font-size:13.5px;min-height:20px;margin-top:8px;font-weight:600}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+button{font:inherit;font-size:15px;font-weight:700;padding:10px 16px;border-radius:3px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+button.fill{background:var(--ink);color:var(--paper)}
+button:hover{filter:brightness(1.12)}
+.slip{position:relative;background:var(--paper);border:1px solid var(--ink);border-top-width:6px;border-radius:3px;padding:18px 18px 22px}
+.slip h2{font-size:16px;margin:0;font-weight:800}
+.meta{color:var(--ink2);font-size:13px;margin:2px 0 4px}
+.stamp{position:absolute;top:14px;right:14px;transform:rotate(-8deg);border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;padding:1px 9px;font-weight:800;font-size:15px;letter-spacing:.08em}
+.game{margin-top:14px;padding-top:10px;border-top:1.5px solid var(--ink)}
+.game h3{margin:0 0 6px;font-size:14px;font-weight:800}
+.pick{display:flex;align-items:center;gap:10px;padding:4px 0;border-bottom:1px solid var(--rule);font-size:14px}
+.pick span.why{color:var(--ink2)}
+.ball{flex:none;width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff;font-variant-numeric:tabular-nums}
+.b1{background:#C98A00;color:#1b1400}.b2{background:#2F5DA8}.b3{background:#B3261E}.b4{background:#5F6877}.b5{background:#2E7D4F}
+.disc{font-size:13px;color:var(--ink2);margin-top:12px;line-height:1.5}
+.empty{color:var(--ink2);font-size:14.5px;margin:10px 0 0}
+.stat{margin-top:22px;background:var(--paper);border:1px solid var(--ink);border-radius:3px;padding:16px 16px 20px}
+.stat h2{margin:0;font-size:18px;font-weight:800}
+.indep{margin:10px 0;padding:8px 12px;border-left:4px solid var(--stamp);background:var(--desk);font-size:13.5px;font-weight:700}
+.src{font-size:13px;color:var(--ink2);margin:4px 0 10px;line-height:1.5}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--ink);border-radius:4px;overflow:hidden;margin:10px 0 12px}
+.seg button{border:0;border-radius:0;padding:10px 4px;font-size:14px;font-weight:600}
+.seg button.on{background:var(--ink);color:var(--paper)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:6px}
+.cell{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px 5px;border:1px solid var(--rule);border-radius:3px;font-size:13px;font-weight:600}
+.cell b{font-size:15px}.cell i{display:block;width:80%;height:6px;background:var(--rule);border-radius:2px;overflow:hidden}.cell i s{display:block;height:100%;background:var(--bar)}
+.cell.in-must{border-color:var(--ink);border-width:2px;background:var(--hl);color:#1B2447}
+.two{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:14px}
+@media (min-width:640px){.two{grid-template-columns:1fr 1fr}}
+.two h3{margin:0 0 6px;font-size:14px;border-top:1.5px solid var(--ink);padding-top:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid var(--ink);border-radius:999px;font-size:13.5px;font-weight:600}
+.tw{overflow-x:auto;margin-top:6px}
+table{border-collapse:collapse;width:100%;min-width:420px}
+th,td{padding:6px 6px;text-align:left;border-bottom:1px solid var(--rule);font-size:14px}
+th{color:var(--ink2);font-weight:600;font-size:13px}
+td .ball{width:26px;height:26px;font-size:13px;margin-right:3px}
+.bn{color:var(--ink2);font-size:12.5px;margin-left:6px}
+.total{font-size:12.5px;color:var(--ink2);margin-top:8px}
+.notes{margin-top:26px}.notes h3{font-size:14px;margin:0 0 8px;border-top:1.5px solid var(--ink);padding-top:8px}
+.notes ul{margin:0;padding-left:18px;color:var(--ink2);font-size:14px}.notes li{margin:5px 0}
+a{color:var(--acc)}footer{font-size:13px;color:var(--ink2);margin-top:26px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-weight:700;border-radius:4px;padding:8px 16px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="desk">
+<header>
+<h1>나만의 로또 번호 생성기</h1>
+<p class="base">생일과 행운의 숫자로 6/45 번호 5게임, 숫자마다 이유를 붙여 드려요</p>
+<span class="fun">재미용이며 당첨 확률은 모든 번호가 같습니다</span>
+<p class="age">로또 구매는 만 19세 이상만 할 수 있어요.</p>
+<p class="priv">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 같은 방문자 구분(최대 8시간), 브라우저·운영체제 종류, 화면 너비)만 수집해요. 이름은 받지 않아요.</p>
+</header>
+
+<main class="sheet">
+<section class="in" aria-label="입력">
+<label for="birth">생년월일 (선택)</label>
+<input id="birth" type="date" min="1900-01-01">
+<div class="hint">날짜, 태어난 달, 띠 순서, 별자리 순서에서 숫자를 뽑아요.</div>
+<label for="lucky">행운의 숫자 1~3개 (선택)</label>
+<input id="lucky" inputmode="numeric" autocomplete="off" placeholder="예: 7, 13">
+<label for="must">꼭 넣을 숫자 (선택, 6개까지)</label>
+<input id="must" inputmode="numeric" autocomplete="off" placeholder="예: 3, 21">
+<div class="hint">아래 지난 기록 표의 숫자를 눌러도 여기에 들어가요.</div>
+<label for="excl">뺄 숫자 (선택)</label>
+<input id="excl" inputmode="numeric" autocomplete="off" placeholder="예: 4, 44">
+<div class="err" id="err" role="alert"></div>
+<div class="btns"><button type="button" class="fill" id="go">번호 만들기</button><button type="button" id="ex">예시 넣기</button><button type="button" id="clr">비우기</button></div>
+</section>
+
+<section class="slip" aria-live="polite" aria-label="결과">
+<span class="stamp">재미용</span>
+<h2>오늘의 번호 5게임</h2>
+<p class="meta" id="meta">같은 날 같은 입력이면 같은 번호가 나오고, 날짜가 바뀌면 달라져요.</p>
+<div id="games"><p class="empty">입력은 모두 비워도 돼요. “번호 만들기”를 누르면 날짜를 씨앗으로 한 무작위 번호가 나와요.</p></div>
+<p class="disc">재미용이며 당첨 확률은 모든 번호가 같습니다. 로또 구매는 만 19세 이상만 할 수 있어요.</p>
+<div class="btns"><button type="button" id="save" disabled>결과 이미지 저장</button></div>
+</section>
+</main>
+
+<section class="stat" aria-label="지난 당첨번호 기록">
+<h2>지난 당첨번호 기록 (참고용)</h2>
+<p class="indep">매 회 추첨은 서로 독립이라 지난 기록은 다음 회차에 영향을 주지 않습니다.</p>
+<p class="src" id="src"></p>
+<div class="seg" role="group" aria-label="기간"><button type="button" data-p="m">최근 1달</button><button type="button" data-p="q">최근 1분기</button><button type="button" data-p="y">최근 1년</button></div>
+<p class="src" id="prange"></p>
+<div class="grid" id="grid"></div>
+<p class="total" id="total"></p>
+<p class="indep">매 회 추첨은 서로 독립이라 지난 기록은 다음 회차에 영향을 주지 않습니다.</p>
+<div class="two"><div><h3>많이 나온 번호 6개</h3><div class="chips" id="top"></div></div><div><h3>적게 나온 번호 6개</h3><div class="chips" id="low"></div></div></div>
+<p class="src">횟수가 같으면 작은 숫자부터 보여 줘요. 숫자를 누르면 “꼭 넣을 숫자”에 들어가고, 한 번 더 누르면 빠져요. 통계는 번호 만들기에 자동으로 섞이지 않아요.</p>
+<h3 style="margin:16px 0 0;font-size:14px">최근 1달 회차별 1등 번호</h3>
+<div class="tw"><table><thead><tr><th>회차</th><th>추첨일</th><th>당첨번호</th><th>보너스</th></tr></thead><tbody id="recent"></tbody></table></div>
+<p class="indep">매 회 추첨은 서로 독립이라 지난 기록은 다음 회차에 영향을 주지 않습니다.</p>
+</section>
+
+<div class="notes"><h3>알아 두세요</h3>
+<ul>
+<li>재미용이며 당첨 확률은 모든 번호가 같습니다. 이 도구는 당첨을 돕지 않아요.</li>
+<li>번호는 입력한 값과 오늘 날짜를 섞어 만든 값에서 나와요. 이름은 받지 않아요.</li>
+<li>띠 순서는 양력 연도 기준(쥐띠가 1번째)이고, 별자리 순서는 양자리가 1번째예요. 음력 설이나 별자리 경계일 전후에는 다를 수 있어요.</li>
+<li>당첨번호 숫자는 보너스 번호를 빼고 센 횟수예요. 보너스 번호는 최근 1달 목록에만 따로 표시했어요.</li>
+<li>지난 기록은 매달 첫 영업일에 갱신해요.</li>
+</ul></div>
+<footer>© <a href="https://hayanfog9.github.io/">JW의 AI 작업실</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
+</div>
+<div id="toast" role="status"></div>
+<script>
+const D=[[1197,"2025-11-08",1,5,7,26,28,43,30],[1198,"2025-11-15",26,30,33,38,39,41,21],[1199,"2025-11-22",16,24,25,30,31,32,7],[1200,"2025-11-29",1,2,4,16,20,32,45],[1201,"2025-12-06",7,9,24,27,35,36,37],[1202,"2025-12-13",5,12,21,33,37,40,7],[1203,"2025-12-20",3,6,18,29,35,39,24],[1204,"2025-12-27",8,16,28,30,31,44,27],[1205,"2026-01-03",1,4,16,23,31,41,2],[1206,"2026-01-10",1,3,17,26,27,42,23],[1207,"2026-01-17",10,22,24,27,38,45,11],[1208,"2026-01-24",6,27,30,36,38,42,25],[1209,"2026-01-31",2,17,20,35,37,39,24],[1210,"2026-02-07",1,7,9,17,27,38,31],[1211,"2026-02-14",23,26,27,35,38,40,10],[1212,"2026-02-21",5,8,25,31,41,44,45],[1213,"2026-02-28",5,11,25,27,36,38,2],[1214,"2026-03-07",10,15,19,27,30,33,14],[1215,"2026-03-14",13,15,19,21,44,45,39],[1216,"2026-03-21",3,10,14,15,23,24,25],[1217,"2026-03-28",8,10,15,20,29,31,41],[1218,"2026-04-04",3,28,31,32,42,45,25],[1219,"2026-04-11",1,2,15,28,39,45,31],[1220,"2026-04-18",2,22,25,28,34,43,16],[1221,"2026-04-25",6,13,18,28,30,36,9],[1222,"2026-05-02",4,11,17,22,32,41,34],[1223,"2026-05-09",16,18,20,32,33,39,26],[1224,"2026-05-16",9,18,21,27,44,45,28],[1225,"2026-05-23",8,9,19,25,41,42,33],[1226,"2026-05-30",4,6,13,17,26,28,41],[1227,"2026-06-06",1,14,16,34,41,44,13],[1228,"2026-06-13",24,29,30,31,35,44,1],[1229,"2026-06-20",12,13,29,34,37,42,16],[1230,"2026-06-27",3,8,9,22,28,42,45],[1231,"2026-07-04",4,13,14,18,31,38,15],[1232,"2026-07-11",12,15,19,22,24,36,3],[1233,"2026-07-18",2,7,20,25,37,40,29],[1234,"2026-07-25",1,15,19,31,35,43,27],[1235,"2026-08-01",6,7,11,15,39,43,20],[1236,"2026-08-08",12,18,21,29,34,38,10],[1237,"2026-08-15",10,20,23,34,37,40,36],[1238,"2026-08-22",2,13,18,32,38,42,22],[1239,"2026-08-29",11,13,22,32,33,36,8],[1240,"2026-09-05",11,13,19,20,31,44,27],[1241,"2026-09-12",7,13,16,23,24,43,9],[1242,"2026-09-19",2,4,10,16,31,41,9],[1243,"2026-09-26",9,18,24,38,43,44,35],[1244,"2026-10-03",1,13,18,26,34,38,25],[1245,"2026-10-10",4,5,25,28,32,42,12],[1246,"2026-10-17",16,22,23,24,27,28,6],[1247,"2026-10-24",8,14,21,22,42,45,24],[1248,"2026-10-31",16,18,27,36,38,42,22]];
+const ZOD=['쥐','소','호랑이','토끼','용','뱀','말','양','원숭이','닭','개','돼지'];
+const SIGN=['양자리','황소자리','쌍둥이자리','게자리','사자자리','처녀자리','천칭자리','전갈자리','사수자리','염소자리','물병자리','물고기자리'];
+const SIGN_START=[[3,21],[4,20],[5,21],[6,22],[7,23],[8,23],[9,23],[10,23],[11,23],[12,22],[1,20],[2,19]];
+function $(i){return document.getElementById(i)}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast._t);toast._t=setTimeout(function(){e.style.opacity=0},1800)}
+function hash(s){var h=2166136261>>>0;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return h>>>0}
+function rng(seed){var a=seed>>>0;return function(){a=(a+0x6D2B79F5)>>>0;var t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+function parseNums(s){var out=[],bad=[];String(s||'').split(/[^0-9]+/).forEach(function(x){if(x==='')return;var v=+x;if(v>=1&&v<=45){if(out.indexOf(v)<0)out.push(v)}else bad.push(x)});return{nums:out,bad:bad}}
+function signIdx(m,d){var k=m*100+d;if(k>=1222||k<120)return 9;if(k<219)return 10;if(k<321)return 11;if(k<420)return 0;if(k<521)return 1;if(k<622)return 2;if(k<723)return 3;if(k<823)return 4;if(k<923)return 5;if(k<1023)return 6;if(k<1123)return 7;return 8}
+function birthPool(b){var o=[];if(!/^\d{4}-\d{2}-\d{2}$/.test(b||''))return o;var y=+b.slice(0,4),m=+b.slice(5,7),d=+b.slice(8,10);if(!(y>=1900&&m>=1&&m<=12&&d>=1&&d<=31))return o;
+  var z=((y-4)%12+12)%12,s=signIdx(m,d);
+  o.push({n:d,why:'생일 날짜 ('+d+'일)'});o.push({n:m,why:'태어난 달 ('+m+'월)'});o.push({n:z+1,why:'띠 순서 ('+ZOD[z]+'띠 = '+(z+1)+'번째)'});o.push({n:s+1,why:'별자리 순서 ('+SIGN[s]+' = '+(s+1)+'번째)'});
+  var yy=y%100;if(yy>=1&&yy<=45)o.push({n:yy,why:'태어난 해 끝 두 자리 ('+yy+')'});return o}
+function gen(inp,dateStr){
+  var errors=[],L=parseNums(inp.lucky),M=parseNums(inp.must),X=parseNums(inp.excl);
+  var bad=L.bad.concat(M.bad,X.bad);if(bad.length)errors.push('1~45 밖의 숫자는 쓸 수 없어요: '+bad.join(', '));
+  if(L.nums.length>3)errors.push('행운의 숫자는 3개까지예요.');
+  if(M.nums.length>6)errors.push('꼭 넣을 숫자는 6개까지예요.');
+  var both=M.nums.filter(function(x){return X.nums.indexOf(x)>=0});if(both.length)errors.push('꼭 넣을 숫자와 뺄 숫자에 같은 숫자가 있어요: '+both.join(', '));
+  if(45-X.nums.length<6)errors.push('뺄 숫자가 너무 많아요. 6개 이상 남아야 해요.');
+  if(errors.length)return{games:null,errors:errors};
+  var excl={};X.nums.forEach(function(x){excl[x]=1});
+  var must=M.nums.slice(),lucky=L.nums.filter(function(x){return !excl[x]&&must.indexOf(x)<0});
+  var bp=birthPool(inp.birth).filter(function(c){return !excl[c.n]&&must.indexOf(c.n)<0&&lucky.indexOf(c.n)<0});
+  var seen={};bp=bp.filter(function(c){if(seen[c.n])return false;seen[c.n]=1;return true});
+  var key=[dateStr,inp.birth||'',L.nums.slice().sort(function(a,b){return a-b}).join('.'),M.nums.slice().sort(function(a,b){return a-b}).join('.'),X.nums.slice().sort(function(a,b){return a-b}).join('.')].join('|');
+  var games=[],used={},bmap={};birthPool(inp.birth).forEach(function(c){if(!bmap[c.n])bmap[c.n]=c.why});
+  for(var g=0;g<5;g++){
+    var r=rng(hash(key+'#'+g)),res=null;
+    for(var tries=0;tries<30;tries++){
+      var pick=[],has={};
+      function add(n,why){if(pick.length<6&&!has[n]&&!excl[n]){has[n]=1;pick.push({n:n,why:why})}}
+      must.forEach(function(n){add(n,'꼭 넣을 숫자')});
+      lucky.forEach(function(n){add(n,'행운의 숫자')});
+      var b=bp.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(r()*(i+1));var t=b[i];b[i]=b[j];b[j]=t}
+      var take=Math.min(b.length,1+Math.floor(r()*3));
+      for(var k=0;k<take;k++)add(b[k].n,b[k].why);
+      var rest=[];for(var n=1;n<=45;n++)if(!has[n]&&!excl[n])rest.push(n);
+      while(pick.length<6){var q=Math.floor(r()*rest.length);var v=rest.splice(q,1)[0];add(v,bmap[v]?'날짜 씨앗 무작위 ('+dateStr+', 우연히 '+bmap[v].replace(/ \(.*\)/,'')+' 숫자와 같음)':'날짜 씨앗 무작위 ('+dateStr+')')}
+      pick.sort(function(a,b){return a.n-b.n});
+      var sig=pick.map(function(p){return p.n}).join(',');
+      if(!used[sig]||tries===29){used[sig]=1;res=pick;break}
+    }
+    games.push(res)}
+  return{games:games,errors:[]}}
+function bcls(n){return n<=10?'b1':n<=20?'b2':n<=30?'b3':n<=40?'b4':'b5'}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function today(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+var last=null;
+function input(){return{birth:$('birth').value,lucky:$('lucky').value,must:$('must').value,excl:$('excl').value}}
+function run(){var ds=today(),r=gen(input(),ds);$('err').textContent=r.errors.join(' ');
+  if(!r.games){$('save').disabled=true;return}
+  last={games:r.games,ds:ds};
+  $('meta').textContent=ds+' 날짜를 씨앗으로 만들었어요. 같은 날 같은 입력이면 같은 번호예요.'+((parseNums($('must').value).nums.length===6||45-parseNums($('excl').value).nums.length===6)?' 꼭 넣을 숫자가 6개이거나 남은 숫자가 6개뿐이라 5게임이 모두 같아요.':'');
+  $('games').innerHTML=r.games.map(function(g,i){return '<div class="game"><h3>'+(i+1)+'게임</h3>'+g.map(function(p){return '<div class="pick"><span class="ball '+bcls(p.n)+'">'+p.n+'</span><span class="why">'+esc(p.why)+'</span></div>'}).join('')+'</div>'}).join('');
+  $('save').disabled=false}
+function wrapText(c,t,w){var out=[],cur='';t.split('').forEach(function(ch){if(c.measureText(cur+ch).width>w){out.push(cur);cur=ch}else cur+=ch});if(cur)out.push(cur);return out}
+function saveImg(){if(!last)return;var W=1080,pad=56,cv=document.createElement('canvas'),c=cv.getContext('2d');cv.width=W;
+  var FONT='"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif',cols={b1:'#C98A00',b2:'#2F5DA8',b3:'#B3261E',b4:'#5F6877',b5:'#2E7D4F'};
+  c.font='22px '+FONT;var blocks=last.games.map(function(g){var txt=g.map(function(p){return p.n+' '+p.why.replace(/ \(.*\)/,'')}).join(' · ');return wrapText(c,txt,W-pad*2)});
+  var H=230;blocks.forEach(function(b){H+=84+b.length*30+22});H+=170;cv.height=H;
+  c.fillStyle='#E4E9F0';c.fillRect(0,0,W,H);c.fillStyle='#fff';c.fillRect(24,24,W-48,H-48);c.fillStyle='#1B2447';c.fillRect(24,24,W-48,10);
+  c.fillStyle='#1B2447';c.font='800 44px '+FONT;c.fillText('나만의 로또 번호 5게임',pad,104);c.font='24px '+FONT;c.fillStyle='#58627F';c.fillText(last.ds+' 날짜를 씨앗으로 만든 번호',pad,146);
+  c.strokeStyle='#B3261E';c.lineWidth=3;c.strokeRect(W-pad-170,64,170,50);c.fillStyle='#B3261E';c.font='800 28px '+FONT;c.fillText('재미용',W-pad-130,100);
+  var y=190;last.games.forEach(function(g,i){c.fillStyle='#1B2447';c.font='800 26px '+FONT;c.fillText((i+1)+'게임',pad,y+30);
+    g.forEach(function(p,k){var x=pad+130+k*140;c.beginPath();c.arc(x+34,y+22,34,0,7);c.fillStyle=cols[bcls(p.n)];c.fill();c.fillStyle='#fff';c.font='800 32px '+FONT;c.textAlign='center';c.fillText(p.n,x+34,y+33);c.textAlign='left'});
+    c.fillStyle='#58627F';c.font='22px '+FONT;blocks[i].forEach(function(l,j){c.fillText(l,pad,y+88+j*30)});y+=84+blocks[i].length*30+22});
+  c.fillStyle='#B3261E';c.font='800 26px '+FONT;c.fillText('재미용이며 당첨 확률은 모든 번호가 같습니다',pad,y+40);c.fillStyle='#58627F';c.font='22px '+FONT;c.fillText('로또 구매는 만 19세 이상 · JW의 AI 작업실 hayanfog9.github.io/lotto-pick-5n8c/',pad,y+80);
+  cv.toBlob(function(bl){if(!bl){toast('이미지를 만들지 못했어요');return}var a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='lotto-5games-'+last.ds+'.png';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(a.href)},1000);toast('이미지를 저장했어요')},'image/png')}
+/* ---- 지난 기록 ---- */
+var LAST=D[D.length-1],P={m:5,q:13,y:52},per='m';
+function counts(k){var c=new Array(46).fill(0),rows=D.slice(-k);rows.forEach(function(r){for(var i=2;i<=7;i++)c[r[i]]++});return{c:c,rows:rows}}
+function ranked(c){var a=[];for(var n=1;n<=45;n++)a.push([n,c[n]]);return a}
+function addMust(n){var cur=parseNums($('must').value).nums,ex=parseNums($('excl').value).nums;var i=cur.indexOf(n);
+  if(i>=0){cur.splice(i,1);toast(n+'을(를) 뺐어요')}else{if(cur.length>=6){toast('꼭 넣을 숫자는 6개까지예요');return}cur.push(n);var e=ex.indexOf(n);if(e>=0){ex.splice(e,1);$('excl').value=ex.join(', ')}toast(n+'을(를) 꼭 넣을 숫자에 넣었어요')}
+  $('must').value=cur.join(', ');paint()}
+function paint(){var k=P[per],o=counts(k),c=o.c,mx=Math.max.apply(null,c.slice(1)),sel=parseNums($('must').value).nums;
+  $('prange').textContent='선택한 기간: '+o.rows[0][0]+'회('+o.rows[0][1]+')~'+LAST[0]+'회('+LAST[1]+'), 총 '+k+'회';
+  $('grid').innerHTML=ranked(c).map(function(a){return '<button type="button" class="cell'+(sel.indexOf(a[0])>=0?' in-must':'')+'" data-n="'+a[0]+'" aria-label="'+a[0]+'번 '+a[1]+'회"><b>'+a[0]+'</b><span>'+a[1]+'회</span><i><s style="width:'+(mx?Math.round(a[1]/mx*100):0)+'%"></s></i></button>'}).join('');
+  var sum=0;for(var n=1;n<=45;n++)sum+=c[n];$('total').textContent='횟수 합계 '+sum+' = '+k+'회 × 6개 (보너스 번호 제외)';
+  var r=ranked(c),hi=r.slice().sort(function(a,b){return b[1]-a[1]||a[0]-b[0]}).slice(0,6),lo=r.slice().sort(function(a,b){return a[1]-b[1]||a[0]-b[0]}).slice(0,6);
+  function ch(a){return '<button type="button" class="chip" data-n="'+a[0]+'">'+a[0]+' <span style="font-weight:400">'+a[1]+'회</span></button>'}
+  $('top').innerHTML=hi.map(ch).join('');$('low').innerHTML=lo.map(ch).join('');
+  document.querySelectorAll('.seg button').forEach(function(b){b.className=b.dataset.p===per?'on':''})}
+function init(){$('src').textContent=LAST[0]+'회('+LAST[1]+') 기준, 출처: 로또 6/45 공식 추첨 결과. 보너스 번호는 횟수에 넣지 않고 최근 1달 목록에만 따로 표시했어요.';
+  $('recent').innerHTML=D.slice(-5).reverse().map(function(r){return '<tr><td>'+r[0]+'회</td><td>'+r[1]+'</td><td>'+r.slice(2,8).map(function(n){return '<span class="ball '+bcls(n)+'">'+n+'</span>'}).join('')+'</td><td><span class="ball '+bcls(r[8])+'">'+r[8]+'</span><span class="bn">따로 표시</span></td></tr>'}).join('');
+  paint()}
+document.addEventListener('click',function(e){var t=e.target.closest('[data-n]');if(t&&(t.classList.contains('cell')||t.classList.contains('chip'))){addMust(+t.dataset.n);return}
+  var s=e.target.closest('.seg button');if(s){per=s.dataset.p;paint()}});
+$('go').onclick=run;$('save').onclick=saveImg;
+$('ex').onclick=function(){$('birth').value='1990-05-14';$('lucky').value='7, 13';$('must').value='';$('excl').value='4';paint();run()};
+$('clr').onclick=function(){['birth','lucky','must','excl'].forEach(function(i){$(i).value=''});$('err').textContent='';paint()};
+['must'].forEach(function(i){$(i).addEventListener('input',paint)});
+window.LG={gen:gen,counts:counts,D:D,parseNums:parseNums,signIdx:signIdx};
+init();
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
