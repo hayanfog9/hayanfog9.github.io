@@ -42,6 +42,7 @@ footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:v
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--acc);color:#07202a;font-weight:700;border-radius:999px;padding:8px 18px;opacity:0;transition:opacity .2s;pointer-events:none}
 @media(max-width:560px){.wrap{padding:0 16px}}
 @media print{body{background:#fff;color:#000}.noprint{display:none!important}.panel{border:0;background:#fff;padding:0}.res,input,select{background:#fff;color:#000;border-color:#999}.big{color:#000}th,td{border-color:#999}}
+.tools{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}.tools a{display:block;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--in);color:var(--text);text-decoration:none}.tools a:hover{border-color:var(--acc)}.tools b{display:block;color:var(--acc);font-size:15px}.tools span{display:block;font-size:13px;color:var(--sub);line-height:1.5}.more{margin:14px 0 0}.more a{display:inline-block;padding:8px 16px;border:1px solid var(--acc);border-radius:999px;font-weight:700;font-size:14.5px;text-decoration:none}
 [hidden]{display:none!important}</style></head><body><div class="wrap">
 <header><h1>환율 환산 <span>계산기</span></h1><p class="lead">환율은 직접 넣어요. 금액과 환율, 수수료만 정하면 원화와 외화를 서로 바꿔 줘요.</p>
 <span class="pill">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 같은 방문자 구분(최대 8시간), 브라우저·운영체제 종류, 화면 너비)만 수집해요</span><span class="pill">실시간 환율 아님 · 내가 넣은 환율로 계산</span></header>
@@ -62,6 +63,7 @@ footer{margin:0 0 40px;padding-top:18px;border-top:1px solid var(--line);color:v
 <li>외화 → 원화는 금액 × 환율 ÷ 기준 수량이고, 원화 → 외화는 금액 ÷ (환율 ÷ 기준 수량)이에요.</li>
 <li>환전 수수료는 받는 금액에서 그 비율만큼 빼요. 은행마다 수수료 방식이 달라서, 정확한 금액은 환전하는 곳에서 확인하세요.</li>
 <li>원화 결과는 원 단위로 반올림해서 보여 줘요. 이 도구는 실시간 환율을 가져오지 않는 참고용 계산기예요.</li></ul></div>
+<section class="panel noprint" aria-label="함께 쓰면 좋은 도구"><h2>함께 쓰면 좋은 도구</h2><p class="hint">모두 무료이고, 입력한 값은 저장하지 않아요.</p><div class="tools"><a href="https://hayanfog9.github.io/salary-calc-6w2p/" target="_blank" rel="noopener"><b>월급 실수령액 계산기</b><span>세전 월급이나 연봉에서 4대보험과 소득세를 뺀 예상 실수령액을 계산해요.</span></a><a href="https://hayanfog9.github.io/wage-convert-4p6s/" target="_blank" rel="noopener"><b>시급·월급·연봉 환산기</b><span>하나만 넣으면 나머지를 세전 금액으로 환산해요. 참고용이에요.</span></a><a href="https://hayanfog9.github.io/margin-calc-4d9r/" target="_blank" rel="noopener"><b>마진·원가 계산기</b><span>원가와 판매가로 마진액과 마진율을 계산해요.</span></a><a href="https://hayanfog9.github.io/option-quote-3h8w/" target="_blank" rel="noopener"><b>할인·옵션 견적 계산기</b><span>옵션과 정률·정액 할인을 적용해 합계를 단계별로 계산해요.</span></a></div><p class="more"><a href="https://blog.naver.com/hayanfog" target="_blank" rel="noopener">JW의 AI 작업실 블로그 바로가기</a></p></section>
 <footer>© JW의 AI 작업실 · <a href="https://hayanfog9.github.io/">다른 도구 보기</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
 </div><div id="toast" role="status"></div>
 <script>
