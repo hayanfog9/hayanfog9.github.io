@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>퇴직금 계산기 | JW의 AI 작업실</title>
+<meta name="description" content="입사일, 마지막 근무일, 퇴직 전 3개월 임금을 넣으면 1일 평균임금과 퇴직금을 계산해요. 고용노동부 퇴직금 계산기의 계산 순서를 따랐고, 참고용이에요. 퇴직소득세는 계산하지 않아요. 입력한 내용은 저장하거나 전송하지 않아요.">
+<link rel="canonical" href="https://hayanfog9.github.io/retire-pay-6m3x/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="퇴직금 계산기">
+<meta property="og:description" content="1일 평균임금 × 30일 × (재직일수 ÷ 365). 고용노동부 계산 순서를 따른 참고용 계산기예요.">
+<meta property="og:url" content="https://hayanfog9.github.io/retire-pay-6m3x/">
+<meta name="robots" content="index,follow">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"퇴직금 계산기","url":"https://hayanfog9.github.io/retire-pay-6m3x/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"author":{"@type":"Person","name":"JW"}}</script>
+<style>
+:root{color-scheme:light dark;--desk:#E4E9F0;--paper:#FFFFFF;--ink:#1B2447;--ink2:#58627F;--rule:#CBD2DF;--hl:#FFE45C;--stamp:#B3261E;--warn:#B3261E;--focus:#3F528F;--acc:#3F528F}
+@media (prefers-color-scheme:dark){:root{--desk:#0D1220;--paper:#151B2D;--ink:#E8ECF8;--ink2:#A2ACC6;--rule:#2A3552;--hl:#5A4B00;--stamp:#FF8A80;--warn:#FF8A80;--focus:#AAB7E8;--acc:#AAB7E8}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--desk);color:var(--ink);font:16px/1.6 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.desk{max-width:980px;margin:0 auto;padding:22px 16px 56px}
+h1{font-size:clamp(22px,4.4vw,30px);line-height:1.2;margin:0;letter-spacing:-.02em;font-weight:800}
+.base{margin:4px 0 0;color:var(--ink2);font-size:14px}
+.ref{display:inline-block;margin:12px 0 0;padding:4px 10px;border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;font-weight:800;font-size:14px;transform:rotate(-1deg)}
+.priv{margin:8px 0 0;color:var(--ink2);font-size:12.5px;line-height:1.5}
+.sheet{display:grid;gap:18px;grid-template-columns:minmax(0,1fr);margin-top:18px}
+@media (min-width:900px){.sheet{grid-template-columns:minmax(330px,420px) minmax(0,1fr);align-items:start}.in{position:sticky;top:16px}}
+.in{background:var(--paper);border:1px solid var(--ink);border-radius:3px;padding:6px 16px 18px}
+label{display:block;font-size:14px;font-weight:600;margin:14px 0 5px}
+input{width:100%;padding:10px 12px;border:1px solid var(--ink);border-radius:3px;background:var(--paper);color:var(--ink);font:inherit;font-size:16px}
+input:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:13px;color:var(--ink2);margin-top:4px;line-height:1.5}
+.err{color:var(--warn);font-size:13.5px;min-height:20px;margin-top:8px;font-weight:600}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+button{font:inherit;font-size:14.5px;font-weight:700;padding:9px 14px;border-radius:3px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+button.fill{background:var(--ink);color:var(--paper)}
+.seg{margin-top:16px;padding-top:6px;border-top:1.5px solid var(--ink)}
+.seg h2{font-size:14px;margin:8px 0 2px}
+.sr{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end;padding:8px 0;border-bottom:1px solid var(--rule)}
+.sr .cap{grid-column:1/-1;font-size:13px;font-weight:700}
+.sr label{margin:0 0 3px;font-size:12.5px;font-weight:600;color:var(--ink2)}
+.slip{position:relative;background:var(--paper);border:1px solid var(--ink);border-top-width:6px;border-radius:3px;padding:18px 18px 22px}
+.slip h2{font-size:16px;margin:0;font-weight:800}
+.meta{color:var(--ink2);font-size:13px;margin:2px 0 4px}
+.stamp{position:absolute;top:14px;right:14px;transform:rotate(-8deg);border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;padding:1px 9px;font-weight:800;font-size:15px;letter-spacing:.08em}
+.r{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);font-size:14.5px}
+.r span:first-child{color:var(--ink2)}.r b{font-weight:600;text-align:right}
+.net{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px;padding-top:12px;border-top:3px double var(--ink)}
+.net span{font-weight:700}
+#net{white-space:nowrap;font-size:clamp(26px,8vw,38px);font-weight:800;letter-spacing:-.03em;background:linear-gradient(transparent 55%,var(--hl) 55%,var(--hl) 92%,transparent 92%) no-repeat;padding:0 .12em}
+.note{font-size:13px;color:var(--ink2);margin-top:10px;line-height:1.55}
+.warnbox{margin-top:12px;padding:10px 12px;border:1.5px solid var(--warn);border-radius:3px;color:var(--warn);font-size:13.5px;font-weight:600}
+.empty{color:var(--ink2);font-size:14.5px;margin:10px 0 0}
+.notes{margin-top:26px}.notes h3{font-size:14px;margin:0 0 8px;border-top:1.5px solid var(--ink);padding-top:8px}
+.notes ul{margin:0;padding-left:18px;color:var(--ink2);font-size:14px}.notes li{margin:5px 0}
+a{color:var(--acc)}footer{font-size:13px;color:var(--ink2);margin-top:26px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-weight:700;border-radius:4px;padding:8px 16px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="desk">
+<header>
+<h1>퇴직금 계산기</h1>
+<p class="base">1일 평균임금 × 30일 × (재직일수 ÷ 365) · 고용노동부 계산 순서를 따른 계산</p>
+<span class="ref">참고용 계산이며 실제 지급액은 회사 규정과 실제 임금 자료에 따라 달라질 수 있습니다</span>
+<p class="priv">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 같은 방문자 구분(최대 8시간), 브라우저·운영체제 종류, 화면 너비)만 수집해요. 퇴직소득세는 계산하지 않아요.</p>
+</header>
+
+<main class="sheet">
+<section class="in" aria-label="입력">
+<div class="row">
+<div><label for="hire">입사일</label><input id="hire" type="date" min="1960-01-01"></div>
+<div><label for="last">마지막 근무일</label><input id="last" type="date" min="1960-01-01"></div>
+</div>
+<div class="hint" id="dates">퇴직일자는 마지막 근무일의 다음 날이에요.</div>
+<div class="seg" id="seg" hidden>
+<h2>퇴직 전 3개월 임금(세전)</h2>
+<div class="hint">기간마다 받은 기본급과 기타수당을 넣어요. 월급이 한 달에 같다면 아래 두 칸을 채우고 "일할로 채우기"를 누르면 날짜 수에 맞춰 나눠 넣어요(직접 고칠 수 있어요).</div>
+<div class="row"><div><label for="mbase">월 기본급(선택)</label><input id="mbase" inputmode="numeric" autocomplete="off"></div><div><label for="mextra">월 기타수당(선택)</label><input id="mextra" inputmode="numeric" autocomplete="off"></div></div>
+<div class="btns"><button type="button" id="fill">일할로 채우기</button></div>
+<div id="rows"></div>
+</div>
+<div class="row">
+<div><label for="bonus">연간 상여금 총액</label><input id="bonus" inputmode="numeric" autocomplete="off" value="0"></div>
+<div><label for="leave">연차수당</label><input id="leave" inputmode="numeric" autocomplete="off" value="0"></div>
+</div>
+<div class="hint">상여금은 퇴직 전 12개월 동안 받은 총액, 연차수당은 퇴직 전전년도에 생긴 휴가 중 퇴직 전년도에 쓰지 않은 날의 수당 합계예요. 모르면 0으로 두세요.</div>
+<label for="com">1일 통상임금(선택)</label>
+<input id="com" inputmode="numeric" autocomplete="off" value="0">
+<div class="hint">알고 있고 평균임금보다 크면 통상임금으로 계산해요. 모르면 0으로 두세요.</div>
+<div class="err" id="err" role="alert"></div>
+<div class="btns"><button type="button" class="fill" id="go">퇴직금 계산</button><button type="button" id="ex">예시 넣기</button><button type="button" id="clr">비우기</button></div>
+</section>
+
+<section class="slip" aria-live="polite" aria-label="결과">
+<span class="stamp">참고용</span>
+<h2>퇴직금 계산서</h2>
+<p class="meta" id="meta">입사일과 마지막 근무일을 넣으면 퇴직 전 3개월 기간이 나와요.</p>
+<div id="res"><p class="empty">필요한 값을 모두 넣고 "퇴직금 계산"을 누르세요.</p></div>
+<p class="note">참고용 계산이며 실제 지급액은 회사 규정과 실제 임금 자료에 따라 달라질 수 있습니다. 퇴직소득세는 계산하지 않았어요. 세금은 국세청 홈택스의 퇴직소득 세액 계산 프로그램에서 확인하세요.</p>
+<div class="btns"><button type="button" id="copy" disabled>결과 복사</button></div>
+</section>
+</main>
+
+<div class="notes"><h3>계산 방법과 한계</h3>
+<ul>
+<li>퇴직금 = 1일 평균임금 × 30일 × (재직일수 ÷ 365)예요. 재직일수는 입사일부터 퇴직일자(마지막 근무일의 다음 날)까지의 날짜 수예요.</li>
+<li>1일 평균임금 = 퇴직 전 3개월 임금 총액 ÷ 그 기간의 총일수예요. 상여금과 연차수당은 연간 금액의 3/12를 더해요. 소수 둘째 자리까지 올림하고, 퇴직금은 원 단위로 반올림해서 고용노동부 계산기와 같은 방식이에요.</li>
+<li>평균임금이 통상임금보다 적으면 통상임금을 평균임금으로 봐요(법제처 생활법령정보).</li>
+<li>재직이 1년 미만이면 계산하지 않아요. 법제처 생활법령정보는 계속근로기간 1년 미만 근로자와 4주 평균 주 15시간 미만 근로자를 퇴직급여제도가 설정되지 않은 근로자로 안내하고, 고용노동부 퇴직금 계산기도 재직 1년 미만이면 계산하지 않아요.</li>
+<li>육아휴직 등 평균임금 산정기간에서 빼는 기간(미산입기간)과 근속에서 빼는 기간(근무제외기간)은 이 계산기에서 다루지 않아요. 필요하면 고용노동부 퇴직금 계산기를 쓰세요.</li>
+<li>퇴직금은 지급사유가 생긴 날부터 14일 안에 지급해야 해요(근로자퇴직급여 보장법 제9조 제1항, 법제처 생활법령정보). 당사자 간 합의로 늘릴 수 있어요.</li>
+<li>회사에 퇴직연금(DB·DC)이 있거나 퇴직금 규정이 따로 있으면 금액이 달라질 수 있어요. 이 계산기는 퇴직금제도 기준이에요.</li>
+</ul>
+<p class="note">공식 자료: <a href="https://www.moel.go.kr/retirementpayCal.do" target="_blank" rel="noopener">고용노동부 퇴직금 계산</a> · <a href="https://easylaw.go.kr/CSP/CsmMain.laf?csmSeq=999" target="_blank" rel="noopener">법제처 찾기쉬운 생활법령정보 퇴직급여제도</a></p>
+</div>
+<footer>© <a href="https://hayanfog9.github.io/">JW의 AI 작업실</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
+</div>
+<div id="toast" role="status"></div>
+<script>
+function $(i){return document.getElementById(i)}
+function n(v){v=parseFloat(String(v).replace(/,/g,''));return isFinite(v)?v:0}
+function won(v){return Math.round(v).toLocaleString('ko-KR')+'원'}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast._t);toast._t=setTimeout(function(){e.style.opacity=0},1800)}
+function leap(y){return (y%4===0&&y%100!==0)||y%400===0}
+function maxday(y,m){return [31,leap(y)?29:28,31,30,31,30,31,31,30,31,30,31][m-1]}
+function utc(y,m,d){return Date.UTC(y,m-1,d)}
+function parse(s){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');return m?{y:+m[1],m:+m[2],d:+m[3]}:null}
+function addDay(o,k){var t=new Date(utc(o.y,o.m,o.d)+k*86400000);return{y:t.getUTCFullYear(),m:t.getUTCMonth()+1,d:t.getUTCDate()}}
+/* 평균임금 산정기간: 고용노동부 퇴직금 계산기의 기간 나누기와 같은 방식(미산입기간 없음). E=퇴직일자(마지막 근무일의 다음 날) */
+function segments(E){
+  var Y=E.y,M=E.m,D=E.d,idx,emon=M,special=(M===5&&(D===30||D===31||(D===29&&!leap(Y))));
+  if(D-1===0){emon=M-1;idx=3}else idx=4;
+  if(special)idx=3;
+  var out=[];
+  for(var i=1;i<=idx;i++){
+    var yy,mm,t=emon-idx+i;
+    if(t<=0){yy=Y-1;mm=12+t}else{yy=Y;mm=t}
+    var dd,dd2;
+    if(idx===3){dd=1;dd2=(special&&i===3)?D-1:maxday(yy,mm)}
+    else if(i===1){dd=(D>maxday(yy,mm))?maxday(yy,mm)-(maxday(Y,emon)-D):D;dd2=maxday(yy,mm)}
+    else if(i===2||i===3){dd=1;dd2=maxday(yy,mm)}
+    else{dd=1;dd2=D-1}
+    var cnt=(dd2!==0&&dd!==dd2)?(dd2-dd+1):1;
+    out.push({y:yy,m:mm,d1:dd,d2:dd2,cnt:cnt,dim:maxday(yy,mm)});
+  }
+  return out}
+function ceil2(x){return Math.ceil(x*100)/100}
+function calc(o){
+  /* o: hire{y,m,d}, last{y,m,d}, base[], extra[], bonus, leave, com */
+  var E=addDay(o.last,1),term=Math.round((utc(E.y,E.m,E.d)-utc(o.hire.y,o.hire.m,o.hire.d))/86400000);
+  var oneYearBefore={y:E.y-1,m:E.m,d:E.d};
+  if(utc(o.hire.y,o.hire.m,o.hire.d)>utc(oneYearBefore.y,oneYearBefore.m,oneYearBefore.d))return{short:true,term:term,E:E};
+  var seg=segments(E),days=0,sb=0,se=0;
+  seg.forEach(function(s,i){days+=s.cnt;sb+=o.base[i]||0;se+=o.extra[i]||0});
+  var ab=o.bonus*0.25,lv=o.leave*0.25,total=sb+se+ab+lv;
+  var avr=ceil2(total/days),use=avr,usedCom=false;
+  if(o.com>0&&avr<o.com){use=o.com;usedCom=true}
+  var ret=Math.round(use*30*term/365);
+  return{short:false,term:term,E:E,seg:seg,days:days,sumBase:sb,sumExtra:se,bonusAdd:ab,leaveAdd:lv,total:total,avr:avr,usedCom:usedCom,use:use,ret:ret}}
+function fmtD(o){return o.y+'.'+('0'+o.m).slice(-2)+'.'+('0'+o.d).slice(-2)}
+var cur=null,segNow=null;
+function build(){
+  var h=parse($('hire').value),l=parse($('last').value);
+  if(!h||!l){$('seg').hidden=true;segNow=null;return}
+  var E=addDay(l,1);segNow=segments(E);
+  var html='';segNow.forEach(function(s,i){html+='<div class="sr"><div class="cap">'+(i+1)+'. '+fmtD({y:s.y,m:s.m,d:s.d1})+' ~ '+fmtD({y:s.y,m:s.m,d:s.d2})+' ('+s.cnt+'일)</div><div><label for="b'+i+'">기본급</label><input id="b'+i+'" data-k="b" data-i="'+i+'" inputmode="numeric" autocomplete="off" value="'+(window._keep&&window._keep.b[i]||'')+'"></div><div><label for="x'+i+'">기타수당</label><input id="x'+i+'" data-k="x" data-i="'+i+'" inputmode="numeric" autocomplete="off" value="'+(window._keep&&window._keep.x[i]||'')+'"></div></div>'});
+  $('rows').innerHTML=html;$('seg').hidden=false;
+  $('dates').textContent='퇴직일자 '+fmtD(E)+'(마지막 근무일의 다음 날) · 재직일수 '+Math.round((utc(E.y,E.m,E.d)-utc(h.y,h.m,h.d))/86400000)+'일 · 3개월 총일수 '+segNow.reduce(function(a,s){return a+s.cnt},0)+'일'}
+function keepRows(){window._keep={b:[],x:[]};document.querySelectorAll('#rows input').forEach(function(e){window._keep[e.dataset.k][+e.dataset.i]=e.value})}
+function readInput(){
+  var h=parse($('hire').value),l=parse($('last').value),base=[],extra=[];
+  document.querySelectorAll('#rows input').forEach(function(e){(e.dataset.k==='b'?base:extra)[+e.dataset.i]=n(e.value)});
+  return{hire:h,last:l,base:base,extra:extra,bonus:n($('bonus').value),leave:n($('leave').value),com:n($('com').value)}}
+function run(){
+  var o=readInput(),err=[];
+  if(!o.hire||!o.last)err.push('입사일과 마지막 근무일을 넣어 주세요.');
+  else if(utc(o.last.y,o.last.m,o.last.d)<utc(o.hire.y,o.hire.m,o.hire.d))err.push('마지막 근무일이 입사일보다 앞이에요.');
+  [['bonus','연간 상여금'],['leave','연차수당'],['com','1일 통상임금']].forEach(function(p){if(n($(p[0]).value)<0)err.push(p[1]+'은 0 이상으로 넣어 주세요.')});
+  document.querySelectorAll('#rows input').forEach(function(e){if(n(e.value)<0)err.push('임금은 0 이상으로 넣어 주세요.')});
+  $('err').textContent=err.join(' ');if(err.length){$('copy').disabled=true;return}
+  var r=calc(o);cur=r;
+  if(r.short){$('res').innerHTML='<div class="warnbox">재직이 1년 미만이에요. 계속근로기간 1년 미만 근로자는 퇴직급여제도가 설정되지 않은 근로자로 안내돼 있고(법제처 생활법령정보), 고용노동부 퇴직금 계산기도 같은 경우 계산하지 않아서 이 계산기도 계산하지 않아요.</div>';$('copy').disabled=true;return}
+  var total=r.sumBase+r.sumExtra,rows='';
+  rows+='<div class="r"><span>재직일수(입사일 ~ 퇴직일자 '+fmtD(r.E)+')</span><b>'+r.term.toLocaleString('ko-KR')+'일</b></div>';
+  rows+='<div class="r"><span>퇴직 전 3개월 기본급·기타수당 합계('+r.days+'일)</span><b>'+won(total)+'</b></div>';
+  rows+='<div class="r"><span>상여금 가산(연간 × 3/12)</span><b>'+won(r.bonusAdd)+'</b></div>';
+  rows+='<div class="r"><span>연차수당 가산(연간 × 3/12)</span><b>'+won(r.leaveAdd)+'</b></div>';
+  rows+='<div class="r"><span>임금 총액</span><b>'+won(r.total)+'</b></div>';
+  rows+='<div class="r"><span>1일 평균임금(소수 둘째 자리 올림)</span><b>'+r.avr.toLocaleString('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:2})+'원</b></div>';
+  if(o.com>0)rows+='<div class="r"><span>1일 통상임금 '+(r.usedCom?'(평균임금보다 커서 이 값으로 계산)':'(평균임금보다 작아서 평균임금으로 계산)')+'</span><b>'+won(o.com)+'</b></div>';
+  rows+='<div class="net"><span>예상 퇴직금(세전)</span><b id="net">'+won(r.ret)+'</b></div>';
+  $('res').innerHTML=rows;$('meta').textContent='계산 기준 퇴직일자 '+fmtD(r.E)+'. 참고용이에요.';$('copy').disabled=false;
+  window._txt='예상 퇴직금 '+won(r.ret)+' (재직일수 '+r.term+'일, 1일 평균임금 '+r.avr.toFixed(2)+'원, 퇴직 전 3개월 '+r.days+'일, 임금 총액 '+won(r.total)+'). 참고용 계산이며 실제 지급액은 회사 규정과 실제 임금 자료에 따라 달라질 수 있습니다. 퇴직소득세는 계산하지 않았어요.'}
+function fill(){
+  if(!segNow)return;var b=n($('mbase').value),x=n($('mextra').value);
+  segNow.forEach(function(s,i){$('b'+i).value=b?Math.round(b*s.cnt/s.dim):'';$('x'+i).value=x?Math.round(x*s.cnt/s.dim):''});keepRows()}
+$('hire').addEventListener('change',function(){keepRows();build()});$('last').addEventListener('change',function(){window._keep=null;build()});
+$('rows').addEventListener('input',keepRows);
+$('fill').onclick=fill;$('go').onclick=run;
+$('ex').onclick=function(){$('hire').value='2014-10-02';$('last').value='2017-09-15';window._keep=null;build();document.getElementById('mbase').value='2000000';document.getElementById('mextra').value='360000';fill();$('bonus').value='4000000';$('leave').value='300000';$('com').value='0';run()};
+$('clr').onclick=function(){['hire','last','mbase','mextra'].forEach(function(i){$(i).value=''});['bonus','leave','com'].forEach(function(i){$(i).value='0'});window._keep=null;build();$('err').textContent='';$('res').innerHTML='<p class="empty">필요한 값을 모두 넣고 "퇴직금 계산"을 누르세요.</p>';$('copy').disabled=true};
+$('copy').onclick=function(){var t=window._txt||'';function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('복사했어요')}catch(e){toast('복사하지 못했어요. 직접 선택해서 복사하세요')}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},fb)}else fb()};
+window.RP={calc:calc,segments:segments,addDay:addDay};
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
