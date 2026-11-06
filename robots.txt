@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://hayanfog9.github.io/sitemap.xml
+Sitemap: https://hayanfog9.github.io/sitemap.txt
