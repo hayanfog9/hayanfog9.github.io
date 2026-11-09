@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>엔화 여행 경비 계산기 | JW의 AI 작업실</title>
+<meta name="description" content="숙박, 식비, 교통, 입장료, 쇼핑 같은 일본 여행 경비를 엔으로 적고 내가 넣은 환율을 곱하면 항목별 원화와 총합, 1인당 금액을 보여 줘요. 실시간 환율이 아니에요. 입력한 내용은 저장하거나 전송하지 않아요.">
+<link rel="canonical" href="https://hayanfog9.github.io/yen-trip-4n7q/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="엔화 여행 경비 계산기">
+<meta property="og:description" content="엔으로 적은 여행 경비를 내가 넣은 환율로 원화 합계와 1인당 금액으로 바꿔요. 실시간 환율이 아니에요.">
+<meta property="og:url" content="https://hayanfog9.github.io/yen-trip-4n7q/">
+<meta name="robots" content="index,follow">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"엔화 여행 경비 계산기","url":"https://hayanfog9.github.io/yen-trip-4n7q/","applicationCategory":"TravelApplication","operatingSystem":"Web","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"author":{"@type":"Person","name":"JW"}}</script>
+<style>
+:root{color-scheme:light dark;--desk:#E4E9F0;--paper:#FFFFFF;--ink:#1B2447;--ink2:#58627F;--rule:#CBD2DF;--hl:#FFE45C;--stamp:#B3261E;--warn:#B3261E;--focus:#3F528F;--acc:#3F528F}
+@media (prefers-color-scheme:dark){:root{--desk:#0D1220;--paper:#151B2D;--ink:#E8ECF8;--ink2:#A2ACC6;--rule:#2A3552;--hl:#5A4B00;--stamp:#FF8A80;--warn:#FF8A80;--focus:#AAB7E8;--acc:#AAB7E8}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--desk);color:var(--ink);font:16px/1.6 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.desk{max-width:980px;margin:0 auto;padding:22px 16px 56px}
+h1{font-size:clamp(22px,4.4vw,30px);line-height:1.2;margin:0;letter-spacing:-.02em;font-weight:800}
+.base{margin:4px 0 0;color:var(--ink2);font-size:14px}
+.ref{display:inline-block;margin:12px 0 0;padding:4px 10px;border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;font-weight:800;font-size:14px;transform:rotate(-1deg)}
+.priv{margin:8px 0 0;color:var(--ink2);font-size:12.5px;line-height:1.5}
+.sheet{display:grid;gap:18px;grid-template-columns:minmax(0,1fr);margin-top:18px}
+@media (min-width:900px){.sheet{grid-template-columns:minmax(340px,430px) minmax(0,1fr);align-items:start}.in{position:sticky;top:16px}}
+.in{background:var(--paper);border:1px solid var(--ink);border-radius:3px;padding:6px 16px 18px}
+label{display:block;font-size:14px;font-weight:600;margin:14px 0 5px}
+input{width:100%;padding:10px 12px;border:1px solid var(--ink);border-radius:3px;background:var(--paper);color:var(--ink);font:inherit;font-size:16px}
+input:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:13px;color:var(--ink2);margin-top:4px;line-height:1.5}
+.err{color:var(--warn);font-size:13.5px;min-height:20px;margin-top:8px;font-weight:600}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+button{font:inherit;font-size:14.5px;font-weight:700;padding:9px 14px;border-radius:3px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+button.fill{background:var(--ink);color:var(--paper)}button:disabled{opacity:.45;cursor:default}
+.items{margin-top:6px}
+.it{display:grid;grid-template-columns:1fr 1fr 34px;gap:8px;align-items:end;padding:6px 0;border-bottom:1px solid var(--rule)}
+.it label{margin:0 0 3px;font-size:12px;color:var(--ink2)}
+.it .x{padding:9px 0;border-color:var(--rule);color:var(--ink2)}
+.slip{position:relative;background:var(--paper);border:1px solid var(--ink);border-top-width:6px;border-radius:3px;padding:18px 18px 22px}
+.slip h2{font-size:16px;margin:0;font-weight:800}
+.meta{color:var(--ink2);font-size:13px;margin:2px 0 4px}
+.stamp{position:absolute;top:14px;right:14px;transform:rotate(-8deg);border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;padding:1px 9px;font-weight:800;font-size:15px;letter-spacing:.08em}
+.r{display:grid;grid-template-columns:1fr auto auto;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule);font-size:14.5px}
+.r span:first-child{color:var(--ink)}.r span:nth-child(2){color:var(--ink2);text-align:right}.r b{text-align:right;font-weight:600;min-width:96px}
+.tot{margin-top:12px;padding-top:12px;border-top:3px double var(--ink)}
+.tot .l{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:2px 0}
+.tot .l span{font-weight:700}
+#won{white-space:nowrap;font-size:clamp(26px,8vw,38px);font-weight:800;letter-spacing:-.03em;background:linear-gradient(transparent 55%,var(--hl) 55%,var(--hl) 92%,transparent 92%) no-repeat;padding:0 .12em}
+.note{font-size:13px;color:var(--ink2);margin-top:10px;line-height:1.55}
+.empty{color:var(--ink2);font-size:14.5px;margin:10px 0 0}
+.notes{margin-top:26px}.notes h3{font-size:14px;margin:0 0 8px;border-top:1.5px solid var(--ink);padding-top:8px}
+.notes ul{margin:0;padding-left:18px;color:var(--ink2);font-size:14px}.notes li{margin:5px 0}
+a{color:var(--acc)}footer{font-size:13px;color:var(--ink2);margin-top:26px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-weight:700;border-radius:4px;padding:8px 16px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="desk">
+<header>
+<h1>엔화 여행 경비 계산기</h1>
+<p class="base">엔으로 적은 경비를 내가 넣은 환율로 원화 합계와 1인당 금액으로 바꿔요</p>
+<span class="ref">환율은 내가 넣는 값이에요. 실시간 환율이 아니에요</span>
+<p class="priv">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 같은 방문자 구분(최대 8시간), 브라우저·운영체제 종류, 화면 너비)만 수집해요. 실제 환전이나 카드 결제는 환율과 수수료가 다를 수 있습니다.</p>
+</header>
+
+<main class="sheet">
+<section class="in" aria-label="입력">
+<div class="row">
+<div><label for="rate">환율(100엔당 원)</label><input id="rate" inputmode="decimal" autocomplete="off" placeholder="직접 입력"></div>
+<div><label for="ppl">인원 수(선택)</label><input id="ppl" inputmode="numeric" autocomplete="off" placeholder="예: 2"></div>
+</div>
+<div class="hint" id="exnote">환율은 은행이나 환전 앱에서 확인해서 직접 넣어 주세요. "예시 넣기"의 환율은 가상의 값이에요.</div>
+<div class="items" id="items"></div>
+<div class="btns"><button type="button" id="add">항목 추가</button></div>
+<div class="err" id="err" role="alert"></div>
+<div class="btns"><button type="button" class="fill" id="go">원화로 계산</button><button type="button" id="ex">예시 넣기</button><button type="button" id="clr">비우기</button></div>
+</section>
+
+<section class="slip" aria-live="polite" aria-label="결과">
+<span class="stamp">참고용</span>
+<h2>여행 경비 목록</h2>
+<p class="meta" id="meta">환율과 항목별 엔 금액을 넣으면 원화로 바꿔 줘요.</p>
+<div id="res"><p class="empty">환율과 금액을 넣고 "원화로 계산"을 누르세요.</p></div>
+<p class="note">내가 넣은 환율로 계산한 값이에요. 실제 환전이나 카드 결제는 환율과 수수료가 다를 수 있습니다. 원화는 항목마다 원 단위로 반올림해서 더해요.</p>
+<div class="btns"><button type="button" id="copy" disabled>목록 복사</button><button type="button" id="save" disabled>이미지 저장</button></div>
+</section>
+</main>
+
+<div class="notes"><h3>알아 두세요</h3>
+<ul>
+<li>원화 = 엔 금액 × 환율 ÷ 100이에요. 환율은 "100엔에 몇 원"으로 넣어요. 항목마다 원 단위로 반올림하고, 합계는 반올림한 항목을 더한 값이에요.</li>
+<li>1인당 금액 = 원화 합계 ÷ 인원 수이고, 나누어떨어지지 않으면 원 단위로 반올림해요.</li>
+<li>환율은 직접 넣는 값이고 특정 날짜의 환율을 쓰지 않아요. 실제 환전, 카드 결제, 현금 인출은 환율과 수수료가 달라서 금액이 다를 수 있어요.</li>
+<li>항목 이름은 바꿀 수 있고, 항목을 더하거나 지울 수 있어요. 숙박, 식비, 교통, 입장료, 쇼핑은 처음에 들어 있는 예시 이름이에요.</li>
+<li>환율만 따로 바꿔 보려면 <a href="https://hayanfog9.github.io/fx-convert-7q5m/">환율 환산 계산기</a>를 쓰세요.</li>
+</ul></div>
+<footer>© <a href="https://hayanfog9.github.io/">JW의 AI 작업실</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
+</div>
+<div id="toast" role="status"></div>
+<script>
+function $(i){return document.getElementById(i)}
+function num(v){v=parseFloat(String(v).replace(/,/g,''));return isFinite(v)?v:NaN}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast._t);toast._t=setTimeout(function(){e.style.opacity=0},1800)}
+var DEFAULTS=['숙박','식비','교통','입장료','쇼핑'];
+function addRow(name,yen){var d=document.createElement('div');d.className='it';var k=document.querySelectorAll('.it').length;
+  d.innerHTML='<div><label>항목</label><input class="nm" value="'+esc(name||'')+'" autocomplete="off" aria-label="항목 이름"></div><div><label>엔 금액</label><input class="yn" inputmode="decimal" autocomplete="off" value="'+esc(yen||'')+'" aria-label="엔 금액"></div><button type="button" class="x" aria-label="항목 지우기">×</button>';
+  d.querySelector('.x').onclick=function(){d.remove()};$('items').appendChild(d)}
+function reset(){$('items').innerHTML='';DEFAULTS.forEach(function(n){addRow(n,'')})}
+/* 계산: 항목마다 원 단위 반올림, 합계는 반올림한 항목의 합 */
+function calc(rate,people,items){
+  var rows=items.map(function(it){return{name:it.name,yen:it.yen,won:Math.round(it.yen*rate/100)}});
+  var totalYen=rows.reduce(function(a,r){return a+r.yen},0),totalWon=rows.reduce(function(a,r){return a+r.won},0);
+  return{rows:rows,totalYen:totalYen,totalWon:totalWon,per:people>0?Math.round(totalWon/people):null,people:people}}
+function read(){var items=[];document.querySelectorAll('.it').forEach(function(d){var nm=d.querySelector('.nm').value.trim(),raw=d.querySelector('.yn').value;if(raw.trim()===''&&nm==='')return;items.push({name:nm||'(이름 없음)',yen:raw.trim()===''?0:num(raw),raw:raw})});return items}
+var cur=null;
+function fmt(v){return Math.round(v).toLocaleString('ko-KR')}
+function run(){
+  var rate=num($('rate').value),ppl=$('ppl').value.trim()===''?0:num($('ppl').value),items=read(),err=[];
+  if(!(rate>0))err.push('환율(100엔당 원)을 0보다 크게 직접 넣어 주세요.');
+  if($('ppl').value.trim()!==''&&!(ppl>=1&&Math.floor(ppl)===ppl))err.push('인원 수는 1 이상의 정수로 넣어 주세요.');
+  if(!items.length)err.push('경비 항목을 하나 이상 넣어 주세요.');
+  items.forEach(function(it){if(!isFinite(it.yen)||it.yen<0)err.push('"'+it.name+'"의 엔 금액을 0 이상의 숫자로 넣어 주세요.')});
+  $('err').textContent=err.join(' ');if(err.length){$('copy').disabled=$('save').disabled=true;return}
+  var r=calc(rate,ppl,items);cur={r:r,rate:rate};
+  var h='';r.rows.forEach(function(x){h+='<div class="r"><span>'+esc(x.name)+'</span><span>'+fmt(x.yen)+'엔</span><b>'+fmt(x.won)+'원</b></div>'});
+  h+='<div class="tot"><div class="l"><span>합계 '+fmt(r.totalYen)+'엔</span><b id="won">'+fmt(r.totalWon)+'원</b></div>';
+  if(r.per!==null)h+='<div class="l"><span>1인당 ('+r.people+'명)</span><b>'+fmt(r.per)+'원</b></div>';
+  h+='</div>';$('res').innerHTML=h;$('meta').textContent='내가 넣은 환율 100엔 = '+rate.toLocaleString('ko-KR')+'원 기준이에요.';
+  var lines=['엔화 여행 경비 (내가 넣은 환율 100엔 = '+rate.toLocaleString('ko-KR')+'원)'];r.rows.forEach(function(x){lines.push(x.name+' '+fmt(x.yen)+'엔 → '+fmt(x.won)+'원')});
+  lines.push('합계 '+fmt(r.totalYen)+'엔 → '+fmt(r.totalWon)+'원');if(r.per!==null)lines.push('1인당 '+fmt(r.per)+'원 ('+r.people+'명)');
+  lines.push('※ 실제 환전이나 카드 결제는 환율과 수수료가 다를 수 있습니다.');window._txt=lines.join('\n');window._lines=lines;$('copy').disabled=$('save').disabled=false}
+function wrap(c,t,w){var out=[],cur='';t.split('').forEach(function(ch){if(c.measureText(cur+ch).width>w){out.push(cur);cur=ch}else cur+=ch});if(cur)out.push(cur);return out}
+function saveImg(){if(!window._lines)return;var W=1080,pad=56,L=window._lines,cv=document.createElement('canvas'),c=cv.getContext('2d');cv.width=W;var FONT='"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif';
+  c.font='34px '+FONT;var rows=[];L.forEach(function(l,i){var ls=wrap(c,l,W-pad*2);rows.push(ls)});
+  var H=130+rows.reduce(function(a,ls){return a+ls.length*52+14},0)+90;cv.height=H;
+  c.fillStyle='#E4E9F0';c.fillRect(0,0,W,H);c.fillStyle='#fff';c.fillRect(24,24,W-48,H-48);c.fillStyle='#1B2447';c.fillRect(24,24,W-48,10);
+  c.font='800 40px '+FONT;c.fillText('엔화 여행 경비 목록',pad,100);var y=150;
+  rows.forEach(function(ls,i){var last=i>=L.length-1,tot=L[i].indexOf('합계')===0||L[i].indexOf('1인당')===0;c.font=(tot?'800 36px ':'32px ')+FONT;c.fillStyle=last?'#B3261E':'#1B2447';if(i===0){c.fillStyle='#58627F';c.font='28px '+FONT}
+    ls.forEach(function(l,j){c.fillText(l,pad,y+38+j*50)});y+=ls.length*50+16;if(i===0||L[i].indexOf('합계')===0){c.fillStyle='#CBD2DF';c.fillRect(pad,y-6,W-pad*2,2)}});
+  c.fillStyle='#58627F';c.font='24px '+FONT;c.fillText('JW의 AI 작업실 · hayanfog9.github.io/yen-trip-4n7q/',pad,H-52);
+  cv.toBlob(function(bl){if(!bl){toast('이미지를 만들지 못했어요');return}var a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='yen-trip-cost.png';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(a.href)},1000);toast('이미지를 저장했어요')},'image/png')}
+$('add').onclick=function(){addRow('','');var l=document.querySelectorAll('.nm');l[l.length-1].focus()};
+$('go').onclick=run;$('save').onclick=saveImg;
+$('copy').onclick=function(){var t=window._txt||'';function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('복사했어요')}catch(e){toast('복사하지 못했어요. 직접 선택해서 복사하세요')}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},fb)}else fb()};
+$('ex').onclick=function(){reset();var v=['20000','15000','8000','3000','12000'];document.querySelectorAll('.yn').forEach(function(e,i){e.value=v[i]||''});$('rate').value='900';$('ppl').value='2';$('exnote').textContent='환율 100엔 = 900원은 가상의 예시 값이에요. 실제 환율은 은행이나 환전 앱에서 확인해서 직접 넣어 주세요.';run()};
+$('clr').onclick=function(){reset();$('rate').value='';$('ppl').value='';$('err').textContent='';$('res').innerHTML='<p class="empty">환율과 금액을 넣고 "원화로 계산"을 누르세요.</p>';$('copy').disabled=$('save').disabled=true;$('exnote').textContent='환율은 은행이나 환전 앱에서 확인해서 직접 넣어 주세요. "예시 넣기"의 환율은 가상의 값이에요.'};
+reset();window.YT={calc:calc};
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
