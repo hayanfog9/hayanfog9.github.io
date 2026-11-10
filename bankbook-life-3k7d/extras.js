@@ -21,6 +21,7 @@
       compact: { price: 23000000, keep: 2000000 }, mid: { price: 32000000, keep: 2300000 }, suv: { price: 42000000, keep: 2700000 },
       imported: { price: 70000000, keep: 4000000 }, importedSuv: { price: 95000000, keep: 4800000 }, superc: { price: 400000000, keep: 20000000 }
     },
+    importCash: 1, importInst: 0.6, importShow: 45, importFix: 3500000, // 수입차: 예금이 값의 1배면 현금, 0.6배면 할부 선택지가 나온다
     carDep: 0.85, carLife: 15, carStopAge: 80, instYears: 5, instAdd: 0.10, superNeed: 2000000000
   };
   // 차·오토바이 이름: 모두 지어낸 이름이다(통제실·JW가 정함, 2026-11-10). 실제 모델명·로고·차 생김새는 쓰지 않는다.
@@ -112,6 +113,10 @@
       opts: [["새로 산다", (g, L) => { pay(g, L, "새 세탁기", -X.washerNew); note(L, "새 세탁기는 조용해요. 너무 조용해서 가끔 들여다봐요.", "sur"); }, man(X.washerNew) + "이 나가요"]] },
     { id: "weddings", noimg: 1, ok: (g) => g.age < 45, title: "청첩장의 계절", text: "한 달에 청첩장이 네 장 왔어요. 주말마다 뷔페를 먹었어요. 봉투를 네 번 채웠어요.",
       opts: [["봉투를 채운다", (g, L) => { pay(g, L, "축의금 네 번", -X.weddings); note(L, "갈비찜 맛집이 어디인지 알게 됐어요.", "sur"); }]] },
+    { id: "testdrive", img: "sur_car_suv", ok: (g) => g.age >= 26 && g.age < 60, title: "회장님 시승", text: "친구가 새로 뽑은 ‘반츠 회장님’에 태워 줬어요. 잠깐 운전대도 잡게 해 줬어요. 방지턱 앞에서 둘 다 숨을 참았어요.",
+      opts: [["조심조심 몬다", (g, L) => { tag(g, "testDrive"); note(L, "시속 30km로 동네를 한 바퀴 돌았어요. 내려서 손바닥 땀을 닦았어요.", "sur"); }]] },
+    { id: "importfix", img: "sur_car_suv", ok: (g) => !!g.x.car && (g.x.car.id === "imported" || g.x.car.id === "importedSuv" || g.x.car.id === "superc"), title: "바다를 건너오는 부품", text: "{car} 계기판에 처음 보는 불이 들어왔어요. 정비소에서 부품이 바다를 건너와야 한대요. 견적서의 숫자를 두 번 읽었어요.",
+      opts: [["고친다", (g, L) => { pay(g, L, "수입차 수리비", -X.importFix); note(L, "3주 만에 돌아왔어요. 그동안 버스 노선을 다시 외웠어요.", "sur"); }, man(X.importFix) + "이 나가요"]] },
     { id: "prize", noimg: 1, title: "경품 당첨", text: "마트 영수증 추첨에 뽑혔어요. 살면서 처음이에요. 상품은 쌀 20kg과 상품권이에요.",
       opts: [["받으러 간다", (g, L) => { pay(g, L, "경품 상품권", X.prize); note(L, "쌀은 들고 오다가 두 번 쉬었어요.", "sur"); }]] }
   );
@@ -152,7 +157,8 @@
     const s = g.savings, opts = [], taken = [];
     const add = (id, inst) => {
       const c = X.cars[id], nm = carName(g, id, taken); taken.push(nm);
-      opts.push({ label: CAR[id].kind + " ‘" + nm + "’" + (inst ? " (할부)" : ""), sub: inst ? "5년 동안 해마다 " + man(c.price * (1 + X.instAdd) / X.instYears) + ", 유지비 한 해 " + man(c.keep) : "값 " + man(c.price) + ", 유지비 한 해 " + man(c.keep), run: () => buyCar(g, L, id, inst, nm) });
+      const tight = inst ? (c.price * (1 + X.instAdd) / X.instYears + c.keep) > s * 0.3 : c.price > s * 0.5;
+      opts.push({ imp: id === "imported" || id === "importedSuv", label: CAR[id].kind + " ‘" + nm + "’" + (inst ? " (할부)" : ""), sub: (tight && (id === "imported" || id === "importedSuv") ? "통장이 휘청해요 · " : "") + (inst ? "5년 동안 해마다 " + man(c.price * (1 + X.instAdd) / X.instYears) + ", 유지비 한 해 " + man(c.keep) : "값 " + man(c.price) + ", 유지비 한 해 " + man(c.keep)), run: () => buyCar(g, L, id, inst, nm) });
     };
     if (g.age < 40 && s >= X.cars.scooter.price * 2) add("scooter", false);
     if (g.age >= 35 && g.age < 60 && s >= X.cars.bike.price * 3) add("bike", false);
@@ -161,10 +167,15 @@
     if (s >= X.cars.compact.price * 1.6) add("compact", false);
     if (s >= X.cars.mid.price * 1.6) add("mid", false); else if (s >= X.cars.mid.price * 0.6) add("mid", true);
     if (s >= X.cars.suv.price * 2 && g.kids.length) add("suv", false);
-    if (s >= X.cars.imported.price * 3) add("imported", false);
-    if (s >= X.cars.importedSuv.price * 3.5) add("importedSuv", false);
+    // 수입차는 살 수 있는 형편이어도 차 장면의 절반쯤에서만 보인다(난수를 쓰지 않고 씨앗·나이로 정한다)
+    const impShow = ((Math.imul((g.seed ^ Math.imul(g.age, 2654435761)) >>> 0, 2246822519) >>> 8) % 100) < X.importShow;
+    if (!impShow) { /* 이번에는 국산차만 */ } else
+    if (s >= X.cars.imported.price * X.importCash) add("imported", false); else if (s >= X.cars.imported.price * X.importInst) add("imported", true);
+    if (!impShow) { /* 건너뜀 */ } else if (s >= X.cars.importedSuv.price * X.importCash) add("importedSuv", false); else if (s >= X.cars.importedSuv.price * X.importInst) add("importedSuv", true);
     if (!opts.length) return null;
-    const pick = opts.slice(-3);
+    // 국산 둘 + 수입 하나(있으면). 수입차가 둘 다 되면 씨앗으로 하나를 고른다
+    const dom = opts.filter((o) => !o.imp), imp = opts.filter((o) => o.imp);
+    const pick = imp.length ? dom.slice(-2).concat([imp[(g.seed + g.age) % imp.length]]) : dom.slice(-3);
     pick.push({ label: "안 산다", sub: "버스와 지하철이면 충분해요", run: () => { g.x.carNo = (g.x.carNo || 0) + 1; note(L, "교통카드를 충전했어요. 창밖 구경은 덤이에요.", "car"); } });
     const big = pick.some((o) => /SUV|중형/.test(o.label));
     return { type: "scene", kind: "car", id: "car_offer", age: g.age, title: "차를 살까", text: "장을 보고 양손 가득 짐을 든 채 버스를 기다리다가 생각했어요. 차가 있으면 어떨까.", img: big ? "sur_car_suv" : "sur_car_small", options: pick,

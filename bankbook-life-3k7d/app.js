@@ -2,9 +2,9 @@
 (function () {
   const D = window.TJ_DATA, TJ = window.TJ, A = TJ.assume, CARD = window.TJ_CARD, STORY = window.TJ_STORY, EX = window.TJ_EXTRAS, PLACE = window.TJ_PLACE, CITY = window.TJ_CITY;
   const $ = (id) => document.getElementById(id);
-  const KEY = "tongjang_v2";          // 이어 보기 기록. 계산이 바뀌면 이름을 바꾼다
+  const KEY = "tongjang_v3";          // 이어 보기 기록. 계산이 바뀌면 이름을 바꾼다
   const STAMP_KEY = "tongjang_stamps"; // 모은 도장(이 브라우저에만 저장)
-  const SHARE_VER = 2;                // 계산이나 통계를 바꾸면 1씩 올린다. index.html의 ?v= 숫자도 같이 올린다
+  const SHARE_VER = 3;                // 계산이나 통계를 바꾸면 1씩 올린다. index.html의 ?v= 숫자도 같이 올린다
   const SITE_URL = "https://hayanfog9.github.io/bankbook-life-3k7d/";
 
   // 이어지는 곳. open: 공개일(그 전에는 "곧 열려요"로만 표시)
@@ -546,9 +546,9 @@
 
     h += "<h3>통계가 아닌 장면 (전부 가정)</h3><ul>" + [
       "소소한 하루(재미 장면)는 통장 금액을 바꾸지 않아요. 통계 계산과 따로 도는 주사위로 뽑아서, 재미 장면이 있어도 월급·사건·수명은 달라지지 않아요.",
-      "갑자기 생긴 일(돌발)의 금액은 우리가 정한 값이에요: 친구가 갚은 돈 +" + man(X.friend) + ", 깜짝 성과급 +한 달 월급, 잊고 있던 적금 +" + man(X.oldbank) + ", 퀴즈 상금 +" + man(X.quiz) + "(절반 확률), 경품 +" + man(X.prize) + ", 천장 수리 −" + man(X.leakShare) + "(나눠 냄) 또는 −" + man(X.leakFix) + ", 접촉 사고 자기부담금 −" + man(X.bumpIns) + ", 새 세탁기 −" + man(X.washerNew) + ", 축의금 −" + man(X.weddings) + ", 발령 이사비 −" + man(X.moveCost) + "과 월급 +" + pc(X.moveRaise) + "%, 고양이 수술 −" + man(X.pet) + ", 부모님 병원비 −" + man(X.parentsAll) + " 또는 −" + man(X.parentsShare) + ", 동창 사업 −" + man(X.biz) + "(다섯에 하나만 원금을 돌려받음).",
+      "갑자기 생긴 일(돌발)의 금액은 우리가 정한 값이에요: 친구가 갚은 돈 +" + man(X.friend) + ", 깜짝 성과급 +한 달 월급, 잊고 있던 적금 +" + man(X.oldbank) + ", 퀴즈 상금 +" + man(X.quiz) + "(절반 확률), 경품 +" + man(X.prize) + ", 천장 수리 −" + man(X.leakShare) + "(나눠 냄) 또는 −" + man(X.leakFix) + ", 접촉 사고 자기부담금 −" + man(X.bumpIns) + ", 새 세탁기 −" + man(X.washerNew) + ", 축의금 −" + man(X.weddings) + ", 수입차 수리비 −" + man(X.importFix) + "(수입차가 있는 판에만), 발령 이사비 −" + man(X.moveCost) + "과 월급 +" + pc(X.moveRaise) + "%, 고양이 수술 −" + man(X.pet) + ", 부모님 병원비 −" + man(X.parentsAll) + " 또는 −" + man(X.parentsShare) + ", 동창 사업 −" + man(X.biz) + "(다섯에 하나만 원금을 돌려받음).",
       "돌발도 따로 도는 주사위를 써요. 다만 잔액이 달라지면 집을 살 수 있는 때 같은 것이 조금 달라질 수 있어요. 무작위 3,000판에서 돌발을 넣기 전과 넣은 뒤의 65세 순자산 평균 차이는 0.3%였어요.",
-      "차와 오토바이: 값은 " + Object.keys(X.cars).map((k) => EX.CAR[k].kind + " " + man(X.cars[k].price)).join(", ") + ". 보험·기름·수리로 한 해 " + man(X.cars.scooter.keep) + "~" + man(X.cars.importedSuv.keep) + "(슈퍼카 " + man(X.cars.superc.keep) + ")이 나가고, 차 값은 해마다 " + pc(1 - X.carDep) + "%씩 떨어져요. 할부는 5년, 값의 " + pc(X.instAdd) + "%를 더 내요. " + X.carLife + "년을 타면 폐차해요. 차를 살지는 한 판에 " + X.carAskMax + "번까지 물어요. 겹쳐 계산하지 않으려고, 평균 소비지출에 들어 있는 자가용 지출(자동차 구입, 유지·수리, 연료, 주차·통행료 같은 개인교통 서비스. 2025년 가계동향조사, 가구원 수별로 월 " + man(D.spendBySize.car[0]) + "~" + man(D.spendBySize.car[4]) + ")은 기본 생활비에서 빼고, 차를 산 해에만 위의 차 비용을 따로 더해요. 차가 없는 해에는 대중교통 몫(철도·버스·택시 등)만 남아요. 무작위 3,000판에서 통계 장면만 돌린 것과 재미·돌발·차를 모두 넣은 것의 65세 순자산은 평균 +0.6%, 중앙값 −0.5% 차이였어요.",
+      "차와 오토바이: 값은 " + Object.keys(X.cars).map((k) => EX.CAR[k].kind + " " + man(X.cars[k].price)).join(", ") + ". 보험·기름·수리로 한 해 " + man(X.cars.scooter.keep) + "~" + man(X.cars.importedSuv.keep) + "(슈퍼카 " + man(X.cars.superc.keep) + ")이 나가고, 차 값은 해마다 " + pc(1 - X.carDep) + "%씩 떨어져요. 할부는 5년, 값의 " + pc(X.instAdd) + "%를 더 내요. " + X.carLife + "년을 타면 폐차해요. 수입차는 예금이 차 값 이상이면 현금으로, 값의 " + pc(X.importInst) + "% 이상이면 할부로 살 수 있는 선택지가 나와요(무리한 선택도 고를 수 있어요). 차를 살지는 한 판에 " + X.carAskMax + "번까지 물어요. 겹쳐 계산하지 않으려고, 평균 소비지출에 들어 있는 자가용 지출(자동차 구입, 유지·수리, 연료, 주차·통행료 같은 개인교통 서비스. 2025년 가계동향조사, 가구원 수별로 월 " + man(D.spendBySize.car[0]) + "~" + man(D.spendBySize.car[4]) + ")은 기본 생활비에서 빼고, 차를 산 해에만 위의 차 비용을 따로 더해요. 차가 없는 해에는 대중교통 몫(철도·버스·택시 등)만 남아요. 무작위 3,000판에서 통계 장면만 돌린 것과 재미·돌발·차를 모두 넣은 것의 65세 순자산은 평균 +0.6%, 중앙값 −0.5% 차이였어요.",
       "등장하는 차·오토바이 이름은 모두 지어낸 이름이에요. 실제 회사나 차와 관계가 없어요.",
       "'같은 조건 몇 명 중 몇 번째'는 시작 조건(나이·일자리·사는 곳)마다 " + (window.TJ_DIST ? window.TJ_DIST.n.toLocaleString("ko-KR") : "") + "판을 미리 돌려 둔 표에서 찾아요. 그 판들의 고르는 장면은 무작위로 골랐어요."
     ].map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul>";
@@ -627,8 +627,8 @@
   $("cMore").innerHTML = moreHtml(); bindMore($("cMore"));
   // ── 표지: 숫자 한 줄, 예시 통장 세 권(실제 엔진으로 그 자리에서 계산해 그린다), 표지 열림 ──
   const COVER_EX = [
-    { opt: { seed: 6327, age: 27, job: "sme", region: "metro" }, picks: "1210001111101000010000", cap: "아이 둘, 33년을 일한 통장" },
-    { opt: { seed: 47, age: 25, job: "large", region: "prov" }, picks: "21100103", cap: "마흔에 멈춘 통장" },
+    { opt: { seed: 6327, age: 27, job: "sme", region: "metro" }, picks: "1210001111101003010000", cap: "아이 둘, 33년을 일한 통장" },
+    { opt: { seed: 47, age: 25, job: "large", region: "prov" }, picks: "11100101", cap: "마흔에 멈춘 통장" },
     { opt: { seed: 280, age: 25, job: "large", region: "prov" }, picks: "2001131011300100101000000", cap: "전설: 슈퍼카를 산 통장" }
   ];
   try {

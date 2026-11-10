@@ -120,6 +120,7 @@
     { id: "marathon", t: "완주", d: "마라톤을 끝까지 달렸어요", test: (s) => has(s, "marathon") },
     { id: "firstcar", t: "첫 차", d: "첫 차가 생겼어요", test: (s) => has(s, "firstCar") },
     { id: "car15", t: "한 차로\n15년", d: "차 한 대를 15년 탔어요", test: (s) => has(s, "car15") },
+    { id: "testdrive", t: "회장님\n시승", d: "친구의 수입차를 조심조심 몰아 봤어요", test: (s) => has(s, "testDrive") },
     { id: "rider", t: "라이더", d: "스쿠터나 오토바이를 탔어요", test: (s) => has(s, "rider") },
     { id: "lcat", t: "전설의\n집사", d: "전설: 고양이가 동네 유명 인사가 됐어요", legend: 1, test: (s) => has(s, "legendCat") },
     { id: "lart", t: "전설의\n안목", d: "전설: 벼룩시장 그림이 화가의 초기작이었어요", legend: 1, test: (s) => has(s, "legendArt") },
