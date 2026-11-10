@@ -125,7 +125,7 @@
     g.r = rng(g.seed);
     g.startAge = opt.age;
     g.region = opt.region;      // metro | city | prov
-    g.jobType = opt.job;        // min | sme | large
+    g.jobType = opt.job; g.startJob = opt.job;        // min | sme | large
     g.age = opt.age;
     g.year = A.baseYear;
     g.pf = 1 - A.personalSpread + g.r() * 2 * A.personalSpread;
@@ -145,10 +145,16 @@
     g.dead = false; g.cause = null;
     g.queue = []; g.pendingScene = null;
     g.history = [];
-    g.tot = { gross: 0, tax: 0, insure: 0, spend: 0, interest: 0, severance: 0, pension: 0, loanInterest: 0, spouseNet: 0, benefit: 0, rent: 0, tutoring: 0 };
+    g.tot = { gross: 0, tax: 0, insure: 0, spend: 0, interest: 0, severance: 0, pension: 0, loanInterest: 0, spouseNet: 0, benefit: 0, rent: 0, tutoring: 0, college: 0 };
     g.flags = { zero: false, minus: false, lostJob: 0, moved: 0 };
-    g.ev = []; g.peak = 0; g.peakAge = opt.age;
+    g.yr = ""; g.yrHome = ""; g.yrFam = ""; g.lostThisYear = false; g.lastJob = opt.job;
+    g.ev = []; g.kidCol = []; g.peak = 0; g.peakAge = opt.age;
     g.firstSlip = null;
+    // 재미 장면과 돌발은 통계 계산과 따로 도는 난수를 쓴다(통계 사건의 주사위가 달라지지 않게)
+    g.fr = rng((g.seed ^ 0x2545f491) >>> 0); g.sr = rng((g.seed ^ 0x7f4a7c15) >>> 0);
+    g.useFun = opt.fun !== false; g.useSur = opt.sur !== false; g.useCar = opt.car !== false;
+    g.x = { funCount: 0, surCount: 0, lastExtra: opt.age - 2, lastSur: opt.age, seen: {}, tags: {}, car: null, cars: 0, carAsk: 0, carAskAge: 0, pend: [], net: 0, carNet: 0 };
+    g.heavyAge = -9; g.facts = []; g.dieNow = false;
     g.phase = "start";
   }
 
@@ -200,13 +206,15 @@
     if (!s) return;
     g.pendingScene = null;
     s.options[i].run();
-    g.history.push({ age: g.age, scene: s.id, pick: s.options[i].label });
+    g.history.push({ age: g.age, scene: s.id, pick: s.options[i].label, kind: s.kind || "stat", n: s.options.length });
   };
 
   Game.prototype.buildScenes = function () {
     const g = this, q = g.queue, r = g.r;
     g.yearLines = [];
     const L = g.yearLines;
+    g.facts = [];
+    g.dieNow = r() < D.life.q[Math.min(100, g.age)] / 100000;
 
     // 첫 취업
     if (!g.employed && !g.retired && g.gapMonths < 12 && g.age < A.mainJobEnd) {
@@ -214,7 +222,7 @@
       g.workMonths = 12 - g.gapMonths;
       if (!g.wage) g.wage = g.targetWage();
       if (!g.firstSlip) {
-        g.firstSlip = payslip(g.wage, 1, 0, g.year);
+        g.firstSlip = payslip(g.wage, 1, 0, g.year); g.facts.push("first");
         q.push({
           type: "scene", id: "first", age: g.age, title: "첫 월급날",
           text: g.waitMonths > 0 ? "일자리를 구하는 데 " + g.waitMonths + "개월이 걸렸어요. 오늘 첫 월급이 들어왔고, 통장을 새로 만들었어요." : "바로 일을 시작했어요. 오늘 첫 월급이 들어왔고, 통장을 새로 만들었어요.",
@@ -227,7 +235,7 @@
           ]
         });
       } else {
-        L.push({ k: "note", t: "다시 일을 시작했어요" });
+        L.push({ k: "note", t: "다시 일을 시작했어요" }); g.facts.push("rejoin");
       }
     } else if (!g.employed && !g.retired) {
       g.workMonths = 0;
@@ -247,8 +255,8 @@
         text: "오래 다닌 일터를 떠나는 날이에요. 퇴직금이 통장에 들어와요.", link: "retire",
         ask: "연금이 나오는 65세까지 " + (A.workEnd - g.age) + "년이 남았어요.",
         options: [
-          { label: "다시 일한다", sub: "중소기업 나이대 평균 임금으로 65세까지", run: () => { g.paySeverance(L); g.rehired = true; g.jobType = g.jobType === "min" ? "min" : "sme"; g.wage = g.targetWage(); } },
-          { label: "일을 쉰다", sub: "모은 돈으로 65세까지", run: () => { g.paySeverance(L); g.employed = false; g.retired = true; g.lastWage = g.wage; g.wage = 0; g.workMonths = 0; } }
+          { label: "다시 일한다", sub: "중소기업 나이대 평균 임금으로 65세까지", run: () => { g.leftAge = g.age; g.ev.push({ a: g.age, k: "exit" }); g.facts.push("exitRe"); g.paySeverance(L); g.rehired = true; g.jobType = g.jobType === "min" ? "min" : "sme"; g.wage = g.targetWage(); } },
+          { label: "일을 쉰다", sub: "모은 돈으로 65세까지", run: () => { g.leftAge = g.age; g.ev.push({ a: g.age, k: "exit" }); g.facts.push("exitRest"); g.paySeverance(L); g.employed = false; g.retired = true; g.lastWage = g.wage; g.wage = 0; g.workMonths = 0; } }
         ]
       });
     }
@@ -257,6 +265,7 @@
       if (g.employed) { g.paySeverance(L); g.employed = false; g.lastWage = g.wage; g.wage = 0; g.workMonths = 0; }
       g.retired = true;
       g.npsMonthly = npsMonthly(g.pMonths ? g.pSum / g.pMonths : 0, g.pMonths);
+      g.facts.push(g.npsMonthly > 0 ? "pension" : "pension0");
       if (g.spouse) { g.spouse.wage = 0; g.spouse.nps = npsMonthly(g.spouse.pMonths ? g.spouse.pSum / g.spouse.pMonths : 0, g.spouse.pMonths); }
       q.push({
         type: "scene", id: "pension", age: g.age, title: "연금 첫 달",
@@ -268,12 +277,27 @@
       });
     }
 
+    // 일을 쉬는 동안 모아 둔 돈이 2년 치 최저임금 아래로 내려가면 다시 일할지 한 번 묻는다
+    if (g.retired && !g.employed && g.age < A.workEnd && !g.restAsked && g.savings < D.minWage.monthly * 24) {
+      g.restAsked = true;
+      q.push({
+        type: "scene", id: "back", age: g.age, title: "통장이 가벼워졌어요",
+        text: "일을 쉬는 동안 모아 둔 돈이 많이 줄었어요. 연금이 나오는 " + A.workEnd + "세까지는 " + (A.workEnd - g.age) + "년이 남았어요.",
+        ask: "다시 일을 구할까요?",
+        options: [
+          { label: "다시 일한다", sub: "중소기업 나이대 평균 임금으로 " + A.workEnd + "세까지", run: () => { g.retired = false; g.employed = true; g.rehired = true; g.jobType = g.jobType === "min" ? "min" : "sme"; g.wage = g.targetWage(); g.workMonths = 12; g.tenure = 0; g.facts.push("rejoin"); } },
+          { label: "계속 쉰다", sub: "모아 둔 돈과 마이너스 통장으로 버텨요", run: () => {} }
+        ]
+      });
+    }
+
     if (g.employed && g.age < A.mainJobEnd) {
       // 실직
       const pLoss = (g.age < 30 ? D.jobs.unempYouth : D.jobs.unemp) / 100;
       if (g.tenure >= 1 && r() < pLoss) {
-        g.flags.lostJob++; g.ev.push({ a: g.age, k: "loss" });
+        g.flags.lostJob++; g.ev.push({ a: g.age, k: "loss" }); g.heavyAge = g.age; g.facts.push("loss");
         const lose = (mode) => {
+          g.lostThisYear = true;
           const lastWage = g.wage, yrs = g.tenure;
           g.paySeverance(L);
           const gap = A.jobLossGap[mode];
@@ -312,7 +336,7 @@
           compare: { now: cur, offer: offer }, link: "leave",
           ask: "옮기면 지금까지의 퇴직금을 받고, 근속은 1년 차부터 다시 시작해요.",
           options: [
-            { label: "옮긴다", run: () => { g.paySeverance(L); if (to === g.jobType) g.pf *= 1 + raise; else g.pf = Math.max(g.pf, offer / 10000 / (wageCurve(g.age) * SIZE[to])); g.jobType = to; g.wage = offer; g.flags.moved++; g.ev.push({ a: g.age, k: "move" }); } },
+            { label: "옮긴다", run: () => { g.paySeverance(L); if (to === g.jobType) g.pf *= 1 + raise; else g.pf = Math.max(g.pf, offer / 10000 / (wageCurve(g.age) * SIZE[to])); g.jobType = to; g.wage = offer; g.flags.moved++; g.ev.push({ a: g.age, k: "move" }); g.facts.push("move"); } },
             { label: "남는다", run: () => {} }
           ]
         });
@@ -332,7 +356,7 @@
           ask: "어떻게 할까요? 어느 쪽도 틀린 답이 아니에요.",
           options: [
             { label: "결혼한다", sub: "두 사람의 돈을 한 통장으로 봐요", run: () => {
-              g.married = true; g.ev.push({ a: g.age, k: "marry" });
+              g.married = true; g.ev.push({ a: g.age, k: "marry" }); g.facts.push("marry");
               g.spouse = { works: sWorks, pf: sPf, wage: 0, pMonths: Math.max(0, (g.age - 27)) * 12 * (sWorks ? 1 : 0), pSum: 0, nps: 0 };
               if (sWorks) g.spouse.pSum = g.spouse.pMonths * Math.min(D.deduct.pensionBaseMax, wageCurve(g.age) * sPf * 10000);
               const add = Math.max(0, Math.round(g.savings * A.spouseSavingShare));
@@ -358,7 +382,7 @@
     if (g.married && g.kidPlan !== "no" && g.kids.length < A.maxKids && g.age < 50) {
       const b = band(D.birth.ages, D.birth.rate, g.age) / 1000 * A.birthBoost[g.kidPlan] / (1 + 0.5 * g.kids.length);
       if (r() < b) {
-        g.kids.push(0); g.ev.push({ a: g.age, k: "kid", n: g.kids.length });
+        g.kids.push(0); g.ev.push({ a: g.age, k: "kid", n: g.kids.length }); g.facts.push("kid" + g.kids.length);
         L.push({ k: "note", t: (["첫째", "둘째", "셋째"][g.kids.length - 1]) + " 아이가 태어났어요" });
       }
     }
@@ -382,7 +406,7 @@
           options: [
             { label: "산다", sub: need > 0 ? n + "년 동안 대출을 갚아요" : "대출 없이 사요", run: () => {
               g.savings -= (price - need); g.loan = need; g.loanPay = pay; g.loanLeft = need > 0 ? n : 0; g.loanRate = rate;
-              g.home = { price: price, age: g.age }; g.ev.push({ a: g.age, k: "home" });
+              g.home = { price: price, age: g.age }; g.ev.push({ a: g.age, k: "home" }); g.facts.push(need > 0 ? "homeLoan" : "home");
               L.push({ k: "out", t: "집 계약 (내 돈)", v: price - need });
               if (need > 0) L.push({ k: "note", t: "주택 대출 " + Math.round(need / 1e4).toLocaleString("ko-KR") + "만 원" });
             } },
@@ -396,7 +420,7 @@
     if (!g.cancer) {
       const p = band(D.cancer.ages, D.cancer.rate, g.age) / 100000;
       if (r() < p) {
-        g.cancer = true; g.ev.push({ a: g.age, k: "ill" });
+        g.cancer = true; g.ev.push({ a: g.age, k: "ill" }); g.heavyAge = g.age; g.facts.push("ill");
         g.cancerAge = g.age;
         const rest = g.employed ? A.illnessRestMonths : 0;
         q.push({
@@ -407,6 +431,7 @@
         });
       }
     }
+    if (root.TJ_EXTRAS) root.TJ_EXTRAS.plan(g, q, L);
   };
 
   Game.prototype.settle = function () {
@@ -425,8 +450,8 @@
       const s = payslip(g.wage, fam, kidTax, year);
       const gross = s.gross * months, net = s.net * months;
       L.push({ k: "in", t: "월급 " + months + "개월 (세전 " + won(s.gross) + ")", v: gross });
-      L.push({ k: "out", t: "4대보험", v: s.insure * months });
-      L.push({ k: "out", t: "소득세·지방소득세", v: (s.tax + s.local) * months });
+      L.push({ k: "out", t: "4대보험", v: s.insure * months, tax: 1 });
+      L.push({ k: "out", t: "소득세·지방소득세", v: (s.tax + s.local) * months, tax: 1 });
       T.gross += gross; T.insure += s.insure * months; T.tax += (s.tax + s.local) * months;
       income += net;
       g.pMonths += months; g.pSum += s.pBase * months;
@@ -460,7 +485,8 @@
     const floor = D.minWage.monthly * A.spendFloorShare * Math.sqrt(n) * 12;
     // 가구원수별 평균 소비지출(교육 지출 제외)을 기준으로, 우리 집 소득이 그 가구원수 평균보다 많고 적은 만큼 조정한다
     const SB = D.spendBySize, si = Math.min(5, n) - 1;
-    const baseM = SB.spend[si] - SB.edu[si];
+    // 차 장면을 쓰는 판에서는 평균 소비지출에 들어 있는 자가용 지출을 빼고(겹쳐 계산하지 않으려고), 차를 사면 extras.js의 차 비용(가정)을 따로 더한다
+    const baseM = SB.spend[si] - SB.edu[si] - (g.useCar ? SB.car[si] : 0);
     const working = months > 0 || (g.spouse && g.spouse.wage > 0);
     let spend;
     if (working) spend = baseM * Math.pow(Math.max(0.3, income / 12 / SB.disposable[si]), A.spendElastic) * A.spendMode[g.saveMode] * 12;
@@ -470,24 +496,34 @@
     let tut = 0;
     g.kids.forEach((k) => { tut += k >= 7 && k <= 12 ? D.tutoring.elementary : k >= 13 && k <= 15 ? D.tutoring.middle : k >= 16 && k <= 18 ? D.tutoring.high : 0; });
     tut = Math.round(tut * 10000 * 12);
+    // 대학 등록금: 19세가 되는 해에 진학률대로 진학 여부를 정하고, 진학하면 4년 동안 평균 등록금을 낸다
+    let col = 0;
+    g.kids.forEach((k, i) => {
+      if (k === 19 && g.kidCol[i] === undefined) { g.kidCol[i] = g.r() < D.college.rate / 100; if (g.kidCol[i]) { L.push({ k: "note", t: (["첫째", "둘째", "셋째"][i]) + "가 대학에 들어갔어요" }); g.facts.push("college"); } }
+      if (g.kidCol[i] && k >= 19 && k <= 22) col += D.college.tuition;
+    });
     let rent = 0;
     if (g.home) {
       // 대출을 갚는 동안에는 남는 돈 안에서 쓴다(최소 생활비 아래로는 내려가지 않음)
-      if (g.loan > 0 && working) spend = Math.max(floor, Math.min(spend, income - g.loanPay - tut));
+      if (g.loan > 0 && working) spend = Math.max(floor, Math.min(spend, income - g.loanPay - tut - col));
     } else { spend = spend * (1 + (D.housing.rir[g.region] - D.housing.rir.all) / 100); rent = spend * D.housing.rir[g.region] / 100; }
     // 은퇴 뒤 잔고가 없으면 들어오는 돈만큼만 쓴다
-    const due = (g.loan > 0 ? Math.min(g.loanPay, Math.round(g.loan * (1 + g.loanRate))) : 0) + tut;
+    const due = (g.loan > 0 ? Math.min(g.loanPay, Math.round(g.loan * (1 + g.loanRate))) : 0) + tut + col;
     if (!working && g.savings + income - spend - due < 0 && g.age >= A.mainJobEnd) {
       // 남은 예금과 들어오는 돈에서 대출 상환을 뺀 만큼만 쓴다. 다만 들어오는 돈 안에서 최소 생활비는 쓴다
       spend = Math.max(Math.min(floor, income), Math.max(0, g.savings) + income - due);
       rent = Math.min(rent, spend);
-      if (!g.flags.zero) { g.flags.zero = true; g.zeroAge = g.age; g.ev.push({ a: g.age, k: "zero" }); L.push({ k: "note", t: "모아 둔 돈을 다 썼어요. 이제 들어오는 돈으로만 살아요", help: "money" }); }
+      if (!g.flags.zero && !g.flags.minus && g.savings >= 0) { g.flags.zero = true; g.zeroAge = g.age; g.ev.push({ a: g.age, k: "zero" }); g.heavyAge = g.age; g.facts.push("zero"); L.push({ k: "note", t: "모아 둔 돈을 다 썼어요. 이제 들어오는 돈으로만 살아요", help: "money" }); }
     }
     spend = Math.round(spend);
     const spendLine = { k: "out", t: "생활비" + (rent > 0 ? " (월세 " + won(Math.round(rent / 12 / 1e4) * 1e4) + " 포함)" : ""), v: spend };
     L.push(spendLine);
     if (tut > 0) { L.push({ k: "out", t: "자녀 사교육비", v: tut }); T.tutoring += tut; }
+    if (col > 0) { L.push({ k: "out", t: "자녀 대학 등록금", v: col }); T.college += col; }
     T.rent += Math.round(rent);
+
+    // 곁가지(차 할부·유지비, 미뤄 둔 공사 등). 통계가 아니라 가정이다
+    const ext = root.TJ_EXTRAS ? root.TJ_EXTRAS.yearly(g, L) : 0;
 
     // 대출 상환
     let loanOut = 0;
@@ -497,40 +533,48 @@
       g.loan = Math.max(0, g.loan + interest - pay);
       g.loanLeft--; T.loanInterest += interest; loanOut = pay;
       L.push({ k: "out", t: "주택 대출 상환 (이자 " + won(interest) + ")", v: pay });
-      if (g.loan <= 0) { g.loan = 0; L.push({ k: "note", t: "주택 대출을 다 갚았어요" }); }
+      if (g.loan <= 0) { g.loan = 0; L.push({ k: "note", t: "주택 대출을 다 갚았어요" }); g.facts.push("loanPaid"); }
     }
 
     // 마이너스 통장에는 한도가 있다. 한도를 넘으면 집이 있으면 팔아서 대출을 갚고, 그래도 넘으면 한도 안에서만 쓴다
     const limit = -D.minWage.monthly * A.minusLimitMonths;
-    let end = g.savings + income - spend - loanOut - tut;
+    let end = g.savings + income - spend - loanOut - tut - col - ext;
     if (end < limit && g.home) {
       const back = g.home.price - g.loan;
       L.push({ k: "in", t: "집을 팔고 대출을 갚은 뒤 남은 돈", v: back });
       L.push({ k: "note", t: "대출을 감당하기 어려워 집을 팔고 월세로 옮겼어요", help: "money" });
-      end += back; g.loan = 0; g.loanPay = 0; g.home = null; g.homeAsks = A.homeAskMax; g.flags.soldHome = true; g.ev.push({ a: g.age, k: "sold" });
+      end += back; g.loan = 0; g.loanPay = 0; g.home = null; g.homeAsks = A.homeAskMax; g.flags.soldHome = true; g.ev.push({ a: g.age, k: "sold" }); g.heavyAge = g.age; g.facts.push("sold");
     }
     if (end < limit) {
       const cut = Math.min(spend, limit - end);
       spend -= cut; end += cut; spendLine.v = spend;
-      if (!g.flags.limit) { g.flags.limit = true; L.push({ k: "note", t: "마이너스 통장 한도까지 썼어요. 이제 들어오는 돈 안에서만 살아요", help: "money" }); }
+      g.heavyAge = g.age; if (!g.flags.limit) { g.flags.limit = true; g.facts.push("limit"); L.push({ k: "note", t: "마이너스 통장 한도까지 썼어요. 이제 들어오는 돈 안에서만 살아요", help: "money" }); }
     }
     T.spend += spend;
     g.savings = end;
     if (g.savings > g.peak) { g.peak = Math.round(g.savings); g.peakAge = g.age; }
-    if (g.savings < 0 && !g.flags.minus) { g.flags.minus = true; L.push({ k: "note", t: "통장이 마이너스가 됐어요", help: "money" }); }
+    if (g.savings < 0) g.heavyAge = g.age;
+    if (g.savings < 0 && !g.flags.minus) { g.flags.minus = true; g.facts.push("minus"); L.push({ k: "note", t: "통장이 마이너스가 됐어요", help: "money" }); }
 
-    const out = { type: "year", age: g.age, year: year, lines: L, balance: Math.round(g.savings), net: Math.round(g.netWorth()), employed: g.employed, retired: g.retired };
+    g.yr += g.lostThisYear ? "u" : months > 0 ? "w" : g.age >= A.workEnd ? "p" : "r";
+    g.yrHome += g.home ? "1" : "0";
+    g.yrFam += kidsHome > 0 ? "2" : g.married ? "1" : "0";
+    g.lostThisYear = false;
+    if (months > 0) g.lastJob = g.rehired ? "re" : g.jobType;
+    if (g.jobType === "large" && months > 0) g.everLarge = true;
+    const out = { type: "year", age: g.age, year: year, lines: L, balance: Math.round(g.savings), net: Math.round(g.netWorth()), employed: g.employed, retired: g.retired, facts: g.facts, loan: g.loan > 0, married: g.married, kidAges: g.kids.slice(), home: !!g.home, car: g.x.car ? g.x.car.id : null,
+      taxSum: L.filter((l) => l.tax).reduce((a, l) => a + l.v, 0) };
     g.snap = g.snap || {};
     if ([30, 40, 50, 60, 65].includes(g.age)) g.snap[g.age] = Math.round(g.netWorth());
 
     // 한 해가 지남
-    const q = D.life.q[Math.min(100, g.age)] / 100000;
-    if (g.r() < q) {
+    if (g.dieNow) {
       g.dead = true; g.deathAge = g.age;
       g.cause = g.pickCause();
       out.last = true;
     }
     if (g.employed) g.tenure++;
+    g.kids.forEach((k) => { if (k === 7) g.facts.push("school"); if (k === A.kidLeavesAt - 1) g.facts.push("kidLeft"); });
     g.kids = g.kids.map((k) => k + 1);
     g.age++; g.year++;
     return out;
@@ -541,7 +585,7 @@
     let i = 0;
     for (let k = 0; k < d.ages.length; k++) if (g.age >= d.ages[k]) i = k;
     const all = d.all[i];
-    const parts = [["neoplasm", d.neoplasm[i]], ["circ", d.circ[i]], ["resp", d.resp[i]], ["external", d.external[i]]];
+    const parts = [["neoplasm", d.neoplasm[i]], ["circ", d.circ[i]], ["resp", d.resp[i]], ["external", d.external[i]], ["neuro", d.neuro[i]], ["digest", d.digest[i]], ["endo", d.endo[i]], ["infect", d.infect[i]], ["genito", d.genito[i]], ["mental", d.mental[i]], ["unspec", d.unspec[i]]];
     const other = all - parts.reduce((s, p) => s + p[1], 0);
     parts.push(["other", other]);
     let x = g.r() * all;
@@ -561,12 +605,12 @@
       seed: g.seed, startAge: g.startAge, endAge: g.deathAge, years: years, cause: g.cause,
       region: g.region, jobType: g.jobType,
       gross: T.gross, tax: T.tax, insure: T.insure, spend: T.spend, rent: T.rent, interest: T.interest,
-      severance: T.severance, pension: T.pension, loanInterest: T.loanInterest, spouseNet: T.spouseNet, benefit: T.benefit, tutoring: T.tutoring,
+      severance: T.severance, pension: T.pension, loanInterest: T.loanInterest, spouseNet: T.spouseNet, benefit: T.benefit, tutoring: T.tutoring, college: T.college,
       net: net, savings: Math.round(g.savings), home: g.home, loan: g.loan,
       npsMonthly: g.npsMonthly, pYears: Math.round(g.pMonths / 12 * 10) / 10,
       married: g.married, kids: g.kids.length, cancer: g.cancer, cancerAge: g.cancerAge,
       zeroAge: g.zeroAge, flags: g.flags, snap: g.snap || {}, rank65: n65 != null ? rank : null,
-      history: g.history, firstSlip: g.firstSlip, ev: g.ev, peak: g.peak, peakAge: g.peakAge
+      history: g.history, firstSlip: g.firstSlip, leftAge: g.leftAge || null, rehired: !!g.rehired, loanLeft: g.loan, yr: g.yr, yrHome: g.yrHome, yrFam: g.yrFam, lastJob: g.lastJob, startJob: g.startJob, ev: g.ev, peak: g.peak, peakAge: g.peakAge, tags: Object.keys(g.x.tags), extraNet: g.x.net, carNet: g.x.carNet, cars: g.x.cars, carYearsMax: g.x.carYearsMax || 0, funCount: g.x.funCount, surCount: g.x.surCount, everLarge: !!g.everLarge, moves: g.x.moves || 0
     };
   };
 
