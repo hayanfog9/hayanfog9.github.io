@@ -59,13 +59,22 @@
     stamp: ["...bb...", "...bb...", "..bbbb..", "..bbbb..", ".rrrrrr.", ".rrrrrr.", "........", ".rrrrrr."],
     cap: ["...nn...", ".nnnnnn.", "nnnnnnnn", ".nnnnnn.", "..nnnng.", "..nnnng.", "......g.", "........"],
     list: ["n.kkkkk.", "........", "n.kkkkk.", "........", "n.kkkk..", "........", "n.kkkkk.", "........"],
+    scoot: ["......k.", ".....kk.", "..nn..n.", ".nnnnnn.", "nnnnnnn.", ".kk..kk.", ".kk..kk.", "........"],
     leaf: ["....tt..", "..ttttt.", ".tttttt.", ".ttttt..", ".tttt...", "..b.....", ".b......", "b......."]
   };
-  function pix(name) {
+  const CARCOL = [["남색", "#14305a"], ["빨간색", "#c5352b"], ["초록색", "#3f7d5c"], ["은색", "#9aa7b8"], ["노란색", "#d9a520"], ["하늘색", "#5b9bd5"], ["흰색", "#f2efe6"], ["갈색", "#8a5a3c"]];
+  const carCol = (age, i) => CARCOL[(STORY.hash(S.opt.seed, age) + i) % CARCOL.length]; // 한 장면의 선택지끼리 색이 겹치지 않는다
+  function pix(name, col) {
     const m = PIX[name]; if (!m) return "";
+    if (col) return pix2(m, col);
     let r = "";
     m.forEach((row, y) => { for (let x = 0; x < 8; x++) { const c = PIXC[row[x]]; if (c) r += `<rect x="${x}" y="${y}" width="1" height="1" fill="${c}"/>`; } });
     return `<svg class="px" viewBox="0 0 8 8" aria-hidden="true" shape-rendering="crispEdges">${r}</svg>`;
+  }
+  function pix2(m, col) {
+    let r = "";
+    m.forEach((row, y) => { for (let x = 0; x < 8; x++) { const c = row[x] === "n" ? col : PIXC[row[x]]; if (c) r += `<rect x="${x}" y="${y}" width="1" height="1" fill="${c}"/>`; } });
+    return `<svg class="px big" viewBox="0 0 8 8" aria-hidden="true" shape-rendering="crispEdges">${r}</svg>`;
   }
   // 그해의 사실에 맞는 그림(무거운 일에는 붙이지 않는다)
   const FACT_PIX = [["marry", "heart"], ["kid1", "baby"], ["kid2", "baby"], ["kid3", "baby"], ["homeLoan", "house"], ["home", "house"], ["loanPaid", "house"], ["pension", "coin"], ["first", "bag"], ["college", "cap"], ["carFirst", "car"], ["carBuy", "car"], ["move", "bag"], ["rejoin", "bag"], ["exitRe", "leaf"], ["exitRest", "leaf"], ["school", "cap"]];
@@ -283,7 +292,11 @@
     if (e.id === "ill") h += `<p class="fine">암 진단 확률은 2023년 암등록통계의 나이대별 발생률이에요. 치료비는 사람마다 달라 계산하지 않았고, 일을 쉬는 기간(${A.illnessRestMonths}개월)은 가정이에요. 의료 상담이 아니에요.</p>`;
     if (kind === "car") h += `<label class="fine" for="carNick" style="display:block;margin-top:6px">차를 사면 부를 별명 (안 쓰면 "${esc(S.game.x.nick)}")</label><input id="carNick" class="tin" maxlength="8" autocomplete="off" placeholder="${esc(S.game.x.nick)}">`;
     if (e.ask) h += `<p class="ask">${esc(e.ask)}</p>`;
-    e.options.forEach((o, i) => { h += `<button class="opt" data-i="${i}">${esc(ct(o.label))}${o.sub ? "<small>" + esc(ct(o.sub)) + "</small>" : ""}</button>`; });
+    e.options.forEach((o, i) => {
+      let ic = "", colName = "";
+      if (kind === "car" && i < e.options.length - 1) { const cc = carCol(e.age, i); ic = pix(/스쿠터|오토바이/.test(o.label) ? "scoot" : "car", cc[1]); colName = cc[0] + " · "; }
+      h += `<button class="opt${ic ? " caropt" : ""}" data-i="${i}">${ic}<span>${esc(ct(o.label))}${o.sub ? "<small>" + esc(colName + ct(o.sub)) + "</small>" : ""}</span></button>`;
+    });
     if (kind === "sur") h += `<p class="fine" style="margin:8px 0 0">갑자기 생긴 일의 금액은 통계가 아니라 우리가 정한 가정이에요.</p>`;
     if (e.foot) h += `<p class="fine" style="margin:8px 0 0">${esc(e.foot)}</p>`;
     if (e.link) { h += `<div class="linkrow">${linkHtml(e.link)}</div>`; if (e.id === "first") h += `<div class="linkrow">${linkHtml("saving")}</div>`; }

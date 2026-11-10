@@ -25,18 +25,24 @@
   };
   // 차·오토바이 이름: 모두 지어낸 이름이다(통제실·JW가 정함, 2026-11-10). 실제 모델명·로고·차 생김새는 쓰지 않는다.
   const CAR = {
-    scooter: { kind: "스쿠터", names: ["배달스파 골목대장", "번개표 동네한바퀴"], img: "sur_scooter" },
-    bike: { kind: "오토바이", names: ["할배슨 아저씨의 꿈", "번개표 주말라이더"], img: "sur_scooter" },
-    used: { kind: "중고 경차", names: ["규아 콩알", "핸대 꼬마"], img: "sur_car_small" },
-    small: { kind: "경차", names: ["규아 콩알", "핸대 꼬마"], img: "sur_car_small" },
-    compact: { kind: "준중형차", names: ["핸대 무난", "규아 성실"], img: "sur_car_small" },
-    mid: { kind: "중형차", names: ["핸대 든든", "규아 점잖"], img: "sur_car_suv" },
-    suv: { kind: "SUV", names: ["규아 씩씩", "핸대 캠핑가자"], img: "sur_car_suv" },
+    scooter: { kind: "스쿠터", names: ["배달스파 골목대장", "번개표 동네한바퀴", "배달스파 치킨특급"], img: "sur_scooter" },
+    bike: { kind: "오토바이", names: ["할배슨 아저씨의 꿈", "번개표 주말라이더", "할배슨 바람막이"], img: "sur_scooter" },
+    used: { kind: "중고 경차", names: ["규아 털털이", "핸대 십년지기", "규아 물려받음"], img: "sur_car_small" },
+    small: { kind: "경차", names: ["규아 콩알", "핸대 꼬마", "핸대 깡총이"], img: "sur_car_small" },
+    compact: { kind: "준중형차", names: ["핸대 무난", "규아 성실", "핸대 출퇴근"], img: "sur_car_small" },
+    mid: { kind: "중형차", names: ["핸대 든든", "규아 점잖", "규아 반듯"], img: "sur_car_suv" },
+    suv: { kind: "SUV", names: ["규아 씩씩", "핸대 캠핑가자", "핸대 산타할배"], img: "sur_car_suv" },
     imported: { kind: "수입 중형차", names: ["반츠 회장님", "볼보이 튼튼", "오우디 동그라미 넷 아님"], img: "sur_car_suv" },
     importedSuv: { kind: "수입 SUV", names: ["반츠 큰회장님", "볼보이 북유럽", "뱀따블유 콧구멍"], img: "sur_car_suv" },
     superc: { kind: "슈퍼카", names: ["름보르가니 황소고집", "빼로리 빨간맛", "쁘르쉐 개구리눈"], img: "sur_supercar" }
   };
-  const carName = (g, id) => { const n = CAR[id].names; return n[(g.seed + g.age * 7 + id.length) % n.length]; };
+  // 이름 고르기: 난수를 쓰지 않고 씨앗·나이로 정한다(계산과 무관). taken에 든 이름은 피하고, 직전 차와 같은 이름·같은 브랜드도 되도록 피한다
+  const brand = (nm) => String(nm || "").split(" ")[0];
+  function carName(g, id, taken) {
+    const n = CAR[id].names, st = (g.seed + g.age * 7 + id.length * 3) % n.length, last = g.x.lastCar || "", tk = taken || [];
+    const order = n.map((_, i) => n[(st + i) % n.length]);
+    return order.find((x) => tk.indexOf(x) < 0 && x !== last && brand(x) !== brand(last)) || order.find((x) => tk.indexOf(x) < 0 && x !== last) || order.find((x) => tk.indexOf(x) < 0) || order[0];
+  }
   const NICK_A = ["회색", "은색", "하얀", "남색", "초록", "빨간"], NICK_B = ["똑딱이", "붕붕이", "구름이", "고래", "완두", "감자"];
   const man = (v) => Math.round(v / 1e4).toLocaleString("ko-KR") + "만 원";
 
@@ -136,16 +142,16 @@
     const car = { id: id, name: name || carName(g, id), price: c.price, value: c.price, years: 0, instLeft: 0, instPay: 0 };
     if (inst) { car.instLeft = X.instYears; car.instPay = Math.round(c.price * (1 + X.instAdd) / X.instYears); }
     else { pay(g, L, CAR[id].kind + " ‘" + car.name + "’ 값", -c.price); g.x.carNet -= c.price; }
-    g.x.car = car; g.x.cars++;
+    g.x.car = car; g.x.cars++; g.x.lastCar = car.name;
     if (id === "scooter" || id === "bike") tag(g, "rider"); else tag(g, "firstCar");
     if (id === "superc") tag(g, "legendSuper");
     g.facts.push(g.x.cars === 1 ? "carFirst" : "carBuy");
     note(L, "‘" + car.name + "’" + josa(car.name, "이", "가") + " 왔어요. " + (g.x.cars === 1 ? "이제부터 {car}라고 불러요." : "별명은 이번에도 {car}예요."), "car");
   }
   function carScene(g, L) {
-    const s = g.savings, opts = [];
+    const s = g.savings, opts = [], taken = [];
     const add = (id, inst) => {
-      const c = X.cars[id], nm = carName(g, id);
+      const c = X.cars[id], nm = carName(g, id, taken); taken.push(nm);
       opts.push({ label: CAR[id].kind + " ‘" + nm + "’" + (inst ? " (할부)" : ""), sub: inst ? "5년 동안 해마다 " + man(c.price * (1 + X.instAdd) / X.instYears) + ", 유지비 한 해 " + man(c.keep) : "값 " + man(c.price) + ", 유지비 한 해 " + man(c.keep), run: () => buyCar(g, L, id, inst, nm) });
     };
     if (g.age < 40 && s >= X.cars.scooter.price * 2) add("scooter", false);
