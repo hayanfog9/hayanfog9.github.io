@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>예금·적금 이자 계산기 | JW의 AI 작업실</title>
+<meta name="description" content="예금이나 적금의 금액, 기간, 연이율을 넣으면 세전 이자, 이자소득세(15.4%), 세후 이자, 만기 수령액을 보여 줘요. 이율은 내가 넣는 값이고 은행별 계산과 다를 수 있는 참고용이에요. 입력한 내용은 저장하거나 전송하지 않아요.">
+<link rel="canonical" href="https://hayanfog9.github.io/saving-calc-3k8d/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="예금·적금 이자 계산기">
+<meta property="og:description" content="금액, 기간, 연이율을 넣으면 세후 이자와 만기 수령액을 보여 줘요. 참고용이에요.">
+<meta property="og:url" content="https://hayanfog9.github.io/saving-calc-3k8d/">
+<meta name="robots" content="index,follow">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"예금·적금 이자 계산기","url":"https://hayanfog9.github.io/saving-calc-3k8d/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"author":{"@type":"Person","name":"JW"}}</script>
+<style>
+:root{color-scheme:light dark;--desk:#E4E9F0;--paper:#FFFFFF;--ink:#1B2447;--ink2:#58627F;--rule:#CBD2DF;--hl:#FFE45C;--stamp:#B3261E;--warn:#B3261E;--focus:#3F528F;--acc:#3F528F}
+@media (prefers-color-scheme:dark){:root{--desk:#0D1220;--paper:#151B2D;--ink:#E8ECF8;--ink2:#A2ACC6;--rule:#2A3552;--hl:#5A4B00;--stamp:#FF8A80;--warn:#FF8A80;--focus:#AAB7E8;--acc:#AAB7E8}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--desk);color:var(--ink);font:16px/1.6 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.desk{max-width:980px;margin:0 auto;padding:22px 16px 56px}
+h1{font-size:clamp(22px,4.4vw,30px);line-height:1.2;margin:0;letter-spacing:-.02em;font-weight:800}
+.base{margin:4px 0 0;color:var(--ink2);font-size:14px}
+.ref{display:inline-block;margin:12px 0 0;padding:4px 10px;border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;font-weight:800;font-size:14px;transform:rotate(-1deg)}
+.priv{margin:8px 0 0;color:var(--ink2);font-size:12.5px;line-height:1.5}
+.sheet{display:grid;gap:18px;grid-template-columns:minmax(0,1fr);margin-top:18px}
+@media (min-width:900px){.sheet{grid-template-columns:minmax(340px,430px) minmax(0,1fr);align-items:start}.in{position:sticky;top:16px}}
+.in{background:var(--paper);border:1px solid var(--ink);border-radius:3px;padding:6px 16px 18px}
+label{display:block;font-size:14px;font-weight:600;margin:14px 0 5px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--ink);border-radius:3px;background:var(--paper);color:var(--ink);font:inherit;font-size:16px}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:13px;color:var(--ink2);margin-top:4px;line-height:1.5}
+.err{color:var(--warn);font-size:13.5px;min-height:20px;margin-top:8px;font-weight:600}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+button{font:inherit;font-size:14.5px;font-weight:700;padding:9px 14px;border-radius:3px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+button.fill{background:var(--ink);color:var(--paper)}button:disabled{opacity:.45;cursor:default}
+.slip{position:relative;background:var(--paper);border:1px solid var(--ink);border-top-width:6px;border-radius:3px;padding:18px 18px 22px}
+.slip h2{font-size:16px;margin:0;font-weight:800}
+.meta{color:var(--ink2);font-size:13px;margin:2px 0 4px}
+.stamp{position:absolute;top:14px;right:14px;transform:rotate(-8deg);border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;padding:1px 9px;font-weight:800;font-size:15px;letter-spacing:.08em}
+.r{display:grid;grid-template-columns:1fr auto;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule);font-size:14.5px}
+.r b{text-align:right;font-weight:600;min-width:96px}
+.tot{margin-top:12px;padding-top:12px;border-top:3px double var(--ink)}
+.tot .l{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:2px 0}
+.tot .l span{font-weight:700}
+#won{white-space:nowrap;font-size:clamp(26px,8vw,38px);font-weight:800;letter-spacing:-.03em;background:linear-gradient(transparent 55%,var(--hl) 55%,var(--hl) 92%,transparent 92%) no-repeat;padding:0 .12em}
+.note{font-size:13px;color:var(--ink2);margin-top:10px;line-height:1.55}
+.empty{color:var(--ink2);font-size:14.5px;margin:10px 0 0}
+.notes{margin-top:26px}.notes h3{font-size:14px;margin:0 0 8px;border-top:1.5px solid var(--ink);padding-top:8px}
+.notes ul{margin:0;padding-left:18px;color:var(--ink2);font-size:14px}.notes li{margin:5px 0}
+a{color:var(--acc)}footer{font-size:13px;color:var(--ink2);margin-top:26px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-weight:700;border-radius:4px;padding:8px 16px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="desk">
+<header>
+<h1>예금·적금 이자 계산기</h1>
+<p class="base">금액, 기간, 연이율을 넣으면 세후 이자와 만기 수령액을 보여 줘요</p>
+<span class="ref">참고용이에요. 은행 계산과 다를 수 있어요</span>
+<p class="priv">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 같은 방문자 구분(최대 8시간), 브라우저·운영체제 종류, 화면 너비)만 수집해요. 이율은 내가 넣는 값이고, 은행별 이자 계산 방식과 우대금리에 따라 실제 만기 금액은 달라질 수 있습니다.</p>
+</header>
+
+<main class="sheet">
+<section class="in" aria-label="입력">
+<div class="row">
+<div><label for="kind">상품</label><select id="kind"><option value="save">적금(매달 넣기)</option><option value="dep">예금(한 번에 넣기)</option></select></div>
+<div><label for="amt" id="amtl">월 납입액(원)</label><input id="amt" inputmode="numeric" autocomplete="off" placeholder="예: 100000"></div>
+</div>
+<div class="row">
+<div><label for="mon">기간(개월)</label><input id="mon" inputmode="numeric" autocomplete="off" placeholder="예: 12"></div>
+<div><label for="rate">연이율(%)</label><input id="rate" inputmode="decimal" autocomplete="off" placeholder="직접 입력"></div>
+</div>
+<div class="hint" id="exnote">연이율은 은행 상품 안내에서 확인해 직접 넣어 주세요. "예시 넣기"의 이율은 가상의 값이에요.</div>
+<div class="row">
+<div><label for="how">이자 계산 방식</label><select id="how"><option value="simple">단리</option><option value="comp">월복리</option></select></div>
+<div><label for="tax">세금</label><select id="tax"><option value="gen">일반 과세(15.4%)</option><option value="free">비과세(0%)</option></select></div>
+</div>
+<div class="hint">단리·월복리 중 어느 쪽인지, 우대금리가 있는지는 상품 설명서에서 확인하세요. 적금은 매달 월초에 같은 금액을 넣는 것으로 계산해요.</div>
+<div class="err" id="err" role="alert"></div>
+<div class="btns"><button type="button" class="fill" id="go">이자 계산</button><button type="button" id="ex">예시 넣기</button><button type="button" id="clr">비우기</button></div>
+</section>
+
+<section class="slip" aria-live="polite" aria-label="결과">
+<span class="stamp">참고용</span>
+<h2>만기 수령액 예상</h2>
+<p class="meta" id="meta">값을 넣고 "이자 계산"을 누르면 세전·세후 이자와 만기 금액을 보여 줘요.</p>
+<div id="res"><p class="empty">금액, 기간, 연이율을 넣고 "이자 계산"을 누르세요.</p></div>
+<p class="note">내가 넣은 이율로 단순 계산한 참고 값이에요. 이자와 세금은 원 미만을 버려요(은행은 다르게 계산할 수 있어요). 실제 만기 금액은 상품 약관과 우대조건에 따라 달라질 수 있습니다.</p>
+<div class="btns"><button type="button" id="copy" disabled>결과 복사</button><button type="button" id="save" disabled>이미지 저장</button></div>
+</section>
+</main>
+
+<div class="notes"><h3>알아 두세요</h3>
+<ul>
+<li>적금 단리 이자 = 월 납입액 × 개월 수 × (개월 수 + 1) ÷ 2 × 연이율 ÷ 12예요(매달 월초 납입). 예금 단리 이자 = 예치금 × 연이율 × 개월 수 ÷ 12예요.</li>
+<li>월복리는 월 이율(연이율 ÷ 12)로 매달 이자가 원금에 붙는 것으로 계산해요. 적금은 납입한 달수만큼, 예금은 전체 기간만큼 붙어요.</li>
+<li>일반 과세는 이자소득세 14%에 지방소득세(소득세의 10%, 즉 1.4%)를 더한 15.4%를 이자에서 뺀 값이에요. 비과세·세금우대 조건은 내가 "비과세"를 골라야 반영돼요. 어떤 상품이 비과세인지는 이 계산기가 판단하지 않아요.</li>
+<li>이율은 직접 넣는 값이고 특정 날짜의 금리를 쓰지 않아요. 우대금리, 중도해지, 이자 지급 주기, 일할 계산은 반영하지 않아요.</li>
+<li>환율이 필요한 외화 상품은 <a href="https://hayanfog9.github.io/fx-convert-7q5m/">환율 환산 계산기</a>를 함께 쓰세요.</li>
+</ul>
+<h3 style="margin-top:20px">확인한 곳 (2026-11-05에 국가법령정보센터를 직접 열어 읽었어요)</h3>
+<ul>
+<li>소득세법 제129조 제1항 제1호 라목(시행 2026. 1. 1.): 그 밖의 이자소득의 원천징수세율은 100분의 14</li>
+<li>지방세법 제103조의13 제1항(시행 2026. 1. 1.): 원천징수하는 소득세의 100분의 10을 개인지방소득세로 특별징수</li>
+<li>열어 보지 못한 것: 은행별 이자 계산·반올림 방식, 소액 부징수 등 세부 예외, 비과세 상품의 조건. 그래서 이 계산기는 이 부분을 단정하지 않아요.</li>
+</ul></div>
+<footer>© <a href="https://hayanfog9.github.io/">JW의 AI 작업실</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
+</div>
+<div id="toast" role="status"></div>
+<script>
+function $(i){return document.getElementById(i)}
+function num(v){v=String(v).replace(/,/g,'').trim();if(v==='')return NaN;v=Number(v);return isFinite(v)?v:NaN}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast._t);toast._t=setTimeout(function(){e.style.opacity=0},1800)}
+function fmt(v){return Number(v).toLocaleString('ko-KR')}
+/* 계산: BigInt 정수로 정확히. 연이율은 0.01% 단위(rateC), 이자와 세금은 원 미만 버림 */
+function calc(o){
+  var P=BigInt(o.amt),n=BigInt(o.mon),rc=BigInt(Math.round(o.rate*100)),D=120000n,A=D+rc,interest,principal;
+  if(o.kind==='save'){principal=P*n;
+    if(o.how==='simple')interest=P*n*(n+1n)*rc/(240000n);
+    else{var S=0n,k;for(k=1n;k<=n;k++)S+=A**k*D**(n-k);interest=P*S/(D**n)-principal}}
+  else{principal=P;
+    if(o.how==='simple')interest=P*n*rc/D;
+    else interest=P*A**n/(D**n)-principal}
+  var inc=o.tax==='gen'?interest*14n/100n:0n,loc=o.tax==='gen'?inc*10n/100n:0n,tax=inc+loc,net=interest-tax;
+  return{principal:Number(principal),interest:Number(interest),incomeTax:Number(inc),localTax:Number(loc),tax:Number(tax),net:Number(net),total:Number(principal+net)}}
+var cur=null;
+function run(){
+  var amt=num($('amt').value),mon=num($('mon').value),rate=num($('rate').value),err=[];
+  if(!(amt>0&&Math.floor(amt)===amt))err.push(($('kind').value==='save'?'월 납입액':'예치금')+'을 1원 이상의 정수로 넣어 주세요.');
+  if(!(mon>=1&&mon<=120&&Math.floor(mon)===mon))err.push('기간은 1~120개월의 정수로 넣어 주세요.');
+  if(!(rate>=0&&rate<=100))err.push('연이율(%)을 0 이상 100 이하의 숫자로 직접 넣어 주세요.');
+  if(amt>1e12)err.push('금액이 너무 커요. 1조 원 이하로 넣어 주세요.');
+  $('err').textContent=err.join(' ');if(err.length){$('copy').disabled=$('save').disabled=true;return}
+  var o={kind:$('kind').value,how:$('how').value,tax:$('tax').value,amt:amt,mon:mon,rate:rate},r=calc(o);cur=r;
+  var save=o.kind==='save',h='';
+  h+='<div class="r"><span>'+(save?'총 납입 원금 ('+fmt(amt)+'원 × '+mon+'개월)':'예치 원금')+'</span><b>'+fmt(r.principal)+'원</b></div>';
+  h+='<div class="r"><span>세전 이자 ('+(o.how==='simple'?'단리':'월복리')+', 연 '+rate+'%)</span><b>'+fmt(r.interest)+'원</b></div>';
+  h+='<div class="r"><span>이자소득세 + 지방소득세'+(o.tax==='gen'?' (14% + 1.4%)':' (비과세)')+'</span><b>'+fmt(r.tax)+'원</b></div>';
+  h+='<div class="r"><span>세후 이자</span><b>'+fmt(r.net)+'원</b></div>';
+  h+='<div class="tot"><div class="l"><span>만기 수령액 (원금 + 세후 이자)</span><b id="won">'+fmt(r.total)+'원</b></div></div>';
+  $('res').innerHTML=h;$('meta').textContent=(save?'적금':'예금')+' '+mon+'개월, 내가 넣은 연이율 '+rate+'% 기준이에요.';
+  var L=['예금·적금 이자 계산 ('+(save?'적금':'예금')+' '+mon+'개월, 연 '+rate+'%, '+(o.how==='simple'?'단리':'월복리')+')',(save?'총 납입 원금 ':'예치 원금 ')+fmt(r.principal)+'원','세전 이자 '+fmt(r.interest)+'원, 세금 '+fmt(r.tax)+'원, 세후 이자 '+fmt(r.net)+'원','만기 수령액 '+fmt(r.total)+'원','※ 참고용이에요. 실제 만기 금액은 은행 계산과 우대조건에 따라 달라질 수 있습니다.'];
+  window._txt=L.join('\n');window._lines=L;$('copy').disabled=$('save').disabled=false}
+function wrap(c,t,w){var out=[],cu='';t.split('').forEach(function(ch){if(c.measureText(cu+ch).width>w){out.push(cu);cu=ch}else cu+=ch});if(cu)out.push(cu);return out}
+function saveImg(){if(!window._lines)return;var W=1080,pad=56,L=window._lines,cv=document.createElement('canvas'),c=cv.getContext('2d');cv.width=W;var FONT='"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif';
+  c.font='32px '+FONT;var rows=L.map(function(l){return wrap(c,l,W-pad*2)});
+  var H=130+rows.reduce(function(a,ls){return a+ls.length*50+16},0)+90;cv.height=H;
+  c.fillStyle='#E4E9F0';c.fillRect(0,0,W,H);c.fillStyle='#fff';c.fillRect(24,24,W-48,H-48);c.fillStyle='#1B2447';c.fillRect(24,24,W-48,10);
+  c.font='800 40px '+FONT;c.fillText('예금·적금 이자 계산',pad,100);var y=150;
+  rows.forEach(function(ls,i){var last=i>=L.length-1;c.font=(i===3?'800 36px ':'32px ')+FONT;c.fillStyle=last?'#B3261E':'#1B2447';if(i===0){c.fillStyle='#58627F';c.font='28px '+FONT}
+    ls.forEach(function(l,j){c.fillText(l,pad,y+38+j*50)});y+=ls.length*50+16});
+  c.fillStyle='#58627F';c.font='24px '+FONT;c.fillText('JW의 AI 작업실 · hayanfog9.github.io/saving-calc-3k8d/',pad,H-52);
+  cv.toBlob(function(bl){if(!bl){toast('이미지를 만들지 못했어요');return}var a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='saving-calc.png';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(a.href)},1000);toast('이미지를 저장했어요')},'image/png')}
+$('kind').onchange=function(){$('amtl').textContent=this.value==='save'?'월 납입액(원)':'예치금(원)'};
+$('go').onclick=run;$('save').onclick=saveImg;
+$('copy').onclick=function(){var t=window._txt||'';function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('복사했어요')}catch(e){toast('복사하지 못했어요. 직접 선택해서 복사하세요')}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},fb)}else fb()};
+var NOTE0=$('exnote').innerHTML;
+$('ex').onclick=function(){$('kind').value='save';$('kind').onchange&&$('kind').onchange.call($('kind'));$('amt').value='100000';$('mon').value='12';$('rate').value='3';$('how').value='simple';$('tax').value='gen';
+  $('exnote').textContent='연이율 3%는 가상의 예시 값이에요. 실제 이율은 은행 상품 안내에서 확인해서 직접 넣어 주세요.';run()};
+$('clr').onclick=function(){['amt','mon','rate'].forEach(function(i){$(i).value=''});$('kind').value='save';$('amtl').textContent='월 납입액(원)';$('how').value='simple';$('tax').value='gen';$('err').textContent='';
+  $('res').innerHTML='<p class="empty">금액, 기간, 연이율을 넣고 "이자 계산"을 누르세요.</p>';$('copy').disabled=$('save').disabled=true;$('exnote').innerHTML=NOTE0;$('meta').textContent='값을 넣고 "이자 계산"을 누르면 세전·세후 이자와 만기 금액을 보여 줘요.'};
+window.SC={calc:calc};
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
