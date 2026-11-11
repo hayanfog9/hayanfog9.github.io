@@ -8,12 +8,12 @@
     funGap: 3, funProb: 0.3, funMax: 7,
     calmNeed: D.minWage.monthly * 12, // 잔액이 이보다 적은 해에는 곁가지 장면을 넣지 않는다(그해에 통장이 바닥날 수 있어서)
     surGap: 6, surProb: 0.16, surMax: 6,
-    friend: 3000000, oldbank: 800000, quiz: 500000, quizWin: 0.5, washerNew: 900000, weddings: 400000, prize: 300000,
+    friend: 3000000, oldbank: 800000, quiz: 500000, quizWin: 0.5, washerNew: 900000, washerUsed: 350000, weddings: 400000, weddingsTwo: 200000, prize: 300000,
     leakFix: 1800000, leakShare: 900000,
-    bumpIns: 300000,
+    bumpIns: 300000, bumpSelf: 500000,
     moveCost: 3000000, moveRaise: 0.05,
-    pet: 1500000, parentsAll: 6000000, parentsShare: 2000000,
-    biz: 10000000, bizBack: 0.2,
+    pet: 1500000, petLight: 600000, parentsAll: 6000000, parentsShare: 2000000,
+    biz: 10000000, bizBack: 0.2, bonusGive: 0.5,
     legendProb: 0.0009, legendCat: 2000000, legendArt: 20000000,
     carAskGap: 5, carAskProb: 0.35, carAskMax: 2, carMax: 2, carNeed: 12000000,
     cars: {
@@ -79,20 +79,25 @@
   // ── 돌발: 돈이 움직인다. 금액은 가정 ─────────────────────────────
   const SUR = [
     { id: "friend", img: "sur_bonus", ok: (g) => g.age >= 35, title: "10년 만에 온 입금", text: "잊고 있던 이름으로 돈이 들어왔어요. 10년 전에 빌려 간 친구예요. 메모 칸에는 \"늦어서 미안\" 다섯 글자가 적혀 있어요.",
-      opts: [["고맙다고 답장한다", (g, L) => { pay(g, L, "친구가 갚은 돈", X.friend); note(L, "돈보다 다섯 글자가 더 오래 남았어요.", "sur"); }]] },
+      opts: [["고맙다고 답장한다", (g, L) => { pay(g, L, "친구가 갚은 돈", X.friend); note(L, "돈보다 다섯 글자가 더 오래 남았어요.", "sur"); }, man(X.friend) + "이 들어와요"],
+        ["반만 받고 밥을 산다", (g, L) => { pay(g, L, "친구가 갚은 돈(반)", Math.round(X.friend / 2)); note(L, "나머지 반은 삼겹살로 받았어요. 10년 치 이야기가 2차까지 이어졌어요.", "sur"); }, man(X.friend / 2) + "만 들어와요"]] },
     { id: "bonus", ok: working, title: "깜짝 성과급", text: "예고도 없이 성과급이 나왔어요. 월급 한 달 치예요. 사무실이 오늘따라 조용하고 다들 표정이 좋아요.",
-      opts: [["조용히 받는다", (g, L) => { pay(g, L, "깜짝 성과급", g.wage); note(L, "아무 일도 없던 것처럼 저녁을 먹었어요. 속으로만 웃었어요.", "sur"); }]] },
+      opts: [["조용히 받는다", (g, L) => { pay(g, L, "깜짝 성과급", g.wage); note(L, "아무 일도 없던 것처럼 저녁을 먹었어요. 속으로만 웃었어요.", "sur"); }, "월급 한 달 치가 들어와요"],
+        ["반은 부모님께 보낸다", (g, L) => { pay(g, L, "깜짝 성과급", g.wage); pay(g, L, "부모님께 보낸 용돈", -Math.round(g.wage * X.bonusGive)); note(L, "어머니가 \"이게 뭐냐\"고 전화하셨어요. 목소리가 웃고 있었어요.", "sur"); }, "반만 남아요"]] },
     { id: "oldbank", title: "서랍 속 통장", text: "이사 준비를 하다가 서랍 맨 아래에서 오래된 적금 통장이 나왔어요. 만기는 한참 전에 지났어요.",
       opts: [["은행에 가 본다", (g, L) => { pay(g, L, "잊고 있던 적금", X.oldbank); note(L, "과거의 내가 미래의 나에게 보낸 선물이었어요.", "sur"); }]] },
     { id: "quiz", img: "fun_refund", title: "퀴즈 프로그램 예선", text: "재미로 넣어 본 퀴즈 프로그램 예선에 붙었어요. 녹화장 조명이 생각보다 뜨거웠어요.",
-      opts: [["버저를 누른다", (g, L) => { if (g.sr() < X.quizWin) { pay(g, L, "퀴즈 상금", X.quiz); note(L, "마지막 문제는 찍었는데 맞았어요. 방송에는 3초 나왔어요.", "sur"); } else note(L, "첫 문제에서 떨어졌어요. 기념 수건은 지금도 잘 써요.", "sur"); }]] },
+      opts: [["버저를 누른다", (g, L) => { if (g.sr() < X.quizWin) { pay(g, L, "퀴즈 상금", X.quiz); note(L, "마지막 문제는 찍었는데 맞았어요. 방송에는 3초 나왔어요.", "sur"); } else note(L, "첫 문제에서 떨어졌어요. 기념 수건은 지금도 잘 써요.", "sur"); }, "반반이에요. 맞히면 " + man(X.quiz)],
+        ["응원석에 앉는다", (g, L) => note(L, "출연은 친구에게 양보했어요. 방송에는 박수 치는 제 뒤통수가 2초 나왔어요.", "sur")]] },
     { id: "medal", ok: (g) => g.age < 60, title: "마라톤 완주", text: "친구 따라 신청한 10km 마라톤 날이에요. 7km부터는 걷는 것과 속도가 같았어요.",
-      opts: [["끝까지 간다", (g, L) => { tag(g, "marathon"); note(L, "완주했어요. 메달은 현관에 걸어 뒀어요. 일주일 동안 계단이 무서웠어요.", "sur"); }]] },
+      opts: [["끝까지 간다", (g, L) => { tag(g, "marathon"); note(L, "완주했어요. 메달은 현관에 걸어 뒀어요. 일주일 동안 계단이 무서웠어요.", "sur"); }],
+        ["5km에서 떡볶이집으로", (g, L) => note(L, "결승선 대신 분식집에 들어갔어요. 친구가 메달을 들고 데리러 왔어요.", "sur")]] },
     { id: "leak", ok: (g) => !!g.home, title: "천장에서 비가 온다", text: "자다가 이마에 물방울을 맞았어요. 위층 배관에서 물이 새요. 집에 있는 그릇이 다 나왔어요.",
       opts: [["위층과 이야기해 나눠 낸다", (g, L) => { pay(g, L, "천장 수리비(절반)", -X.leakShare); note(L, "위층 분이 귤 한 상자를 들고 내려왔어요. 천장은 새하얘졌어요.", "sur"); }, man(X.leakShare) + "이 나가요. 며칠 걸려요"],
         ["내 돈으로 바로 고친다", (g, L) => { pay(g, L, "천장 수리비", -X.leakFix); note(L, "하루 만에 끝났어요. 통장도 조금 하얘졌어요.", "sur"); }, man(X.leakFix) + "이 나가요"]] },
     { id: "carbump", ok: (g) => !!g.x.car && !twoWheel(g), title: "쿵", text: "주차하다가 뒤차와 살짝 닿았어요. {car}도 놀라고 저도 놀랐어요. 다친 사람은 없어요.",
-      opts: [["보험으로 처리한다", (g, L) => { pay(g, L, "접촉 사고 자기부담금", -X.bumpIns); note(L, "보험사 직원이 저보다 침착했어요.", "sur"); }, man(X.bumpIns) + "이 나가요"]] },
+      opts: [["보험으로 처리한다", (g, L) => { pay(g, L, "접촉 사고 자기부담금", -X.bumpIns); note(L, "보험사 직원이 저보다 침착했어요.", "sur"); }, man(X.bumpIns) + "이 나가요"],
+        ["내 돈으로 물어 준다", (g, L) => { pay(g, L, "접촉 사고 수리비", -X.bumpSelf); note(L, "보험은 안 썼어요. 뒤차 주인과 명함을 주고받았어요.", "sur"); }, man(X.bumpSelf) + "이 나가요"]] },
     { id: "transfer", ok: (g) => working(g) && g.age < 50, title: "갑작스러운 발령", text: "월요일 아침에 발령 공지가 떴어요. 다음 달부터 다른 도시의 지사에서 일해 달래요. 대신 월급을 올려 준대요.",
       opts: [["간다", (g, L) => { pay(g, L, "이사 비용", -X.moveCost); g.pf *= 1 + X.moveRaise; g.wage = Math.round(g.wage * (1 + X.moveRaise) / 1000) * 1000;
           const P = root.TJ_PLACE, m = g.x.moves || 0; g.x.moves = m + 1;
@@ -100,7 +105,8 @@
           note(L, (a && b ? a + "에서 " + b + josa(b, "으로", "로") + " 옮겼어요. " : "") + "낯선 동네의 단골 국밥집을 찾는 데 2주 걸렸어요.", "sur"); g.facts.push("moved"); }, "이사비 " + man(X.moveCost) + ", 월급은 5% 올라요"],
         ["안 간다", (g, L) => note(L, "자리는 그대로예요. 그 지사 맛집 이야기는 건너 들었어요.", "sur")]] },
     { id: "petsurgery", ok: (g) => !!g.x.tags.cat, title: "병원에 간 고양이", text: "고양이가 밥을 안 먹어서 병원에 갔더니 수술이 필요하대요. 병원 가는 내내 저보다 고양이가 더 크게 울었어요.",
-      opts: [["수술한다", (g, L) => { pay(g, L, "고양이 수술비", -X.pet); note(L, "수술은 잘 끝났어요. 고양이는 사흘 동안 저를 모른 척했어요.", "sur"); }, man(X.pet) + "이 나가요"]] },
+      opts: [["수술한다", (g, L) => { pay(g, L, "고양이 수술비", -X.pet); note(L, "수술은 잘 끝났어요. 고양이는 사흘 동안 저를 모른 척했어요.", "sur"); }, man(X.pet) + "이 나가요"],
+        ["약 먹이며 지켜본다", (g, L) => { pay(g, L, "고양이 통원 치료비", -X.petLight); note(L, "석 달 동안 병원을 오갔어요. 다시 밥그릇을 비우던 날 박수를 쳤어요.", "sur"); }, man(X.petLight) + "이 나가요. 오래 걸려요"]] },
     { id: "parents", img: "fun_holiday", ok: (g) => g.age >= 40 && g.age <= 60, title: "부모님 병원비", text: "부모님이 입원하셨어요. 큰 병은 아니지만 병원비가 꽤 나왔어요.",
       opts: [["내가 다 낸다", (g, L) => { pay(g, L, "부모님 병원비", -X.parentsAll); note(L, "퇴원하는 날 부모님이 병원 앞에서 국수를 사 주셨어요.", "sur"); }, man(X.parentsAll) + "이 나가요"],
         ["형제와 나눠 낸다", (g, L) => { pay(g, L, "부모님 병원비(나눠 냄)", -X.parentsShare); note(L, "단체 대화방이 오랜만에 시끄러웠어요.", "sur"); }, man(X.parentsShare) + "이 나가요"]] },
@@ -110,15 +116,19 @@
   ];
   SUR.push(
     { id: "washer", noimg: 1, title: "세탁기의 마지막 탈수", text: "세탁기가 큰 소리를 내더니 멈췄어요. 안에는 젖은 빨래가 가득해요. 10년을 썼으니 할 만큼은 했어요.",
-      opts: [["새로 산다", (g, L) => { pay(g, L, "새 세탁기", -X.washerNew); note(L, "새 세탁기는 조용해요. 너무 조용해서 가끔 들여다봐요.", "sur"); }, man(X.washerNew) + "이 나가요"]] },
+      opts: [["새로 산다", (g, L) => { pay(g, L, "새 세탁기", -X.washerNew); note(L, "새 세탁기는 조용해요. 너무 조용해서 가끔 들여다봐요.", "sur"); }, man(X.washerNew) + "이 나가요"],
+        ["중고로 들인다", (g, L) => { pay(g, L, "중고 세탁기", -X.washerUsed); note(L, "탈수할 때 조금 춤을 춰요. 그래도 빨래는 깨끗해요.", "sur"); }, man(X.washerUsed) + "이 나가요"]] },
     { id: "weddings", noimg: 1, ok: (g) => g.age < 45, title: "청첩장의 계절", text: "한 달에 청첩장이 네 장 왔어요. 주말마다 뷔페를 먹었어요. 봉투를 네 번 채웠어요.",
-      opts: [["봉투를 채운다", (g, L) => { pay(g, L, "축의금 네 번", -X.weddings); note(L, "갈비찜 맛집이 어디인지 알게 됐어요.", "sur"); }]] },
+      opts: [["봉투를 채운다", (g, L) => { pay(g, L, "축의금 네 번", -X.weddings); note(L, "갈비찜 맛집이 어디인지 알게 됐어요.", "sur"); }, man(X.weddings) + "이 나가요"],
+        ["가까운 두 곳만 간다", (g, L) => { pay(g, L, "축의금 두 번", -X.weddingsTwo); note(L, "나머지 두 곳은 계좌로 마음만 보냈어요. 주말 하나는 늦잠을 잤어요.", "sur"); }, man(X.weddingsTwo) + "이 나가요"]] },
     { id: "testdrive", img: "sur_car_suv", ok: (g) => g.age >= 26 && g.age < 60, title: "회장님 시승", text: "친구가 새로 뽑은 ‘반츠 회장님’에 태워 줬어요. 잠깐 운전대도 잡게 해 줬어요. 방지턱 앞에서 둘 다 숨을 참았어요.",
       opts: [["조심조심 몬다", (g, L) => { tag(g, "testDrive"); note(L, "시속 30km로 동네를 한 바퀴 돌았어요. 내려서 손바닥 땀을 닦았어요.", "sur"); }]] },
     { id: "importfix", img: "sur_car_suv", ok: (g) => !!g.x.car && (g.x.car.id === "imported" || g.x.car.id === "importedSuv" || g.x.car.id === "superc"), title: "바다를 건너오는 부품", text: "{car} 계기판에 처음 보는 불이 들어왔어요. 정비소에서 부품이 바다를 건너와야 한대요. 견적서의 숫자를 두 번 읽었어요.",
-      opts: [["고친다", (g, L) => { pay(g, L, "수입차 수리비", -X.importFix); note(L, "3주 만에 돌아왔어요. 그동안 버스 노선을 다시 외웠어요.", "sur"); }, man(X.importFix) + "이 나가요"]] },
+      opts: [["고친다", (g, L) => { pay(g, L, "수입차 수리비", -X.importFix); note(L, "3주 만에 돌아왔어요. 그동안 버스 노선을 다시 외웠어요.", "sur"); }, man(X.importFix) + "이 나가요"],
+        ["이참에 판다", (g, L) => dropCar(g, L, "sell"), "지금 값으로 팔아요"]] },
     { id: "prize", noimg: 1, title: "경품 당첨", text: "마트 영수증 추첨에 뽑혔어요. 살면서 처음이에요. 상품은 쌀 20kg과 상품권이에요.",
-      opts: [["받으러 간다", (g, L) => { pay(g, L, "경품 상품권", X.prize); note(L, "쌀은 들고 오다가 두 번 쉬었어요.", "sur"); }]] }
+      opts: [["받으러 간다", (g, L) => { pay(g, L, "경품 상품권", X.prize); note(L, "쌀은 들고 오다가 두 번 쉬었어요.", "sur"); }],
+        ["쌀은 경로당에 드린다", (g, L) => { pay(g, L, "경품 상품권", X.prize); note(L, "다음 날 경로당 앞을 지나는데 다들 손을 흔들어 주셨어요.", "sur"); }]] }
   );
   // 전설: 아주 드물게
   const LEGEND = [

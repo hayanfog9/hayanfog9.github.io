@@ -275,7 +275,8 @@
     const kind = e.kind || "stat";
     let h = `<section class="scene ${kind}" aria-live="polite">`;
     if (kind === "sur") h += `<div class="bang">${e.legend ? "전설!" : "돌발!"}</div>`;
-    const tag = kind === "fun" ? "소소한 하루 · 재미 장면(통계 아님)" : kind === "sur" ? e.age + "세 · 갑자기 생긴 일" : kind === "car" ? e.age + "세 · 차 이야기" : e.age + "세 · " + liveNow().name + " 창구";
+    const one = kind === "sur" && e.options.length === 1;
+    const tag = kind === "fun" ? "소소한 하루 · 재미 장면(통계 아님)" : kind === "sur" ? e.age + "세 · 갑자기 생긴 일" + (one ? " · 소식" : "") : kind === "car" ? e.age + "세 · 차 이야기" : e.age + "세 · " + liveNow().name + " 창구";
     if (e.img) h += `<div class="top"><img src="fun/${e.img}.jpg" width="104" height="104" alt="" loading="lazy"><div><div class="tag">${tag}</div><h2>${esc(ct(e.title))}</h2></div></div><p style="margin-top:10px">${esc(ct(e.text))}</p>`;
     else h += `<div class="tag">${tag}</div><h2>${esc(e.title)}</h2><p>${esc(e.text)}</p>`;
     if (e.slip) {
@@ -297,6 +298,7 @@
       if (kind === "car" && i < e.options.length - 1) { const cc = carCol(e.age, i); ic = pix(/스쿠터|오토바이/.test(o.label) ? "scoot" : "car", cc[1]); colName = cc[0] + " · "; }
       h += `<button class="opt${ic ? " caropt" : ""}" data-i="${i}">${ic}<span>${esc(ct(o.label))}${o.sub ? "<small>" + esc(colName + ct(o.sub)) + "</small>" : ""}</span></button>`;
     });
+    if (one) h += `<p class="fine" style="margin:8px 0 0">고르는 일이 아니라 그냥 생긴 일이에요. 눌러서 넘어가요.</p>`;
     if (kind === "sur") h += `<p class="fine" style="margin:8px 0 0">갑자기 생긴 일의 금액은 통계가 아니라 우리가 정한 가정이에요.</p>`;
     if (e.foot) h += `<p class="fine" style="margin:8px 0 0">${esc(e.foot)}</p>`;
     if (e.link) { h += `<div class="linkrow">${linkHtml(e.link)}</div>`; if (e.id === "first") h += `<div class="linkrow">${linkHtml("saving")}</div>`; }
@@ -430,7 +432,7 @@
     else h += `<div class="card"><h3>연금</h3><p>연금을 받기 시작하는 65세 전에 통장이 멈췄어요. 실제로는 유족연금이나 반환일시금 제도가 있지만 이 통장에는 계산하지 않았어요.</p></div>`;
 
     const picks = s.history.filter((x) => x.n > 1);
-    if (picks.length) h += `<div class="card"><h3>내가 고른 것</h3><ol style="padding-left:20px;margin:6px 0;font-size:14px">${picks.map((x) => `<li>${x.age}세 · ${esc(ct(x.pick))}</li>`).join("")}</ol></div>`;
+    if (picks.length) h += `<div class="card"><h3>내가 고른 것</h3><ol style="padding-left:20px;margin:6px 0;font-size:14px">${picks.map((x) => `<li>${x.age}세 · ${x.title ? esc(ct(x.title)) + " → " : ""}<b>${esc(ct(x.pick))}</b></li>`).join("")}</ol></div>`;
 
     h += `<div class="card links"><h3>이 삶에 나온 숫자, 내 숫자로 바꿔 보기</h3>${linkHtml("salary", 1)}${linkHtml("retire", 1)}${linkHtml("saving", 1)}${linkHtml("convert", 1)}${linkHtml("leave", 1)}${linkHtml("blog", 1)}</div>`;
     h += `<div class="card"><h3>도움받을 곳</h3>${(s.flags.minus || s.zeroAge) ? helpHtml("money") : ""}${s.flags.lostJob ? helpHtml("job") : ""}${s.cancer ? helpHtml("health") : ""}${helpHtml("mind")}<p class="fine">전화번호는 ${D.checked}에 각 기관 누리집에서 확인했어요.</p></div>`;
@@ -548,7 +550,7 @@
       "소소한 하루(재미 장면)는 통장 금액을 바꾸지 않아요. 통계 계산과 따로 도는 주사위로 뽑아서, 재미 장면이 있어도 월급·사건·수명은 달라지지 않아요.",
       "갑자기 생긴 일(돌발)의 금액은 우리가 정한 값이에요: 친구가 갚은 돈 +" + man(X.friend) + ", 깜짝 성과급 +한 달 월급, 잊고 있던 적금 +" + man(X.oldbank) + ", 퀴즈 상금 +" + man(X.quiz) + "(절반 확률), 경품 +" + man(X.prize) + ", 천장 수리 −" + man(X.leakShare) + "(나눠 냄) 또는 −" + man(X.leakFix) + ", 접촉 사고 자기부담금 −" + man(X.bumpIns) + ", 새 세탁기 −" + man(X.washerNew) + ", 축의금 −" + man(X.weddings) + ", 수입차 수리비 −" + man(X.importFix) + "(수입차가 있는 판에만), 발령 이사비 −" + man(X.moveCost) + "과 월급 +" + pc(X.moveRaise) + "%, 고양이 수술 −" + man(X.pet) + ", 부모님 병원비 −" + man(X.parentsAll) + " 또는 −" + man(X.parentsShare) + ", 동창 사업 −" + man(X.biz) + "(다섯에 하나만 원금을 돌려받음).",
       "돌발도 따로 도는 주사위를 써요. 다만 잔액이 달라지면 집을 살 수 있는 때 같은 것이 조금 달라질 수 있어요. 무작위 3,000판에서 돌발을 넣기 전과 넣은 뒤의 65세 순자산 평균 차이는 0.3%였어요.",
-      "차와 오토바이: 값은 " + Object.keys(X.cars).map((k) => EX.CAR[k].kind + " " + man(X.cars[k].price)).join(", ") + ". 보험·기름·수리로 한 해 " + man(X.cars.scooter.keep) + "~" + man(X.cars.importedSuv.keep) + "(슈퍼카 " + man(X.cars.superc.keep) + ")이 나가고, 차 값은 해마다 " + pc(1 - X.carDep) + "%씩 떨어져요. 할부는 5년, 값의 " + pc(X.instAdd) + "%를 더 내요. " + X.carLife + "년을 타면 폐차해요. 수입차는 예금이 차 값 이상이면 현금으로, 값의 " + pc(X.importInst) + "% 이상이면 할부로 살 수 있는 선택지가 나와요(무리한 선택도 고를 수 있어요). 차를 살지는 한 판에 " + X.carAskMax + "번까지 물어요. 겹쳐 계산하지 않으려고, 평균 소비지출에 들어 있는 자가용 지출(자동차 구입, 유지·수리, 연료, 주차·통행료 같은 개인교통 서비스. 2025년 가계동향조사, 가구원 수별로 월 " + man(D.spendBySize.car[0]) + "~" + man(D.spendBySize.car[4]) + ")은 기본 생활비에서 빼고, 차를 산 해에만 위의 차 비용을 따로 더해요. 차가 없는 해에는 대중교통 몫(철도·버스·택시 등)만 남아요. 무작위 3,000판에서 통계 장면만 돌린 것과 재미·돌발·차를 모두 넣은 것의 65세 순자산은 평균 +0.6%, 중앙값 −0.5% 차이였어요.",
+      "차와 오토바이: 값은 " + Object.keys(X.cars).map((k) => EX.CAR[k].kind + " " + man(X.cars[k].price)).join(", ") + ". 보험·기름·수리로 한 해 " + man(X.cars.scooter.keep) + "~" + man(X.cars.importedSuv.keep) + "(슈퍼카 " + man(X.cars.superc.keep) + ")이 나가고, 차 값은 해마다 " + pc(1 - X.carDep) + "%씩 떨어져요. 할부는 5년, 값의 " + pc(X.instAdd) + "%를 더 내요. " + X.carLife + "년을 타면 폐차해요. 수입차는 예금이 차 값 이상이면 현금으로, 값의 " + pc(X.importInst) + "% 이상이면 할부로 살 수 있는 선택지가 나와요(무리한 선택도 고를 수 있어요). 차를 살지는 한 판에 " + X.carAskMax + "번까지 물어요. 겹쳐 계산하지 않으려고, 평균 소비지출에 들어 있는 자가용 지출(자동차 구입, 유지·수리, 연료, 주차·통행료 같은 개인교통 서비스. 2025년 가계동향조사, 가구원 수별로 월 " + man(D.spendBySize.car[0]) + "~" + man(D.spendBySize.car[4]) + ")은 기본 생활비에서 빼고, 차를 산 해에만 위의 차 비용을 따로 더해요. 차가 없는 해에는 대중교통 몫(철도·버스·택시 등)만 남아요. 무작위 3,000판에서 통계 장면만 돌린 것과 재미·돌발·차를 모두 넣은 것의 65세 순자산은 평균 +0.6%, 중앙값 −0.9% 차이였어요.",
       "등장하는 차·오토바이 이름은 모두 지어낸 이름이에요. 실제 회사나 차와 관계가 없어요.",
       "'같은 조건 몇 명 중 몇 번째'는 시작 조건(나이·일자리·사는 곳)마다 " + (window.TJ_DIST ? window.TJ_DIST.n.toLocaleString("ko-KR") : "") + "판을 미리 돌려 둔 표에서 찾아요. 그 판들의 고르는 장면은 무작위로 골랐어요."
     ].map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul>";

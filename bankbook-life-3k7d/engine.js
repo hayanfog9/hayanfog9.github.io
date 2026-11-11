@@ -206,7 +206,7 @@
     if (!s) return;
     g.pendingScene = null;
     s.options[i].run();
-    g.history.push({ age: g.age, scene: s.id, pick: s.options[i].label, kind: s.kind || "stat", n: s.options.length });
+    g.history.push({ age: g.age, scene: s.id, title: s.title, pick: s.options[i].label, kind: s.kind || "stat", n: s.options.length });
   };
 
   Game.prototype.buildScenes = function () {
