@@ -68,7 +68,7 @@
     const ol = $("evList"), ev = cur().ev; ol.textContent = ""; $("mEmpty").hidden = ev.length > 0;
     ev.forEach((e, i) => {
       const cls = () => (e.t ? "x " : "") + (+e.y > NOW ? "f" : ""), li = mk("li", cls());
-      const y = yearIn(e.y), n = nameIn(e.n, "역 이름", 14), t = mk("button", "tg", "환승"), d = mk("button", "del", "×");
+      const y = yearIn(e.y), n = nameIn(e.n, "역 이름", 14), t = mk("button", "tg"), d = mk("button", "del", "×"); t.innerHTML = "길이<br>바뀐 날";
       t.setAttribute("aria-pressed", String(!!e.t)); d.setAttribute("aria-label", "이 역 지우기");
       y.oninput = () => { e.y = +y.value || ""; li.className = cls(); redraw(); };
       y.onchange = () => { sortEv(); };

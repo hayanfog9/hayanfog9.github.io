@@ -267,7 +267,7 @@
     b.u = u / u0;
     if (hero) return b;
     if (!phone) {   // 범례
-      const items = [["역", "stop"], ["환승역", "xfer"]].concat(B ? [["만난 역", "meet"]] : [], [["지금", "now"], ["앞날", "fut"]]), lu = u0 * 0.86, k0 = col(0, 0);
+      const items = [["역", "stop"], ["환승역(길이 바뀐 날)", "xfer"]].concat(B ? [["만난 역", "meet"]] : [], [["지금", "now"], ["앞날", "fut"]]), lu = u0 * 0.86, k0 = col(0, 0);
       const iw = (it) => lu * (it[1] === "meet" ? 3.2 : 2.2);
       c.font = FReg(lu); let tw = 0; items.forEach((it) => { tw += iw(it) + c.measureText(it[0]).width + lu * 2.2; }); tw -= lu * 2.2;
       let lx = (W - tw) / 2; const ly = H - u0 * 4.2, rr = lu * 0.62;
