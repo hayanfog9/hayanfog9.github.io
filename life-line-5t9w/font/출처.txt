@@ -1,0 +1,7 @@
+LNSans-Bold.woff — 나눔고딕 굵은체(NanumGothic Bold)에서 이 사이트가 쓰는 글자만 남겨 작게 만든 글꼴이에요(2026-11-18).
+남긴 글자: 영문·숫자·기호, 한글 2,350자(KS X 1001), 한글 낱자, 문장 부호 몇 개. 작은 화면용 힌트 정보는 뺐어요.
+원본을 고친 글꼴이라 SIL Open Font License 1.1의 3번 조건(Reserved Font Name을 쓰지 않음)에 따라 글꼴 안의 이름을 "LN Sans"로 바꿨고, 저작권 줄은 원본 그대로 두었어요.
+원본: 작업실에 이미 있던 나눔고딕 굵은체 파일(02_유튜브 > 제작도구 > assets). 만든 방법: 01_작업 > 인생노선도 > 글꼴_줄이기.py
+라이선스: SIL Open Font License 1.1 (OFL.txt). 라이선스 글은 2026-11-18에 아래 주소에서 읽은 것과 같아요.
+https://raw.githubusercontent.com/google/fonts/main/ofl/nanumgothic/OFL.txt
+네이버의 안내 페이지는 열지 못해 확인하지 못했어요.

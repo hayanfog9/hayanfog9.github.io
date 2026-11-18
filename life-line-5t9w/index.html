@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>인생 노선도 — 내가 지나온 역들을 한 장으로</title>
+<meta name="description" content="태어난 곳, 입학, 이사, 첫 출근 같은 일을 넣으면 내 인생이 노선도 한 장으로 그려져요. 무료, 가입 없음.">
+<meta name="theme-color" content="#F7F8F5">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231E262C'/%3E%3Cpath d='M22 12v16l20 20v6' fill='none' stroke='%23F2B705' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='22' cy='14' r='6' fill='%23F7F8F5'/%3E%3Ccircle cx='42' cy='50' r='6' fill='%23F7F8F5'/%3E%3C/svg%3E">
+<style>
+@font-face{font-family:"LN Sans";src:url(font/LNSans-Bold.woff) format("woff");font-weight:800;font-display:swap}
+:root{--bg:#F7F8F5;--ink:#1E262C;--sub:#5F6973;--line:#D5D9D6;--card:#FFFFFF;--gam:#E8622C;--sol:#1F8A5B;--jjok:#2B5FD9;--gae:#F2B705;--r:14px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;line-height:1.55;word-break:keep-all}
+h1,h2,legend,.brand,.btn,.top b{font-family:"LN Sans","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif}
+main{max-width:520px;margin:0 auto;padding:0 20px 56px}
+[hidden]{display:none!important}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--jjok);outline-offset:2px}
+
+/* 첫 화면 */
+.brand{margin:0;padding:22px 0 0;font-weight:800;font-size:15px;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.brand i{width:26px;height:10px;border-radius:5px;background:var(--gae);display:inline-block}
+h1{margin:26px 0 10px;font-size:clamp(40px,12.5vw,58px);line-height:1.08;font-weight:800;letter-spacing:-.02em}
+.lead{margin:0 0 4px;font-size:17px;color:var(--sub);max-width:22em}
+.hero{margin:6px -20px 0;position:relative}
+.hero canvas{display:block;width:100%;height:auto}
+.cta{position:sticky;bottom:14px;z-index:5;margin-top:-34px}
+.btn{display:block;width:100%;border:0;border-radius:999px;background:var(--ink);color:#fff;font-weight:800;font-size:19px;padding:17px 20px;box-shadow:0 10px 24px rgba(30,38,44,.22)}
+.btn:active{transform:translateY(1px)}
+.btn.line{background:var(--card);color:var(--ink);box-shadow:none;border:2px solid var(--ink)}
+.small{font-size:14px;color:var(--sub);margin:12px 0 0}
+h2{font-size:17px;margin:34px 0 10px;font-weight:800}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:9px 14px;font-size:15px;font-weight:600;min-height:42px}
+.chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* 만들기 */
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 0 10px}
+.top b{font-size:16px}
+.tbtn{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:7px 13px;font-size:14px;font-weight:700}
+.stage{margin:0 -20px;background:#E9ECE8;padding:16px 0;position:sticky;top:0;z-index:4}
+.stage{border:0;width:auto;display:block;width:calc(100% + 40px)}
+.stage canvas{display:block;height:min(28vh,280px);width:auto;margin:0 auto;border-radius:10px;box-shadow:0 8px 22px rgba(30,38,44,.18)}
+.stage span{position:absolute;right:14px;bottom:10px;font-size:12.5px;font-weight:700;color:var(--sub);background:rgba(255,255,255,.85);border-radius:999px;padding:3px 9px}
+@media (min-width:700px){.stage canvas{height:min(44vh,430px)}}
+.ov{position:fixed;inset:0;z-index:20;background:rgba(20,24,32,.94);display:grid;grid-template-rows:auto 1fr auto;gap:12px;padding:14px 16px calc(16px + env(safe-area-inset-bottom))}
+.ov p{margin:0;color:#fff;font-size:16px;font-weight:700;text-align:center;min-height:1.5em}
+.ov div{min-height:0;display:grid;place-items:center}
+.ov img{max-width:100%;max-height:100%;border-radius:8px;-webkit-touch-callout:default;user-select:auto}
+.ask{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:12px;margin-top:10px}
+.ask p{margin:0 0 10px;font-size:15px;font-weight:700}
+fieldset{border:0;padding:0;margin:26px 0 0;min-width:0}
+legend{font-weight:800;font-size:17px;padding:0;margin-bottom:10px}
+label.lab{display:block;font-size:13px;font-weight:700;color:var(--sub);margin-bottom:4px}
+.in{width:100%;border:1.5px solid var(--line);background:var(--card);border-radius:var(--r);padding:12px 12px;font-size:17px;min-height:50px}
+.in:focus{border-color:var(--ink);outline:0}
+.g3{display:grid;grid-template-columns:1.25fr .9fr 1.15fr;gap:8px}
+/* 역 목록: 왼쪽에 노선이 지나가는 모양 */
+.ev{list-style:none;margin:0;padding:0 0 0 26px;position:relative}
+.ev:before{content:"";position:absolute;left:8px;top:8px;bottom:8px;width:6px;border-radius:3px;background:var(--gae)}
+.ev li{position:relative;display:grid;grid-template-columns:78px 1fr auto auto;gap:6px;align-items:center;margin-bottom:8px}
+.ev li:before{content:"";position:absolute;left:-25px;top:50%;width:14px;height:14px;margin-top:-10px;border-radius:50%;background:var(--bg);border:3px solid var(--gae)}
+.ev li.x:before{border-color:var(--ink);box-shadow:inset 0 0 0 2.5px var(--bg),inset 0 0 0 8px var(--gam)}
+.ev li.f:before{border-style:dashed}
+.ev .in{padding:10px 10px;font-size:16px;min-height:46px}
+.tg{border:1.5px solid var(--line);background:var(--card);border-radius:999px;font-size:13px;font-weight:700;padding:0 10px;height:46px;color:var(--sub)}
+.tg[aria-pressed=true]{background:var(--gam);border-color:var(--gam);color:#fff}
+.del{border:0;background:transparent;font-size:20px;width:34px;height:46px;color:var(--sub)}
+.empty{color:var(--sub);font-size:15px;margin:0 0 10px}
+.kinds{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:10px}
+.kind{border:0;background:transparent;padding:6px 0 4px;border-radius:12px;font-size:12.5px;font-weight:700;color:var(--sub);display:grid;justify-items:center;gap:3px;min-height:60px}
+.kind svg{width:30px;height:30px;padding:5px;border-radius:50%;background:var(--card);border:1.5px solid var(--line);fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;box-sizing:content-box}
+.kind[aria-pressed=true]{color:var(--ink)}
+.kind[aria-pressed=true] svg{background:var(--ink);border-color:var(--ink);stroke:#fff}
+.ev.s3 li{grid-template-columns:78px 1fr auto}
+.ev.mt:before{background:var(--ink)}
+.ev.mt li:before{border-color:var(--ink);border-radius:7px;width:20px;left:-28px}
+.ev.kd:before{background:#F27A9B}
+.ev.kd li:before{border-color:#F27A9B;background:#F27A9B}
+h3{font-size:14.5px;margin:18px 0 8px;font-weight:700}
+.who{margin-top:18px}
+.h1s{font-size:clamp(30px,9vw,42px);margin:20px 0 14px}
+.got canvas{display:block;width:100%;height:auto;border-radius:10px;box-shadow:0 8px 22px rgba(30,38,44,.18);margin-bottom:18px}
+.note{font-size:13.5px;color:var(--sub);margin:10px 0 0}
+.sw{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:6px;vertical-align:-2px}
+.stack{display:grid;gap:10px;margin-top:10px}
+.msg{min-height:1.5em;font-size:14px;font-weight:700;color:var(--sol);margin:10px 0 0}
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{margin:0 0 8px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main id="vHome">
+  <p class="brand"><i></i>인생 노선도</p>
+  <h1>내 인생은<br>몇 호선일까?</h1>
+  <p class="lead">입학, 이사, 첫 출근. 지나온 일을 넣으면 내 인생이 노선도 한 장으로 그려져요.</p>
+  <div class="hero"><canvas id="cvHero" width="1080" height="1180" role="img" aria-label="예시 노선도. 출발역에서 지금 역까지 이어진 선"></canvas></div>
+  <div class="cta"><button class="btn" id="bStart">내 노선 그리기</button></div>
+  <p class="small">무료이고 가입이 없어요. 쓴 내용은 내가 보내기 전에는 이 휴대폰 밖으로 나가지 않아요.</p>
+  <h2>예시 노선 타 보기</h2>
+  <div class="row" id="cEx"></div>
+  <footer>
+    <p>예시 노선의 사람과 일은 지어낸 것이에요.</p>
+  </footer>
+</main>
+
+<main id="vGot" hidden>
+  <p class="brand"><i></i>인생 노선도</p>
+  <h1 class="h1s" id="gTitle"></h1>
+  <div class="got"><canvas id="cvGot" width="1080" height="1350" role="img" aria-label="받은 노선도"></canvas></div>
+  <div class="stack"><button class="btn" id="bGotA"></button><button class="btn line" id="bGotB"></button></div>
+  <p class="small">받은 노선은 이 휴대폰 안에서만 열려요.</p>
+</main>
+
+<main id="vMake" hidden>
+  <div class="top"><button class="tbtn" id="bHome">처음으로</button><b>내 노선도</b><span style="width:74px"></span></div>
+  <button class="stage" id="bZoom" type="button" aria-label="내 노선도 미리 보기. 누르면 크게 보여요"><canvas id="cv" width="1080" height="1350"></canvas><span>크게 보기</span></button>
+
+  <div class="row who" id="cWho" role="group" aria-label="고칠 노선" hidden></div>
+  <fieldset><legend>출발역</legend>
+    <div class="g3">
+      <div><label class="lab" for="iName">노선 이름</label><input class="in" id="iName" maxlength="8" placeholder="서연선" autocomplete="off"></div>
+      <div><label class="lab" for="iBy">태어난 해</label><input class="in" id="iBy" type="number" inputmode="numeric" min="1900" max="2100" placeholder="1994"></div>
+      <div><label class="lab" for="iBp">태어난 곳</label><input class="in" id="iBp" maxlength="8" placeholder="대구" autocomplete="off"></div>
+    </div>
+  </fieldset>
+
+  <fieldset><legend>지나온 역</legend>
+    <p class="empty" id="mEmpty">아래에서 종류를 고르고 단추를 누르면 역이 하나씩 생겨요.</p>
+    <ol class="ev" id="evList"></ol>
+    <div class="kinds" id="cKind" role="group" aria-label="역 종류"></div>
+    <div class="row" id="cAdd" style="margin-top:8px"></div>
+    <p class="note">이사나 전학처럼 길이 바뀐 일은 <b>환승</b>을 켜 두세요. 선이 옆으로 꺾이고 색이 바뀌어요. 올해보다 뒤의 해를 넣으면 앞날의 역이 돼요.</p>
+    <p class="note" id="mAge">해는 흔한 나이로 먼저 채워 드려요. 내 해로 고쳐 쓰세요.</p>
+  </fieldset>
+
+  <fieldset><legend>같이 그리기</legend>
+    <div id="pNone">
+      <p class="note" style="margin-top:0">친구나 짝의 노선을 내 노선 옆에 같이 그릴 수 있어요. 만난 해에 두 선이 한 역에서 만나요.</p>
+      <div class="row" style="margin-top:10px"><button class="chip" id="bPaste" type="button">받은 주소 붙여 넣기</button><button class="chip" id="bHere" type="button">여기서 같이 넣기</button></div>
+      <div class="stack" id="pPaste" hidden>
+        <input class="in" id="iLink" placeholder="받은 주소" aria-label="받은 주소" autocomplete="off">
+        <button class="btn line" id="bLink" type="button">겹쳐 보기</button>
+        <p class="note" id="mLink" role="status" style="margin:0"></p>
+      </div>
+    </div>
+    <div id="pHas" hidden>
+      <h3 style="margin-top:0">만난 역</h3>
+      <ol class="ev s3 mt" id="mtList"></ol>
+      <div class="row"><button class="chip" id="bMeet" type="button">+ 만난 역</button><button class="chip" id="bTg" type="button" aria-pressed="false">지금도 같이 가요</button></div>
+      <p class="note">만난 해를 넣으면 두 선이 그 해에 한 역으로 모여요. [지금도 같이 가요]를 켜면 마지막 만난 역부터 나란히 달려요.</p>
+      <div class="row" style="margin-top:10px"><button class="chip" id="bUnp" type="button">겹치기 풀기</button></div>
+    </div>
+    <h3>아이 노선</h3>
+    <ol class="ev s3 kd" id="kdList"></ol>
+    <div class="row"><button class="chip" id="bKid" type="button">+ 아이 노선</button></div>
+    <p class="note">아이가 태어난 해에 새 색의 선이 갈라져 나와요.</p>
+  </fieldset>
+
+  <fieldset><legend>색과 바탕</legend>
+    <div class="row" id="cColor"></div>
+    <div class="row" id="cTone" style="margin-top:8px"></div>
+  </fieldset>
+
+  <fieldset><legend>저장하기</legend>
+    <div class="stack">
+      <button class="btn" id="bPhone">휴대폰 배경화면으로 저장</button>
+      <button class="btn line" id="bA4">액자용(A4)으로 저장</button>
+      <button class="btn line" id="bSquare">정사각 그림으로 저장</button>
+      <button class="btn line" id="bSend">주소로 보내기</button>
+      <input class="in" id="iOut" readonly aria-label="보낼 주소" hidden>
+    </div>
+    <p class="note">[주소로 보내기]의 주소에는 내가 쓴 내용이 들어 있어요. 보여 주고 싶은 사람에게만 보내세요. 받은 사람은 자기 노선을 겹쳐 볼 수 있어요.</p>
+    <p class="msg" id="mMsg" role="status"></p>
+    <div class="row" style="margin-top:4px"><button class="chip" id="bKeep" aria-pressed="false">이 휴대폰에 기억하기</button><button class="chip" id="bClear">처음부터 다시</button></div>
+    <div class="ask" id="pAsk" hidden><p>쓴 내용을 모두 지울까요?</p><div class="row"><button class="chip" id="bAskY" type="button">지우기</button><button class="chip" id="bAskN" type="button">그대로 두기</button></div></div>
+  </fieldset>
+
+  <div data-more="lifeline"></div>
+
+  <footer>
+    <p>쓴 내용은 이 브라우저 안에서만 쓰여요. 내가 주소로 보낼 때만 밖으로 나가고, [이 휴대폰에 기억하기]를 켰을 때만 이 휴대폰에 남아요.</p>
+  </footer>
+</main>
+<div class="ov" id="ov" hidden role="dialog" aria-modal="true" aria-label="그림 크게 보기">
+  <p id="ovMsg"></p>
+  <div><img id="ovImg" alt="내 노선도 그림"></div>
+  <button class="btn line" id="bOv" type="button">닫기</button>
+</div>
+<script src="draw.js"></script>
+<script src="app.js"></script>
+<script src="more/more.js"></script>
+</body>
+</html>
