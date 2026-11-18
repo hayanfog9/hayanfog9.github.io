@@ -133,13 +133,14 @@
         const nx = rows[i + 1]; r.h = { L: 0, R: 0 };
         r.items.forEach((s) => {
           s.lines = wrap(s.n, WR); s.yt = s.sub || String(s.y) + (s.k === "xfer" ? "  환승" : s.k === "meet" ? "  만난 역" : "");
+          if (phone && multi && (s.k === "stop" || s.k === "fut")) s.yt = "";   // 두 사람 배경화면은 보통 역의 해를 빼고 글자를 키운다(해는 액자용에서)
           if (!multi) { s.side = r.seg[0] % 2 === 0 ? "R" : "L"; if (nx && nx.x[0] !== r.x[0]) s.side = nx.x[0] > r.x[0] ? "L" : "R"; }   // 선이 꺾여 나가는 쪽은 피한다
           else s.side = s.who === 1 ? "R" : s.who === 0 ? "L" : B ? "L" : "R";
           s.gapU = R0 * (s.k === "start" ? (multi ? 2.7 : 3.5) : s.k === "now" ? (multi ? 2.6 : 3.1) : s.k === "meet" ? 2.7 : 2.3);
           c.font = FBold(100); const lw = s.lines.map((l) => c.measureText(l).width * 1.36 / 100);
           c.font = FReg(100); let yw = c.measureText(s.yt).width * YS / 100;
           if (s.k === "now") { c.font = FBold(100); yw += 0.7 + c.measureText(NOWT).width * 0.9 / 100 + 1.2; }
-          if (inl) { const last = lw.pop(); s.wU = Math.max.apply(null, lw.concat([last + 0.55 + yw])); s.hU = s.lines.length * 1.5 + 0.45; }
+          if (inl) { const last = lw.pop(); s.wU = Math.max.apply(null, lw.concat([last + (s.yt ? 0.55 + yw : 0)])); s.hU = s.lines.length * 1.5 + (phone && multi ? 0.2 : 0.45); }
           else { s.wU = Math.max.apply(null, lw.concat([yw])); s.hU = s.lines.length * 1.5 + 1.25; }
           r.h[s.side] = Math.max(r.h[s.side], s.hU);
         });
@@ -151,11 +152,11 @@
       prep(); gaps = [0];
       for (let i = 1; i < rows.length; i++) {
         const p = rows[i - 1], s = rows[i];
-        let g = (multi ? 0.72 : inl ? 0.82 : 1) + Math.min(Math.max(s.y - p.y, 0), 6) * yf;
+        let g = (phone && multi ? 0.6 : multi ? 0.72 : inl ? 0.82 : 1) + Math.min(Math.max(s.y - p.y, 0), 6) * yf;
         if (p.h.L && s.h.L) g = Math.max(g, (p.h.L + s.h.L) / 2 / UNIT + 0.12);
         if (p.h.R && s.h.R) g = Math.max(g, (p.h.R + s.h.R) / 2 / UNIT + 0.12);
         let mv = 0; s.x.forEach((v, li) => { if (v !== undefined && p.x[li] !== undefined) mv = Math.max(mv, Math.abs(v - p.x[li])); });
-        if (mv) g = Math.max(g, (R0 * 1.7 + mv + (mv < 1 ? 0.9 : 1.5)) / UNIT);
+        if (mv) g = Math.max(g, (R0 * 1.7 + mv + (mv < 1 ? 0.9 : phone && multi ? 1.0 : 1.5)) / UNIT);
         if (p.now) g = Math.max(g, 1.4);
         if (s.now) g = Math.max(g, 1.2);
         if (s.skip) g = Math.max(g, 1.7);
@@ -254,7 +255,7 @@
       }
       for (let i = 0; i < nl - 1; i++) { c.fillText(s.lines[i], x, ty); ty += 1.5 * u; }
       const last = s.lines[nl - 1], nw = c.measureText(last).width; c.font = FReg(u * YS); const ywd = c.measureText(s.yt).width, tw = s.k === "now" ? tagW() : 0;
-      const tot = nw + u * 0.55 + ywd + (tw ? u * 0.7 + tw : 0); let sx = R ? x : x - tot;
+      const tot = nw + (s.yt ? u * 0.55 + ywd : 0) + (tw ? u * 0.7 + tw : 0); let sx = R ? x : x - tot;
       c.textAlign = "left"; c.font = FBold(u * 1.36); c.fillStyle = INK; c.fillText(last, sx, ty); sx += nw + u * 0.55;
       c.font = FReg(u * YS); c.fillStyle = SUB; c.fillText(s.yt, sx, ty + u * 0.16); sx += ywd + u * 0.7;
       if (tw) tag(sx, ty + u * 0.02);
