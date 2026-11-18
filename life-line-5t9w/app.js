@@ -4,14 +4,14 @@
   "use strict";
   const $ = (id) => document.getElementById(id), D = window.LNDraw, NOW = new Date().getFullYear(), KEY = "lifeline_v1", MAXURL = 1800;
   // 역 단추: [단추 글자, 역 이름, 환승 여부, 흔한 나이(없으면 null)]. 나이는 우리가 정한 가정(초등 7, 중 13, 고 16, 대학 19, 입대 21, 전역 23, 첫 출근 25)이고 사용자가 고쳐 쓴다.
-  // 넷째 칸이 "앞"이면 앞날의 역(올해 + 2년), "아이선"이면 아이 노선을 새로 만든다.
+  // 넷째 칸이 "앞"이면 앞날의 역(올해 + 2년), "아이선"이면 역 하나와 같은 해의 아이 노선 한 줄을 같이 만든다.
   const KINDS = [
     ["학교", '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11.5v4.5c3 2.6 9 2.6 12 0v-4.5"/>', [["초등학교 입학", "초등학교 입학", 0, 7], ["중학교 입학", "중학교 입학", 0, 13], ["고등학교 입학", "고등학교 입학", 0, 16], ["대학 입학", "대학 입학", 0, 19], ["전학", "전학", 1, null], ["졸업", "졸업", 0, null]]],
     ["이사", '<path d="M3 11l9-7 9 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/>', [["이사", "이사", 1, null], ["독립", "독립해서 나옴", 1, null], ["다른 도시로", "다른 도시로 이사", 1, null]]],
     ["일", '<rect x="3" y="7.5" width="18" height="12.5" rx="2"/><path d="M9 7.5V4.5h6v3"/><path d="M3 13h18"/>', [["첫 출근", "첫 출근", 0, 25], ["이직", "회사를 옮김", 1, null], ["입대", "입대", 0, 21], ["전역", "전역", 0, 23], ["내 일 시작", "내 일을 시작", 1, null], ["쉬어 감", "잠시 쉬어 감", 0, null]]],
     ["사랑", '<path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.2a4.2 4.2 0 0 1 7.5 2.6C19.500 15.400 12 20 12 20z"/>', [["처음 만남", "처음 만난 날", 0, null], ["결혼", "결혼", 0, null]]],
-    ["아이", '<circle cx="12" cy="13" r="7"/><path d="M9.2 14.200c1.500 1.800 4.100 1.800 5.600 0"/><path d="M12 6c0-2 2-2.200 2-3.500"/>', [["아이 노선 시작", "", 0, "아이선"], ["아이가 태어남", "아이가 태어남", 0, null], ["아이 입학", "아이 초등학교 입학", 0, null]]],
-    ["꿈", '<path d="M12 3.200l2.600 5.500 6 .8-4.400 4.200 1.100 6L12 16.700l-5.300 3 1.100-6-4.400-4.200 6-.8z"/>', [["가고 싶은 곳", "한 달 살기", 0, "앞"], ["내 집", "내 집 마련", 0, "앞"], ["내 일", "내 가게 열기", 0, "앞"], ["직접 쓰기", "", 0, "앞"]]],
+    ["아이", '<circle cx="12" cy="13" r="7"/><path d="M9.2 14.200c1.500 1.800 4.100 1.800 5.600 0"/><path d="M12 6c0-2 2-2.200 2-3.500"/>', [["아이가 태어남", "아이가 태어남", 0, "아이선"], ["아이 입학", "아이 초등학교 입학", 0, null]]],
+    ["꿈", '<path d="M12 3.200l2.600 5.500 6 .8-4.400 4.200 1.100 6L12 16.700l-5.300 3 1.100-6-4.400-4.200 6-.8z"/>', [["한 달 살기", "한 달 살기", 0, "앞"], ["내 집", "내 집 마련", 0, "앞"], ["내 일", "내 가게 열기", 0, "앞"], ["직접 쓰기", "", 0, "앞"]]],
     ["직접", '<path d="M4 20l4.200-1L19.500 7.700l-3.200-3.200L5 15.800z"/><path d="M14 6.800l3.200 3.200"/>', [["직접 쓰기", "", 0, null]]]
   ];
   // 예시(지어낸 사람)
@@ -84,11 +84,16 @@
   }
   const lastPast = () => S.m.ev.concat(S.m.p ? S.m.p.ev : []).reduce((v, e) => (+e.y <= NOW ? Math.max(v, +e.y || 0) : v), +S.m.by || 0);
   function addEv(a) {
-    if (a[3] === "아이선") { addKid(); return; }
     const q = cur(), by = +q.by, last = q.ev.reduce((v, e) => Math.max(v, +e.y || 0), by || 0);
     const lp = q.ev.reduce((v, e) => (+e.y <= NOW ? Math.max(v, +e.y || 0) : v), by || 0);
-    let y = a[3] === "앞" ? Math.max(NOW + 2, last + 1) : a[3] != null && by ? by + a[3] : lp ? Math.min(lp + 1, NOW) : "";
+    const kid = a[3] === "아이선";
+    let y = a[3] === "앞" ? Math.max(NOW + 2, last + 1) : !kid && a[3] != null && by ? by + a[3] : lp ? Math.min(lp + 1, NOW) : "";
     const e = { y: y, n: a[1], t: !!a[2] }; q.ev.push(e); q.ev.sort((p, r) => (p.y || 9999) - (r.y || 9999)); renderList(); redraw();
+    if (kid) {   // 아이가 태어남: 같은 해의 아이 노선 한 줄을 같이 만들고 이름 칸으로 간다
+      S.m.kid = S.m.kid || [];
+      if (S.m.kid.length < 3) { S.m.kid.push({ y: y, n: "" }); together(); redraw(); focusLast("kdList", 1); msg("아이 노선이 같이 생겼어요. 이름을 넣어 주세요."); }
+      return;
+    }
     const li = $("evList").children[q.ev.indexOf(e)]; if (li) { const f = li.children[a[1] ? 0 : 1]; f.focus(); if (f.select) f.select(); }
   }
 
@@ -137,7 +142,7 @@
   const unb64 = (t) => { const s = atob(t.replace(/-/g, "+").replace(/_/g, "/")); const u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u; };
   async function pipe(u8, T) { const buf = await new Response(new Blob([u8]).stream().pipeThrough(new T("deflate-raw"))).arrayBuffer(); return new Uint8Array(buf); }
   async function code(m) {
-    const raw = new TextEncoder().encode(JSON.stringify([1, packP(m), m.dark ? 1 : 0, m.p ? packP(m.p) : 0, pairs(m.meet), m.tg ? 1 : 0, pairs(m.kid)]));
+    const raw = new TextEncoder().encode(JSON.stringify([1, packP(m), m.dark ? 1 : 0, m.p && +m.p.by ? packP(m.p) : 0, pairs(m.meet), m.tg ? 1 : 0, pairs(m.kid)]));
     if (window.CompressionStream) { try { return "z" + b64(await pipe(raw, CompressionStream)); } catch (e) { /* 압축이 안 되는 브라우저는 그대로 담는다 */ } }
     return "j" + b64(raw);
   }
@@ -246,5 +251,6 @@
   const fontReady = document.fonts && document.fonts.load ? Promise.race([document.fonts.load('800 20px "LN Sans"', "인생 노선도"), new Promise((r) => setTimeout(r, 2500))]) : Promise.resolve();
   const start = location.hash.length > 3 ? decode(location.hash) : Promise.resolve(null);
   Promise.all([fontReady, start]).then((v) => { hero(); if (v[1]) gotView(v[1]); else if (!$("vMake").hidden) redraw(); });
+  window.addEventListener("hashchange", () => { if (location.hash.length > 3) decode(location.hash).then((m) => { if (m) gotView(m); }); });
   window.LN = { state: S, enter: enter, fromEx: fromEx, EX: EX, draw: D.draw, code: code, decode: decode, link: link };
 })();
