@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>부업 광고 점검기 | 이 부업 광고, 믿어도 될까?</title>
+<meta name="description" content="부업·창업 강의 광고에서 조심할 신호 12가지를 눌러 보면 위험 점수와 이유가 나오고, 광고비 계산기로 하루 광고비·클릭당 비용·신청률·건당 수수료를 넣으면 실제로 남는 돈과 적자 구간을 보여 줘요. 한국소비자원 안내를 근거로 했고 법적 판단이 아니에요. 입력한 내용은 저장하지 않아요.">
+<link rel="canonical" href="https://hayanfog9.github.io/ad-check-6m2x/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="부업 광고 점검기">
+<meta property="og:description" content="광고 신호 12가지 점검과 광고비 계산기. 남는 돈이 얼마인지 직접 확인해 보세요.">
+<meta property="og:url" content="https://hayanfog9.github.io/ad-check-6m2x/">
+<meta name="robots" content="index,follow">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"부업 광고 점검기","url":"https://hayanfog9.github.io/ad-check-6m2x/","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"}}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='6' fill='%23e28036'/%3E%3Cpath d='M9 17l5 5 9-11' stroke='%23fff' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{--cream:#fff7e4;--cream2:#faebc6;--card:#fffdf7;--ink:#422a1a;--sub:#7a6450;--acc:#e28036;--teal:#1c96a0;--line:#ecd7ae;--ok:#2f7a4b;--warn:#c98400;--bad:#c5352b;
+--sans:system-ui,-apple-system,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+*{box-sizing:border-box}html{color-scheme:light}
+body{margin:0;background:linear-gradient(180deg,var(--cream),var(--cream2));color:var(--ink);font:16px/1.6 var(--sans);-webkit-text-size-adjust:100%;font-variant-numeric:tabular-nums;min-height:100vh}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 60px}
+a{color:var(--teal)}button,input,textarea{font:inherit;color:inherit}
+h1{margin:6px 0 4px;font-size:30px;line-height:1.2;letter-spacing:-.01em}
+.lead{margin:0 0 4px;color:var(--sub)}
+.tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.2em;color:var(--acc)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 4px}
+.tabs button{padding:13px 8px;border-radius:12px;border:2px solid var(--acc);background:#fff;font-weight:800;font-size:16px;cursor:pointer;color:var(--ink)}
+.tabs button[aria-selected=true]{background:var(--acc);color:#fff}
+.box{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:16px;margin-top:14px;box-shadow:0 6px 14px rgba(120,80,30,.08)}
+.box h2{margin:0 0 8px;font-size:19px}
+.fine{font-size:13px;color:var(--sub)}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:11px 10px;border:2px solid var(--line);border-radius:12px;background:#fff;margin-top:8px;cursor:pointer}
+.chk input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--bad);flex:none}
+.chk b{display:block;font-size:15.5px}
+.chk small{display:block;color:var(--sub);font-size:12.5px;margin-top:2px}
+.chk.on{border-color:var(--bad);background:#fdf0ee}
+.pill{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:1px 8px;margin-right:6px;vertical-align:1px}
+.pill.o{background:#e3f1f2;color:#136a72}.pill.g{background:#eee6d6;color:#6d5a3d}
+.res{margin-top:14px;border-radius:14px;padding:16px;border:3px solid var(--c);background:var(--bg)}
+.res .lv{font-size:26px;font-weight:900;color:var(--c);line-height:1.2}
+.res .sc{font-size:14px;color:var(--sub);margin-top:2px}
+.res ul{margin:10px 0 0;padding-left:20px}.res li{margin:5px 0;font-size:14.5px}
+.res.low{--c:var(--ok);--bg:#e9f5ee}.res.mid{--c:var(--warn);--bg:#fff4d6}.res.hi{--c:var(--bad);--bg:#fdeceb}
+.bar{height:12px;border-radius:99px;background:#eadfc6;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;width:0;background:var(--c);transition:width .3s}
+label,.lab{display:block;font-weight:700;margin:12px 0 5px}
+.in{width:100%;padding:12px;border:2px solid var(--acc);border-radius:10px;background:#fff;font-size:18px}
+textarea.in{font-size:15px;min-height:84px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:block;width:100%;padding:14px;border-radius:10px;border:2px solid var(--acc);background:var(--acc);color:#fff;font-weight:800;font-size:16px;cursor:pointer;margin-top:12px}
+.btn.line{background:transparent;color:var(--acc)}
+.big{margin-top:14px;border-radius:14px;padding:16px;font-weight:900;font-size:26px;line-height:1.3;border:3px solid var(--c);background:var(--bg);color:var(--c)}
+.big small{display:block;font-size:14px;font-weight:600;color:var(--ink);margin-top:3px}
+.big.plus{--c:var(--ok);--bg:#e9f5ee}.big.minus{--c:var(--bad);--bg:#fdeceb}
+table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}th,td{border:1px solid var(--line);padding:7px 8px;text-align:right}th:first-child,td:first-child{text-align:left}
+td.neg{background:#fdeceb;color:var(--bad);font-weight:800}td.pos{background:#e9f5ee;color:var(--ok);font-weight:800}
+.warn{background:#fff4d6;border:2px solid #d99a00;border-radius:10px;padding:11px 13px;margin-top:12px;font-weight:700;font-size:14.5px}
+details{margin-top:14px;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px 16px}
+summary{cursor:pointer;font-weight:800}details ul{padding-left:20px;margin:10px 0 0}details li{margin:6px 0;font-size:14px}
+.links{margin-top:18px;display:grid;gap:8px}.links a{display:block;padding:13px 14px;border:2px solid var(--acc);border-radius:10px;text-decoration:none;font-weight:700;background:var(--card);color:var(--ink)}
+footer{font-size:13px;color:var(--sub);margin-top:20px}
+.hide{display:none!important}
+:focus-visible{outline:3px solid #f0b400;outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><span class="tag">무료 도구</span><h1>부업 광고 점검기</h1><p class="lead">이 부업 광고, 믿어도 될까? 신호 12가지를 눌러 보고, 광고비를 넣으면 실제로 남는 돈이 나와요.</p></header>
+<div class="warn" role="note">점검 결과는 법적 판단이 아니에요. 특정 업체·사람이 사기라고 말하는 도구도 아니에요. 결제 전에 내가 확인할 것을 정리해 주는 참고용이에요.</div>
+
+<div class="tabs" role="tablist"><button id="t1" role="tab" aria-selected="true" aria-controls="p1">광고 점검 12칸</button><button id="t2" role="tab" aria-selected="false" aria-controls="p2">광고비 계산기</button></div>
+
+<section id="p1" role="tabpanel" aria-labelledby="t1">
+<div class="box"><h2>광고 문구를 붙여넣어 볼까요? (선택)</h2>
+<textarea id="paste" class="in" placeholder="광고에서 본 문구를 붙여넣으면, 해당할 만한 칸을 미리 체크해 줘요" aria-label="광고 문구"></textarea>
+<button class="btn line" id="bScan" type="button">문구로 미리 체크하기</button>
+<p class="fine" id="scanmsg" role="status">붙여넣은 문구는 이 브라우저 안에서만 읽고, 어디에도 보내거나 저장하지 않아요. 자동 체크는 어림짐작이니 칸을 직접 확인해 주세요.</p></div>
+<div class="box"><h2>내가 본 광고에 해당하는 칸을 눌러 주세요</h2><div id="list"></div></div>
+<div id="res" class="res low" aria-live="polite"></div>
+</section>
+
+<section id="p2" role="tabpanel" aria-labelledby="t2" class="hide">
+<div class="box"><h2>광고비를 쓰면 실제로 얼마가 남을까요?</h2>
+<div class="row2"><div><label for="ad">하루 광고비 (원)</label><input id="ad" class="in" type="text" inputmode="numeric" autocomplete="off" value="3,000"></div>
+<div><label for="cpc">클릭당 비용 (원)</label><input id="cpc" class="in" type="text" inputmode="numeric" autocomplete="off" value="300"></div></div>
+<div class="row2"><div><label for="cv">신청률 (%)</label><input id="cv" class="in" type="text" inputmode="decimal" autocomplete="off" value="2"></div>
+<div><label for="fee">건당 수수료 (원)</label><input id="fee" class="in" type="text" inputmode="numeric" autocomplete="off" value="2,000"></div></div>
+<p class="fine">신청률은 광고를 클릭한 사람 중 실제로 신청한 사람 비율이에요. 처음 값은 예시예요. 내 광고의 실제 숫자로 바꿔 보세요.</p>
+<label for="goal">하루에 남기고 싶은 돈 (원, 선택)</label><input id="goal" class="in" type="text" inputmode="numeric" autocomplete="off" value="20,000">
+<p class="fine">입력한 값은 이 브라우저 안에서만 계산해요.</p></div>
+<div id="out"></div>
+</section>
+
+<details><summary>근거와 한계</summary><ul id="src"></ul></details>
+
+<nav class="links" aria-label="다른 곳"><a href="https://hayanfog9.github.io/">JW의 AI 작업실 무료 도구 모음</a><a href="https://blog.naver.com/hayanfog">블로그에서 이 도구 설명 보기</a></nav>
+<footer>만든 곳: <a href="https://hayanfog9.github.io/">JW의 AI 작업실</a> · 입력한 값과 붙여넣은 문구는 이 브라우저 안에서만 계산하고 저장하거나 보내지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 같은 방문자 구분(최대 8시간), 브라우저·운영체제 종류, 화면 너비)만 수집해요. 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요.</footer>
+</div>
+<script>
+const KCA="한국소비자원", GEN="일반적인 주의 신호";
+// [제목, 설명, 점수(1~3), 출처, 이유 한 줄, 문구 찾기 낱말]
+const ITEMS=[
+["\"강의만 들어도 수익이 난다\"고 말해요","수강만 해도 수익이 생긴다는 약속",3,KCA,"소비자원이 위험 신호로 든 문구예요. 강의만으로 수익이 보장되지는 않아요.",["강의만 들어도","수강만 해도","듣기만 해도","따라만 하면"]],
+["\"비전문가도 당일 수익화\"처럼 빠르다고 해요","경험이 없어도 바로 돈이 된다는 말",3,KCA,"소비자원이 위험 신호로 든 표현이에요. 빠른 수익은 확인하기 어려워요.",["비전문가","당일 수익","당일수익","누구나","초보도","바로 수익","하루만에","하루 만에"]],
+["무료 특강·라이브가 끝나면 고액 결제를 권해요","무료로 끌어들인 뒤 비싼 강의로 이어짐",2,KCA,"소비자원이 위험 신호로 든 흐름이에요. 그 자리에서 결제하지 않아도 돼요.",["무료 특강","무료특강","무료 라이브","무료라이브","무료 강의","무료강의"]],
+["\"월 몇백만 원\" 같은 수익 금액을 약속해요","월 300만 원 보장 같은 금액 보장",3,GEN,"수익은 사람과 시장에 따라 달라요. 금액을 약속하는 광고는 근거를 따져 봐야 해요.",["월 100","월 200","월 300","월 500","월 천","보장","확정 수익","수익 보장","수익보장","월급 외"]],
+["단톡방·오픈채팅에 들어가야 자세히 알려 줘요","공개된 설명 없이 채팅방으로 유도",2,GEN,"조건과 비용을 공개된 곳에서 설명하지 않는 점이 신호예요.",["단톡방","오픈채팅","오픈 채팅","카톡방","텔레그램","링크 눌러","DM"]],
+["\"오늘 마감\", \"선착순\"처럼 서두르게 해요","시간·인원 압박",2,GEN,"서두를수록 확인할 시간이 줄어요. 하루 이틀 뒤에도 있는 조건인지 확인해 보세요.",["오늘 마감","오늘까지","선착순","마감 임박","마감임박","한정","남은 자리","자리 \\d"]],
+["환불·환급 규정이 광고에 없거나 작은 글씨예요","결제 전에 환급 조건을 찾기 어려움",3,KCA,"소비자원은 결제 전에 환급 규정을 꼭 확인하라고 안내해요.",["환불 불가","환급 불가","환불불가","환급불가"]],
+["\"수익이 안 나면 전액 환급\" 조건이 복잡해요","조건부 환급, 달성 조건이 많음",2,KCA,"소비자원은 환급 조건이 까다롭거나 나중에 바뀌는 분쟁이 있다고 안내했어요. 조건은 결제 때 화면으로 보관해 두세요.",["전액 환급","100% 환급","전액환급","100%환급","수강료 0원","수강료0원","못 벌면"]],
+["수익 인증 사진은 많은데 들어간 비용 이야기는 없어요","수익만 보이고 광고비·시간은 안 보임",2,GEN,"남는 돈은 번 돈에서 쓴 돈을 뺀 값이에요. 비용이 보이지 않으면 계산할 수 없어요.",["수익 인증","수익인증","인증샷","정산 인증","통장 인증"]],
+["같은 말을 반복하는 후기·댓글이 많아요","비슷한 문장의 후기가 줄줄이",1,GEN,"실제 후기인지 확인하기 어려워요. 후기 말고 계약 조건 문서를 먼저 보세요.",["후기","실제 후기","수강생 후기"]],
+["카드 할부 없이 현금·계좌이체만 받아요","결제 방법이 한 가지뿐",1,KCA,"소비자원은 분쟁에 대비해 신용카드 3개월 이상 할부를 권해요(현금보다 대응이 쉬워요).",["계좌이체","현금만","무통장","입금만","입금 후"]],
+["결제 뒤에야 강의 내용을 볼 수 있고, 열람하면 환불이 안 된대요","강의자료를 먼저 주고 환급을 거절",3,KCA,"소비자원 사례에서 '강의자료를 먼저 제공했다'는 이유로 환급이 거절된 경우가 많았어요. 디지털 콘텐츠는 열람하면 청약철회가 제한될 수 있어요.",["열람 후","다운로드 후","자료 제공 후","자료제공"]]
+];
+const MAX=ITEMS.reduce((s,x)=>s+x[2],0);
+const $=id=>document.getElementById(id);
+function gc(p){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:p,event:true})}catch(e){}}
+const list=$("list");
+ITEMS.forEach((x,i)=>{const l=document.createElement("label");l.className="chk";l.innerHTML='<input type="checkbox" data-i="'+i+'"><span><b>'+(i+1)+'. '+x[0]+'</b><small><span class="pill '+(x[3]===KCA?"o":"g")+'">'+(x[3]===KCA?"소비자원 안내":"일반 신호")+'</span>'+x[1]+'</small></span>';list.appendChild(l)});
+function level(sc){return sc<=3?["low","위험 신호가 적어요","체크한 신호가 적어요. 그래도 결제 전에 환급 규정과 계약서를 꼭 확인하세요."]:sc<=8?["mid","주의가 필요해요","신호가 여러 개 겹쳐요. 결제를 서두르지 말고 환급 규정과 강의 내용을 먼저 확인하세요."]:["hi","위험 신호가 많아요","신호가 많이 겹쳐요. 결제하지 말고 계약 조건·환급 규정을 서면으로 받고, 필요하면 한국소비자원에 문의하세요."]}
+function render(){
+  const on=[...list.querySelectorAll("input")].filter(i=>i.checked).map(i=>+i.dataset.i);
+  list.querySelectorAll(".chk").forEach(l=>l.classList.toggle("on",l.querySelector("input").checked));
+  const sc=on.reduce((s,i)=>s+ITEMS[i][2],0),lv=level(sc),r=$("res");
+  r.className="res "+lv[0];
+  let h='<div class="lv">'+lv[1]+'</div><div class="sc">신호 점수 '+sc+' / '+MAX+' · 체크한 칸 '+on.length+'개</div><div class="bar"><i style="width:'+Math.round(sc/MAX*100)+'%"></i></div><p style="margin:10px 0 0;font-size:14.5px">'+lv[2]+'</p>';
+  if(on.length){h+='<ul>'+on.sort((a,b)=>ITEMS[b][2]-ITEMS[a][2]).map(i=>'<li><b>'+ITEMS[i][0]+'</b> — '+ITEMS[i][4]+'</li>').join('')+'</ul>'}
+  else h+='<p class="fine" style="margin:8px 0 0">아직 체크한 칸이 없어요. 광고에서 본 것을 눌러 보세요.</p>';
+  h+='<p class="fine" style="margin:10px 0 0">법적 판단이 아니에요. 점수는 이 도구가 정한 가중치예요.</p>';
+  r.innerHTML=h;
+}
+list.addEventListener("change",()=>{render();gc("check")});
+$("bScan").onclick=()=>{
+  const t=$("paste").value;if(!t.trim()){$("scanmsg").textContent="문구를 먼저 붙여넣어 주세요.";return}
+  let n=0;ITEMS.forEach((x,i)=>{const hit=x[5].some(w=>new RegExp(w).test(t));const c=list.querySelector('input[data-i="'+i+'"]');if(hit){c.checked=true;n++}});
+  $("scanmsg").textContent=n?n+"개 칸을 미리 체크했어요. 어림짐작이니 직접 확인하고 고쳐 주세요.":"해당할 만한 낱말이 보이지 않았어요. 그래도 아래 칸은 직접 확인해 보세요.";
+  render();gc("scan");
+};
+function num(s){return parseFloat(String(s).replace(/[^0-9.]/g,""))||0}
+const won=n=>Math.round(n).toLocaleString("ko-KR")+"원";
+function fmtIn(e){const v=e.target.value.replace(/[^0-9]/g,"");e.target.value=v?Number(v).toLocaleString("ko-KR"):""}
+["ad","cpc","fee","goal"].forEach(id=>$(id).addEventListener("input",e=>{fmtIn(e);calc()}));$("cv").addEventListener("input",calc);
+function calc(){
+  const ad=num($("ad").value),cpc=num($("cpc").value),cv=num($("cv").value)/100,fee=num($("fee").value),goal=num($("goal").value);
+  const o=$("out");
+  if(!ad||!cpc||!fee){o.innerHTML='<div class="box fine">하루 광고비, 클릭당 비용, 건당 수수료를 넣어 주세요.</div>';return}
+  const clicks=ad/cpc,apps=clicks*cv,inc=apps*fee,net=inc-ad,be=cpc/fee;
+  const cls=net>=0?"plus":"minus";
+  let h='<div class="big '+cls+'">하루 '+(net>=0?"남는 돈 ":"적자 ")+won(Math.abs(net))+'<small>한 달(30일) '+(net>=0?"+":"-")+won(Math.abs(net)*30)+' · 광고비 '+won(ad)+' 써서 수수료 '+won(inc)+' 번 계산이에요</small></div>';
+  h+='<div class="box"><h2>이 숫자는 이렇게 계산했어요</h2><ul style="padding-left:20px;margin:6px 0 0"><li>클릭 수 = 광고비 ÷ 클릭당 비용 = '+clicks.toFixed(1)+'번</li><li>신청 수 = 클릭 수 × 신청률 = '+apps.toFixed(2)+'건</li><li>수수료 수입 = 신청 수 × 건당 수수료 = '+won(inc)+'</li><li>남는 돈 = 수수료 수입 − 광고비 = '+won(net)+'</li></ul></div>';
+  h+='<div class="box"><h2>손익분기 신청률은 '+(be*100).toFixed(1)+'%</h2><p style="margin:4px 0 0;font-size:15px">신청률이 이보다 낮으면 광고비가 더 들어서 적자예요. (클릭당 비용 ÷ 건당 수수료)</p>'+(be>=1?'<p class="warn">손익분기 신청률이 100% 이상이에요. 클릭한 사람이 모두 신청해도 적자예요.</p>':'')+'</div>';
+  if(goal>0){const need=(ad+goal)/(fee*clicks);h+='<div class="box"><h2>하루 '+won(goal)+' 남기려면</h2><p style="margin:4px 0 0;font-size:15px">같은 광고비로 신청률이 <b>'+(need*100).toFixed(1)+'%</b>여야 해요. '+(need>1?'<b style="color:var(--bad)">100%가 넘어서 이 조건으로는 불가능해요.</b>':'지금 신청률은 '+(cv*100).toFixed(1)+'%예요.')+'</p></div>'}
+  const rates=[0.5,1,2,3,5,10,20];
+  h+='<div class="box"><h2>신청률별 하루 남는 돈</h2><table><tr><th>신청률</th><th>신청 수</th><th>남는 돈</th></tr>'+rates.map(r=>{const a=clicks*r/100,n=a*fee-ad;return '<tr><td>'+r+'%</td><td>'+a.toFixed(2)+'건</td><td class="'+(n<0?"neg":"pos")+'">'+(n<0?"-":"+")+won(Math.abs(n))+'</td></tr>'}).join('')+'</table><p class="fine">빨간 칸이 적자예요. 광고비 외 다른 비용(강의비, 시간)은 넣지 않았어요.</p></div>';
+  o.innerHTML=h;
+}
+$("t1").onclick=()=>tab(1);$("t2").onclick=()=>tab(2);
+function tab(n){$("p1").classList.toggle("hide",n!==1);$("p2").classList.toggle("hide",n!==2);$("t1").setAttribute("aria-selected",n===1);$("t2").setAttribute("aria-selected",n===2);gc("tab"+n)}
+$("src").innerHTML=[
+"<b>점검 12칸 중 '소비자원 안내' 표시 칸</b>은 한국소비자원 자료에서 위험 신호나 주의사항으로 든 내용이에요: 피해예방주의보 「고액 온라인 부업 강의, 고수익 보장에 현혹되지 말아야」(2026-02-23), 소비자시대 웹진 2026 Vol.04 「고수익 부업 강의의 유혹, 그 뒤에 숨겨진 함정」, 피해예방주의보 「조건부 수강료 환급형 인터넷 강의, 수강료 환급받기 쉽지 않아」(2017-04-21, 오래된 자료라 사례만 참고). 모두 <a href=\"https://www.kca.go.kr/home/sub.do?menukey=4005\" rel=\"noopener\">한국소비자원 피해예방주의보</a>에서 볼 수 있어요.",
+"소비자원 자료의 숫자(2025년 피해구제 신청 42건, 2021~2025년 합계 59건 등)는 이 도구 계산에 쓰지 않았어요. 그 자료는 신고된 피해 일부의 통계이고, 광고가 사기인지 판단하는 근거가 아니에요.",
+"'일반 신호' 표시 칸(수익 금액 약속, 단톡방 유도, 서두르게 하기, 수익 인증만 보여 주기, 반복 후기)은 이 도구가 정리한 일반적인 주의점이에요. 공식 기관이 이 칸들을 직접 판정 기준으로 정한 것은 아니에요.",
+"점수는 칸마다 1~3점을 준 뒤 더한 값이에요(총 "+MAX+"점). 3점 이하는 '적어요', 4~8점은 '주의', 9점 이상은 '많아요'로 나눴어요. 이 기준은 이 도구가 정했고 법적 의미는 없어요.",
+"소비자원 자료는 관련 법으로 방문판매법과 전자상거래법의 청약철회 규정을 들어요. 디지털 콘텐츠는 열람하거나 자료를 받으면 청약철회가 제한될 수 있고, 사업자 쪽 사정(약속한 내용을 주지 않음 등)이 있으면 다르게 볼 수 있어요. 구체적인 경우는 법률 상담이나 한국소비자원 피해구제 절차로 확인하세요.",
+"공정거래위원회의 공식 안내 페이지는 이 도구를 만들 때 직접 열어 확인하지 못해서 근거로 쓰지 않았어요.",
+"광고비 계산기는 단순 곱셈이에요: 클릭 수 = 광고비 ÷ 클릭당 비용, 신청 수 = 클릭 수 × 신청률, 수수료 수입 = 신청 수 × 건당 수수료, 남는 돈 = 수수료 수입 − 광고비. 환불·세금·강의비·내 시간은 넣지 않았고, 신청이 취소되면 수입이 줄어요. 처음 값(광고비 3,000원, 클릭 300원, 신청률 2%, 수수료 2,000원, 목표 20,000원)은 예시예요.",
+"이 도구는 법률·투자 조언이 아니고 참고용이에요. 특정 업체·사람·채널을 평가하지 않아요."
+].map(x=>"<li>"+x+"</li>").join("");
+render();calc();
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

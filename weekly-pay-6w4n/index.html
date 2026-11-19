@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>주휴수당 계산기 (발생 여부와 금액 어림) | JW의 AI 작업실</title>
+<meta name="description" content="시급, 주 소정근로시간, 개근 여부를 넣으면 주휴수당이 생기는지와 금액을 어림 계산해요. 주휴수당 = 1일 소정근로시간 × 시급(고용노동부 상담 답변)을 따랐고, 어림값이에요. 입력한 내용은 저장하거나 전송하지 않아요.">
+<link rel="canonical" href="https://hayanfog9.github.io/weekly-pay-6w4n/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="주휴수당 계산기 (발생 여부와 금액 어림)">
+<meta property="og:description" content="주 15시간 이상, 소정근로일 개근이면 1일 소정근로시간 × 시급. 어림값이며 실제는 근로계약서와 급여명세서 기준이에요.">
+<meta property="og:url" content="https://hayanfog9.github.io/weekly-pay-6w4n/">
+<meta name="robots" content="index,follow">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"주휴수당 계산기 (발생 여부와 금액 어림)","url":"https://hayanfog9.github.io/weekly-pay-6w4n/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"author":{"@type":"Person","name":"JW"}}</script>
+<style>
+:root{color-scheme:light dark;--desk:#E4E9F0;--paper:#FFFFFF;--ink:#1B2447;--ink2:#58627F;--rule:#CBD2DF;--hl:#FFE45C;--stamp:#B3261E;--warn:#B3261E;--ok:#1E6B3A;--focus:#3F528F;--acc:#3F528F}
+@media (prefers-color-scheme:dark){:root{--desk:#0D1220;--paper:#151B2D;--ink:#E8ECF8;--ink2:#A2ACC6;--rule:#2A3552;--hl:#5A4B00;--stamp:#FF8A80;--warn:#FF8A80;--ok:#7FD8A0;--focus:#AAB7E8;--acc:#AAB7E8}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--desk);color:var(--ink);font:16px/1.6 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.desk{max-width:980px;margin:0 auto;padding:22px 16px 56px}
+h1{font-size:clamp(22px,4.4vw,30px);line-height:1.2;margin:0;letter-spacing:-.02em;font-weight:800}
+.base{margin:4px 0 0;color:var(--ink2);font-size:14px}
+.ref{display:inline-block;margin:12px 0 0;padding:4px 10px;border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;font-weight:800;font-size:14px;transform:rotate(-1deg)}
+.priv{margin:8px 0 0;color:var(--ink2);font-size:12.5px;line-height:1.5}
+.sheet{display:grid;gap:18px;grid-template-columns:minmax(0,1fr);margin-top:18px}
+@media (min-width:900px){.sheet{grid-template-columns:minmax(330px,420px) minmax(0,1fr);align-items:start}.in{position:sticky;top:16px}}
+.in{background:var(--paper);border:1px solid var(--ink);border-radius:3px;padding:6px 16px 18px}
+label{display:block;font-size:14px;font-weight:600;margin:14px 0 5px}
+input[type=text],select{width:100%;padding:10px 12px;border:1px solid var(--ink);border-radius:3px;background:var(--paper);color:var(--ink);font:inherit;font-size:16px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:14.5px;font-weight:600;line-height:1.45}
+.chk input{margin-top:4px;width:18px;height:18px;flex:none}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.hint{font-size:13px;color:var(--ink2);margin-top:4px;line-height:1.5}
+.err{color:var(--warn);font-size:13.5px;min-height:20px;margin-top:8px;font-weight:600}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+button{font:inherit;font-size:14.5px;font-weight:700;padding:9px 14px;border-radius:3px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+button.fill{background:var(--ink);color:var(--paper)}
+button:disabled{opacity:.45;cursor:default}
+.slip{position:relative;background:var(--paper);border:1px solid var(--ink);border-top-width:6px;border-radius:3px;padding:18px 18px 22px}
+.slip h2{font-size:16px;margin:0;font-weight:800}
+.meta{color:var(--ink2);font-size:13px;margin:2px 0 4px}
+.stamp{position:absolute;top:14px;right:14px;transform:rotate(-8deg);border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;padding:1px 9px;font-weight:800;font-size:15px;letter-spacing:.08em}
+.r{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);font-size:14.5px}
+.r span:first-child{color:var(--ink2)}.r b{font-weight:600;text-align:right}
+.net{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px;padding-top:12px;border-top:3px double var(--ink)}
+.net span{font-weight:700}
+#net{white-space:nowrap;font-size:clamp(26px,8vw,38px);font-weight:800;letter-spacing:-.03em;background:linear-gradient(transparent 55%,var(--hl) 55%,var(--hl) 92%,transparent 92%) no-repeat;padding:0 .12em}
+.verdict{margin:10px 0 0;padding:10px 12px;border:1.5px solid var(--ok);border-radius:3px;color:var(--ok);font-size:14.5px;font-weight:700}
+.verdict.no{border-color:var(--warn);color:var(--warn)}
+.note{font-size:13px;color:var(--ink2);margin-top:10px;line-height:1.55}
+.empty{color:var(--ink2);font-size:14.5px;margin:10px 0 0}
+.notes{margin-top:26px}.notes h3{font-size:14px;margin:0 0 8px;border-top:1.5px solid var(--ink);padding-top:8px}
+.notes ul{margin:0;padding-left:18px;color:var(--ink2);font-size:14px}.notes li{margin:5px 0}
+a{color:var(--acc)}footer{font-size:13px;color:var(--ink2);margin-top:26px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-weight:700;border-radius:4px;padding:8px 16px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="desk">
+<header>
+<h1>주휴수당 계산기 (발생 여부와 금액 어림)</h1>
+<p class="base">주휴수당 = 1일 소정근로시간 × 시급 (주 15시간 이상, 소정근로일 개근)</p>
+<span class="ref">어림값이에요. 실제는 근로계약서와 급여명세서 기준이에요</span>
+<p class="priv">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 같은 방문자 구분(최대 8시간), 브라우저·운영체제 종류, 화면 너비)만 수집해요. 최저임금을 지키는지는 이 도구가 판단하지 않아요.</p>
+</header>
+
+<main class="sheet">
+<section class="in" aria-label="입력">
+<label for="wg">시급(원)</label>
+<input type="text" id="wg" inputmode="numeric" autocomplete="off" placeholder="예: 12000">
+<div class="hint">월급제라면 시급으로 바꿔 넣어야 해요. 이 도구는 월급 환산을 하지 않아요.</div>
+<label for="wk">4주 평균 주 소정근로시간(시간)</label>
+<input type="text" id="wk" inputmode="decimal" autocomplete="off" placeholder="예: 20">
+<div class="hint">실제로 일한 시간이 아니라 근로계약서에 정한 일주일 근로시간이에요. 일 8시간, 주 40시간 안에서만 넣을 수 있어요.</div>
+<label for="dy">같은 일을 하는 통상근로자의 주 소정근로일</label>
+<select id="dy"><option value="5" selected>주 5일 (월~금)</option><option value="6">주 6일</option></select>
+<div class="hint">통상근로자가 없으면 주 5일, 주 40시간 기준으로 비례해서 계산해요.</div>
+<label class="chk" for="at"><input type="checkbox" id="at" checked><span>이번 주 소정근로일에 결근이 없어요 (지각·조퇴·휴가·휴일은 결근이 아니에요)</span></label>
+<label class="chk" for="kp"><input type="checkbox" id="kp" checked><span>이번 주 7일 동안 그 사업장에 근로관계가 이어져요 (주 중간에 퇴사하면 해제)</span></label>
+<div class="err" id="err" role="alert"></div>
+<div class="btns"><button type="button" class="fill" id="go">주휴수당 계산</button><button type="button" id="ex">예시 넣기</button><button type="button" id="clr">비우기</button></div>
+</section>
+
+<section class="slip" aria-live="polite" aria-label="결과">
+<span class="stamp">어림값</span>
+<h2>주휴수당 어림 계산서</h2>
+<p class="meta" id="meta">시급과 주 소정근로시간을 넣어 주세요.</p>
+<div id="res"><p class="empty">값을 넣고 "주휴수당 계산"을 누르세요.</p></div>
+<p class="note">어림값이에요. 실제는 근로계약서와 급여명세서 기준이에요. 한 주 기준 금액이고, 월급으로 합치는 계산은 하지 않아요.</p>
+<div class="btns"><button type="button" id="copy" disabled>결과 복사</button></div>
+</section>
+</main>
+
+<div class="notes"><h3>계산 방법과 한계</h3>
+<ul>
+<li>주휴수당은 ① 근로기준법상 근로자이고 ② 4주 평균 1주 소정근로시간이 15시간 이상이며 ③ 1주간의 소정근로일을 개근했을 때 생긴다고 고용노동부 상담 답변이 안내해요(근로기준법 제55조 제1항·시행령 제30조 제1항 등을 근거로 들어요).</li>
+<li>4주 평균 주 15시간 미만이면 근로기준법 제55조를 적용하지 않는다고 제18조 제3항에 적혀 있어서, 이 도구는 15시간 미만을 "발생하지 않음"으로 보여 줘요.</li>
+<li>소정근로시간은 일 8시간, 주 40시간 안에서 노사가 근로하기로 정한 시간이고, 소정근로일은 그 시간을 요일별로 나눠 근로하기로 정한 날이에요(고용노동부 상담 답변). 그래서 이 도구는 주 40시간을 넘는 입력을 막아요.</li>
+<li>개근은 소정근로일에 결근하지 않는 것이고, 소정근로일 중의 지각·조퇴·휴일·휴가·휴업은 결근으로 처리할 수 없다고 안내해요(고용노동부 행정해석을 인용한 상담 답변). 결근인지 아닌지는 이 도구가 판단하지 않고 체크 칸으로 받아요.</li>
+<li>주휴일을 주어야 하는 1주일은 연속된 7일이고, 그 기간 동안 근로관계가 이어져야 해요. 예: 월~금 근로 후 토요일에 퇴직하면 주휴수당이 생기지 않고, 월~일 또는 그 다음 월요일까지 근로관계가 이어지면 생겨요(고용노동부 상담 답변). 입사하는 주는 "1주 만근되는 날 이후부터 발생"이라고만 적혀 있어 이 도구는 입사 주를 따로 계산하지 않아요.</li>
+<li>금액은 주휴수당 = 1일 소정근로시간 × 시급이에요. 통상근로자가 주 5일이면 1일 소정근로시간 = 주 소정근로시간 ÷ 5(주 40시간이면 8시간)이고, 고용노동부 안내 예시(주 20시간·시급 10,000원 → 40,000원, 주 18시간 → 36,000원, 주 6일 사업장 하루 6시간 → 60,000원)와 같은 값이 나오는지 확인했어요.</li>
+<li>원 미만은 계산 마지막에 한 번만 반올림해요. 회사마다 처리가 달라 1~2원 차이가 날 수 있어요.</li>
+<li>이 도구가 다루지 않는 것: 월급제의 시급 환산, 주마다 근로시간이 다른 경우의 4주 평균, 입사·퇴사 주의 세부 처리, 감시·단속적 근로 승인, 상시 근로자 수에 따른 적용 여부, 회사 규정, 최저임금 충족 여부. 고용노동부 공식 주휴수당 계산기는 찾지 못해서 공식 계산기와의 직접 대조는 하지 못했어요.</li>
+</ul>
+<p class="note">확인한 날짜: 2026-11-09. 공식 자료: <a href="https://www.law.go.kr/법령/근로기준법/제55조" target="_blank" rel="noopener">근로기준법 제55조</a> · <a href="https://www.law.go.kr/법령/근로기준법/제18조" target="_blank" rel="noopener">제18조</a> · <a href="https://www.law.go.kr/법령/근로기준법시행령/제30조" target="_blank" rel="noopener">시행령 제30조</a> · <a href="https://www.moel.go.kr/minwon/fastcounsel/fastcounselView.do?inetDcssMngId=202401081620124231000" target="_blank" rel="noopener">고용노동부 빠른인터넷상담(주휴수당 계산방법)</a> · <a href="https://1350.moel.go.kr/rtmview.do?id=1000059852" target="_blank" rel="noopener">고용노동부 1350 상담(주휴수당)</a></p>
+</div>
+<footer>© <a href="https://hayanfog9.github.io/">JW의 AI 작업실</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
+</div>
+<div id="toast" role="status"></div>
+<script>
+function $(i){return document.getElementById(i)}
+function n(v){v=parseFloat(String(v).replace(/,/g,''));return isFinite(v)?v:0}
+function has(v){return String(v).replace(/\s/g,'')!==''}
+function won(v){return Math.round(v+1e-7).toLocaleString('ko-KR')+'원'}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast._t);toast._t=setTimeout(function(){e.style.opacity=0},1800)}
+function f2(v){return (Math.round(v*100)/100).toLocaleString('ko-KR',{maximumFractionDigits:2})}
+/* 주휴수당 어림: wage=시급, week=4주 평균 주 소정근로시간, days=통상근로자 주 소정근로일(5|6), attended=개근, kept=1주 근로관계 유지 */
+function calc(o){
+  if(o.week<15)return{ok:false,reason:'short'};
+  if(!o.attended)return{ok:false,reason:'absent'};
+  if(!o.kept)return{ok:false,reason:'left'};
+  var D=o.week/o.days,pay=o.wage*D;
+  return{ok:true,reason:'ok',D:D,pay:pay,rounded:Math.round(pay+1e-7)}}
+var WHY={short:'주 소정근로시간이 15시간 미만이라 발생하지 않아요(근로기준법 제18조 제3항).',absent:'그 주 소정근로일에 결근이 있어 발생하지 않아요(소정근로일 개근이 조건이에요).',left:'그 주 7일 동안 근로관계가 이어지지 않아(주 중간 퇴사) 발생하지 않아요.'};
+function run(){
+  var err=[],wg=n($('wg').value),wk=n($('wk').value),dy=+$('dy').value;
+  if(!has($('wg').value)||wg<=0)err.push('시급을 0보다 크게 넣어 주세요.');
+  if(!has($('wk').value)||!(wk>0))err.push('주 소정근로시간을 넣어 주세요.');
+  else if(wk>40)err.push('주 소정근로시간은 40시간을 넘길 수 없어요(근로기준법 제50조 제1항). 40 이하로 넣어 주세요.');
+  $('err').textContent=err.join(' ');
+  if(err.length){$('copy').disabled=true;return}
+  var r=calc({wage:wg,week:wk,days:dy,attended:$('at').checked,kept:$('kp').checked}),rows='';
+  rows+='<div class="r"><span>시급</span><b>'+won(wg)+'</b></div>';
+  rows+='<div class="r"><span>4주 평균 주 소정근로시간</span><b>'+f2(wk)+'시간</b></div>';
+  rows+='<div class="r"><span>그 주 결근 / 근로관계 유지</span><b>'+($('at').checked?'결근 없음':'결근 있음')+' / '+($('kp').checked?'유지':'유지 안 됨')+'</b></div>';
+  if(!r.ok){
+    rows+='<div class="verdict no">주휴수당이 생기지 않아요. '+WHY[r.reason]+'</div>';
+    rows+='<div class="net"><span>주휴수당 어림액</span><b id="net">0원</b></div>';
+    window._txt='주휴수당이 생기지 않아요. '+WHY[r.reason]+' 어림값이며 실제는 근로계약서와 급여명세서 기준이에요.';
+  }else{
+    rows+='<div class="verdict">주 15시간 이상이고 개근이라 주휴수당이 생겨요.</div>';
+    rows+='<div class="r"><span>1일 소정근로시간 (주 '+f2(wk)+'시간 ÷ 통상근로자 주 '+dy+'일)</span><b>'+f2(r.D)+'시간</b></div>';
+    rows+='<div class="net"><span>주휴수당 어림액(한 주, 세전)</span><b id="net">'+won(r.pay)+'</b></div>';
+    window._txt='주휴수당 어림액 '+won(r.pay)+' (시급 '+won(wg)+', 주 소정근로시간 '+f2(wk)+'시간, 1일 소정근로시간 '+f2(r.D)+'시간). 한 주 기준 어림값이며 실제는 근로계약서와 급여명세서 기준이에요.';
+  }
+  $('res').innerHTML=rows;$('meta').textContent='어림값이에요. 근로계약서와 급여명세서 기준으로 확인하세요.';$('copy').disabled=false}
+$('go').onclick=run;
+['wg','wk'].forEach(function(i){$(i).addEventListener('keydown',function(e){if(e.key==='Enter')run()})});
+$('ex').onclick=function(){$('wg').value='12000';$('wk').value='20';$('dy').value='5';$('at').checked=true;$('kp').checked=true;run()};
+$('clr').onclick=function(){$('wg').value='';$('wk').value='';$('dy').value='5';$('at').checked=true;$('kp').checked=true;$('err').textContent='';$('meta').textContent='시급과 주 소정근로시간을 넣어 주세요.';$('res').innerHTML='<p class="empty">값을 넣고 "주휴수당 계산"을 누르세요.</p>';$('copy').disabled=true};
+$('copy').onclick=function(){var t=window._txt||'';function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('복사했어요')}catch(e){toast('복사하지 못했어요. 직접 선택해 복사하세요')}a.remove()}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},fb)}else fb()};
+window.WP={calc:calc};
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

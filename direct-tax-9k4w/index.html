@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>해외직구 관부가세 계산기 | JW의 AI 작업실</title>
+<meta name="description" content="해외직구 물품 가격(달러), 배송비, 환율을 넣으면 면세 한도 안인지 판정하고 관세, 부가세, 예상 총액을 보여 줘요. 관세청과 법령 기준을 확인한 참고용 계산기이고 실제 세금은 세관이 정해요. 입력한 내용은 저장하거나 전송하지 않아요.">
+<link rel="canonical" href="https://hayanfog9.github.io/direct-tax-9k4w/">
+<meta property="og:type" content="website"><meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="해외직구 관부가세 계산기">
+<meta property="og:description" content="달러 가격, 배송비, 환율을 넣으면 면세 여부와 예상 관세·부가세를 보여 줘요. 참고용이에요.">
+<meta property="og:url" content="https://hayanfog9.github.io/direct-tax-9k4w/">
+<meta name="robots" content="index,follow">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"해외직구 관부가세 계산기","url":"https://hayanfog9.github.io/direct-tax-9k4w/","applicationCategory":"FinanceApplication","operatingSystem":"Web","inLanguage":"ko","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"author":{"@type":"Person","name":"JW"}}</script>
+<style>
+:root{color-scheme:light dark;--desk:#E4E9F0;--paper:#FFFFFF;--ink:#1B2447;--ink2:#58627F;--rule:#CBD2DF;--hl:#FFE45C;--stamp:#B3261E;--warn:#B3261E;--ok:#1E6B3A;--focus:#3F528F;--acc:#3F528F}
+@media (prefers-color-scheme:dark){:root{--desk:#0D1220;--paper:#151B2D;--ink:#E8ECF8;--ink2:#A2ACC6;--rule:#2A3552;--hl:#5A4B00;--stamp:#FF8A80;--warn:#FF8A80;--ok:#7FD99A;--focus:#AAB7E8;--acc:#AAB7E8}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--desk);color:var(--ink);font:16px/1.6 "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.desk{max-width:980px;margin:0 auto;padding:22px 16px 56px}
+h1{font-size:clamp(22px,4.4vw,30px);line-height:1.2;margin:0;letter-spacing:-.02em;font-weight:800}
+.base{margin:4px 0 0;color:var(--ink2);font-size:14px}
+.ref{display:inline-block;margin:12px 0 0;padding:4px 10px;border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;font-weight:800;font-size:14px;transform:rotate(-1deg)}
+.priv{margin:8px 0 0;color:var(--ink2);font-size:12.5px;line-height:1.5}
+.sheet{display:grid;gap:18px;grid-template-columns:minmax(0,1fr);margin-top:18px}
+@media (min-width:900px){.sheet{grid-template-columns:minmax(340px,430px) minmax(0,1fr);align-items:start}.in{position:sticky;top:16px}}
+.in{background:var(--paper);border:1px solid var(--ink);border-radius:3px;padding:6px 16px 18px}
+label{display:block;font-size:14px;font-weight:600;margin:14px 0 5px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--ink);border-radius:3px;background:var(--paper);color:var(--ink);font:inherit;font-size:16px}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:13px;color:var(--ink2);margin-top:4px;line-height:1.5}
+.err{color:var(--warn);font-size:13.5px;min-height:20px;margin-top:8px;font-weight:600}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+button{font:inherit;font-size:14.5px;font-weight:700;padding:9px 14px;border-radius:3px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+button.fill{background:var(--ink);color:var(--paper)}button:disabled{opacity:.45;cursor:default}
+.slip{position:relative;background:var(--paper);border:1px solid var(--ink);border-top-width:6px;border-radius:3px;padding:18px 18px 22px}
+.slip h2{font-size:16px;margin:0;font-weight:800}
+.meta{color:var(--ink2);font-size:13px;margin:2px 0 4px}
+.stamp{position:absolute;top:14px;right:14px;transform:rotate(-8deg);border:2px solid var(--stamp);color:var(--stamp);border-radius:4px;padding:1px 9px;font-weight:800;font-size:15px;letter-spacing:.08em}
+.verdict{margin:12px 0 4px;padding:10px 12px;border:2px solid var(--ink);border-radius:4px;font-weight:800;font-size:17px}
+.verdict.free{border-color:var(--ok);color:var(--ok)}.verdict.tax{border-color:var(--warn);color:var(--warn)}
+.r{display:grid;grid-template-columns:1fr auto;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule);font-size:14.5px}
+.r b{text-align:right;font-weight:600;min-width:96px}
+.tot{margin-top:12px;padding-top:12px;border-top:3px double var(--ink)}
+.tot .l{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:2px 0}
+.tot .l span{font-weight:700}
+#won{white-space:nowrap;font-size:clamp(26px,8vw,38px);font-weight:800;letter-spacing:-.03em;background:linear-gradient(transparent 55%,var(--hl) 55%,var(--hl) 92%,transparent 92%) no-repeat;padding:0 .12em}
+.note{font-size:13px;color:var(--ink2);margin-top:10px;line-height:1.55}
+.empty{color:var(--ink2);font-size:14.5px;margin:10px 0 0}
+.notes{margin-top:26px}.notes h3{font-size:14px;margin:0 0 8px;border-top:1.5px solid var(--ink);padding-top:8px}
+.notes ul{margin:0;padding-left:18px;color:var(--ink2);font-size:14px}.notes li{margin:5px 0}
+a{color:var(--acc)}footer{font-size:13px;color:var(--ink2);margin-top:26px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-weight:700;border-radius:4px;padding:8px 16px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="desk">
+<header>
+<h1>해외직구 관부가세 계산기</h1>
+<p class="base">달러 가격, 배송비, 환율을 넣으면 면세 한도 안인지 판정하고 예상 관세와 부가세를 보여 줘요</p>
+<span class="ref">참고용이에요. 실제 세금은 세관이 정해요</span>
+<p class="priv">입력한 값은 이 브라우저에서만 처리하고 저장하거나 전송하지 않으며, 방문 횟수 통계(페이지 주소·제목, 이전 페이지, 같은 방문자 구분(최대 8시간), 브라우저·운영체제 종류, 화면 너비)만 수집해요. 환율과 세율은 내가 넣거나 고르는 값이고, 통관 시점의 환율과 세율에 따라 실제 세액과 다를 수 있습니다.</p>
+</header>
+
+<main class="sheet">
+<section class="in" aria-label="입력">
+<div class="row">
+<div><label for="price">물품 가격(달러)</label><input id="price" inputmode="decimal" autocomplete="off" placeholder="예: 180"></div>
+<div><label for="ship">국제 배송비·보험료(달러)</label><input id="ship" inputmode="decimal" autocomplete="off" placeholder="없으면 0"></div>
+</div>
+<div class="hint">물품 가격에는 판매 사이트가 붙인 현지 세금과 현지 내 배송비를 포함해 주세요. 한국으로 오는 국제 배송비와 보험료는 오른쪽 칸에 따로 적으면 면세 판정에서 빠져요.</div>
+<label for="rate">환율(1달러당 원)</label>
+<input id="rate" inputmode="decimal" autocomplete="off" placeholder="직접 입력">
+<div class="hint" id="exnote">세관은 수입신고일이 속한 주의 전주 기준환율·재정환율을 평균해 관세청장이 정한 과세환율을 써요. 이 값은 <a href="https://www.customs.go.kr/kcs/ad/tax/BuyTaxCalculation.do" target="_blank" rel="noopener">관세청 예상세액 조회 화면</a>의 국가별 환율에서 확인해 직접 넣어 주세요. "예시 넣기"의 환율은 가상의 값이에요.</div>
+<div class="row">
+<div><label for="from">발송 국가</label><select id="from"><option value="other">미국 외 나라</option><option value="us">미국</option></select></div>
+<div><label for="excl">목록통관 제외 품목인가요?</label><select id="excl"><option value="no">아니요(모름 포함)</option><option value="yes">예</option></select></div>
+</div>
+<div class="hint">목록통관에서 빠지는 품목(건강기능식품·의약품 같은 품목이 그렇다고 알려져 있어요)이면 "예"로 고르세요. 이 경우 미국에서 와도 한도를 150달러로 봐요. 어떤 품목이 해당하는지는 관세청 고시 원문을 열어 보지 못했으니 관세청에서 확인하세요.</div>
+<label for="duty">관세율 고르기</label>
+<select id="duty">
+<option value="">선택해 주세요</option>
+<option value="13">의류·속옷 (기본세율 13%)</option>
+<option value="13">신발 (기본세율 13%)</option>
+<option value="8">핸드백 (기본세율 8%)</option>
+<option value="8">완구 (기본세율 8%)</option>
+<option value="8">건강기능식품 (기본세율 8%)</option>
+<option value="0">서적·잡지 (기본세율 0%)</option>
+<option value="custom">직접 입력</option>
+</select>
+<input id="dutyc" inputmode="decimal" autocomplete="off" placeholder="관세율(%) 직접 입력" style="display:none;margin-top:8px" aria-label="관세율 직접 입력">
+<div class="hint">위 세율은 관세청 예상세액 조회 화면의 기본세율을 그대로 옮긴 예시예요(2026-11-03 확인). 같은 이름의 물품도 품목 분류에 따라 세율이 달라질 수 있고 FTA 세율이 따로 있을 수 있어서, 정확한 세율은 관세청에서 확인하세요.</div>
+<div class="err" id="err" role="alert"></div>
+<div class="btns"><button type="button" class="fill" id="go">세금 계산</button><button type="button" id="ex">예시 넣기</button><button type="button" id="clr">비우기</button></div>
+</section>
+
+<section class="slip" aria-live="polite" aria-label="결과">
+<span class="stamp">참고용</span>
+<h2>예상 관부가세</h2>
+<p class="meta" id="meta">값을 넣고 "세금 계산"을 누르면 면세 여부와 예상 세금을 보여 줘요.</p>
+<div id="res"><p class="empty">물품 가격, 환율, 관세율을 넣고 "세금 계산"을 누르세요.</p></div>
+<p class="note">자가사용 물품이고 반복·분할 수입이 아니라는 전제로 계산한 참고 값이에요. 실제 세액은 통관 시점의 환율과 세율에 따라 달라질 수 있습니다. 세액은 관세청 예상세액 조회 화면과 같은 방식으로 원 미만을 버려요.</p>
+<div class="btns"><button type="button" id="copy" disabled>결과 복사</button><button type="button" id="save" disabled>이미지 저장</button></div>
+</section>
+</main>
+
+<div class="notes"><h3>알아 두세요</h3>
+<ul>
+<li>면세 판정은 물품 가격(물품 대금 + 현지 세금 + 현지 내 배송비)이 150달러 이하인지로 해요. 미국에서 보내는 목록통관 대상 물품은 200달러 이하까지 목록통관이 돼요. 한도를 넘으면 한도만큼 빼 주지 않고 총과세가격 전체에 세금이 붙어요.</li>
+<li>총과세가격 = 물품 가격 + 국제 배송비 + 보험료예요. 관세 = 총과세가격(원) × 관세율, 부가세 = (총과세가격 + 관세) × 10%예요. 개별소비세·주세·교육세가 붙는 물품(고급 핸드백, 주류 등)은 이 계산기가 다루지 않아요.</li>
+<li>과세 대상인데 관세가 1만원 미만이면 관세를 걷지 않는다는 규정(관세법 시행령 제37조)이 있어서 실제 관세는 0원일 수 있어요. 이 계산기는 그 경우도 위 공식으로 계산해 보여 주고 따로 안내 문구를 붙여요.</li>
+<li>같은 해외 판매자에게 같은 날 산 물품은 합산될 수 있어요. 다른 판매자이거나 구매 날짜가 다르면 입항일이 같아도 합산하지 않는다고 관세청이 2022년 11월에 밝혔어요. 반복·분할 수입 기준은 관세청장이 정해요.</li>
+<li>환율은 직접 넣는 값이고 특정 날짜의 환율을 쓰지 않아요. 카드 결제 금액은 카드사 환율과 수수료가 달라서 이 계산기와 다를 수 있어요.</li>
+<li>정확한 세액은 <a href="https://www.customs.go.kr/kcs/ad/tax/BuyTaxCalculation.do" target="_blank" rel="noopener">관세청 해외직구물품 예상세액 조회</a>나 관세청 콜센터 125번에서 확인하세요.</li>
+<li>환율만 따로 바꿔 보려면 <a href="https://hayanfog9.github.io/fx-convert-7q5m/">환율 환산 계산기</a>를 쓰세요.</li>
+</ul>
+<h3 style="margin-top:20px">확인한 곳 (2026-11-03에 직접 열어 읽었어요)</h3>
+<ul>
+<li>관세청 「해외직구물품 예상세액 조회」 안내 화면: 목록통관 150달러(미국 200달러), 수입신고 150달러 이하 면세, 150달러 초과 시 공제 없이 총과세가격에 과세, 계산식</li>
+<li>국가법령정보센터: 관세법 제94조(소액물품 면세), 제18조(과세환율), 관세법 시행규칙 제45조 제2항(미화 150달러 이하 자가사용 물품), 관세법 시행령 제37조(징수금액의 최저한 1만원), 부가가치세법 제30조(세율 10%)</li>
+<li>관세청 보도자료 「해외직구 물품, 입항일 같아도 합산과세 면제」(2022-11-16)</li>
+<li>열어 보지 못한 것: 수입통관 사무처리에 관한 고시 원문(목록통관 제외 품목, 반복·분할 수입 기준)과 품목별 관세율 전체. 그래서 이 계산기는 이 부분을 단정하지 않아요.</li>
+</ul></div>
+<footer>© <a href="https://hayanfog9.github.io/">JW의 AI 작업실</a> · 이 페이지는 AI(Claude)의 도움으로 만들었어요<br>방문 횟수 통계는 쿠키를 쓰지 않는 GoatCounter로 집계해요</footer>
+</div>
+<div id="toast" role="status"></div>
+<script>
+function $(i){return document.getElementById(i)}
+function num(v){v=String(v).replace(/,/g,'').trim();if(v==='')return NaN;v=Number(v);return isFinite(v)?v:NaN}
+function toast(t){var e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(toast._t);toast._t=setTimeout(function(){e.style.opacity=0},1800)}
+function fmt(v){return Math.round(v).toLocaleString('ko-KR')}
+function usd(c){return (c/100).toLocaleString('ko-KR',{minimumFractionDigits:0,maximumFractionDigits:2})}
+/* 계산: 모두 정수(센트, 환율 0.01원 단위, 관세율 0.01% 단위)로 계산하고 원 미만은 버림 */
+function calc(o){
+  var priceC=Math.round(o.price*100),shipC=Math.round(o.ship*100),rateC=Math.round(o.rate*100),dutyBP=Math.round(o.duty*100);
+  var limitC=(o.us&&!o.excl)?20000:15000;
+  var exempt=priceC<=limitC;
+  var baseWon=Math.floor((priceC+shipC)*rateC/10000);
+  var goodsWon=Math.floor(priceC*rateC/10000);
+  var limitWon=Math.floor(limitC*rateC/10000);
+  var duty=0,vat=0;
+  if(!exempt){duty=Math.floor(baseWon*dutyBP/10000);vat=Math.floor((baseWon+duty)/10)}
+  return{exempt:exempt,limitC:limitC,limitWon:limitWon,priceC:priceC,shipC:shipC,goodsWon:goodsWon,baseWon:baseWon,duty:duty,vat:vat,tax:duty+vat,total:baseWon+duty+vat,
+    lowDuty:!exempt&&duty>0&&duty<10000,mokrok:o.us&&!o.excl}}
+function dutyVal(){var v=$('duty').value;return v==='custom'?num($('dutyc').value):(v===''?NaN:Number(v))}
+$('duty').onchange=function(){$('dutyc').style.display=this.value==='custom'?'block':'none'};
+function run(){
+  var price=num($('price').value),ship=$('ship').value.trim()===''?0:num($('ship').value),rate=num($('rate').value),duty=dutyVal(),err=[];
+  if(!(price>0))err.push('물품 가격(달러)을 0보다 크게 넣어 주세요.');
+  if(!(ship>=0))err.push('국제 배송비는 0 이상의 숫자로 넣어 주세요(없으면 0).');
+  if(!(rate>0))err.push('환율(1달러당 원)을 0보다 크게 직접 넣어 주세요.');
+  if(!(duty>=0&&duty<=200))err.push('관세율을 골라 주거나 0 이상의 숫자(%)로 넣어 주세요.');
+  $('err').textContent=err.join(' ');if(err.length){$('copy').disabled=$('save').disabled=true;return}
+  var us=$('from').value==='us',excl=$('excl').value==='yes';
+  var r=calc({price:price,ship:ship,rate:rate,duty:duty,us:us,excl:excl});cur=r;
+  var h='';
+  if(r.exempt){h+='<div class="verdict free">면세 한도 안이에요 (물품 가격 '+usd(r.priceC)+'달러 ≤ '+usd(r.limitC)+'달러)</div>'}
+  else{h+='<div class="verdict tax">면세 한도를 넘었어요 (물품 가격 '+usd(r.priceC)+'달러 > '+usd(r.limitC)+'달러)</div>'}
+  h+='<div class="r"><span>면세 한도 '+usd(r.limitC)+'달러 = '+fmt(r.limitWon)+'원 (이 환율 기준)</span><b></b></div>';
+  h+='<div class="r"><span>총과세가격 (물품 + 국제 배송비·보험료)</span><b>'+fmt(r.baseWon)+'원</b></div>';
+  if(r.exempt){h+='<div class="r"><span>관세</span><b>0원 (면세)</b></div><div class="r"><span>부가세</span><b>0원 (면세)</b></div>'}
+  else{h+='<div class="r"><span>관세 ('+duty+'%)</span><b>'+fmt(r.duty)+'원</b></div><div class="r"><span>부가세 (10%)</span><b>'+fmt(r.vat)+'원</b></div>'}
+  h+='<div class="tot"><div class="l"><span>예상 총액 (물품 + 배송비 + 세금)</span><b id="won">'+fmt(r.total)+'원</b></div><div class="l"><span>그중 세금</span><b>'+fmt(r.tax)+'원</b></div></div>';
+  if(r.lowDuty)h+='<p class="note">관세가 1만원 미만이에요. 징수금액의 최저한 규정(관세법 시행령 제37조) 때문에 실제로는 관세가 0원일 수 있어요. 부가세가 어떻게 달라지는지는 확인하지 못했으니 세관에 확인하세요.</p>';
+  if(r.mokrok&&price>150&&r.exempt)h+='<p class="note">미국발 200달러 면세는 목록통관 대상 물품일 때만이에요. 목록통관 제외 품목이면 150달러 기준이에요.</p>';
+  $('res').innerHTML=h;$('meta').textContent='내가 넣은 환율 1달러 = '+rate.toLocaleString('ko-KR')+'원 기준이에요.';
+  var L=['해외직구 예상 관부가세 (내가 넣은 환율 1달러 = '+rate.toLocaleString('ko-KR')+'원)',(r.exempt?'면세 한도 안':'면세 한도 초과')+' — 물품 가격 '+usd(r.priceC)+'달러, 한도 '+usd(r.limitC)+'달러','총과세가격 '+fmt(r.baseWon)+'원',
+    r.exempt?'관세 0원, 부가세 0원 (면세)':'관세 '+fmt(r.duty)+'원 ('+duty+'%), 부가세 '+fmt(r.vat)+'원','예상 총액 '+fmt(r.total)+'원 (세금 '+fmt(r.tax)+'원)','※ 참고용이에요. 실제 세액은 통관 시점의 환율과 세율에 따라 달라질 수 있습니다.'];
+  window._txt=L.join('\n');window._lines=L;$('copy').disabled=$('save').disabled=false}
+var cur=null;
+function wrap(c,t,w){var out=[],cu='';t.split('').forEach(function(ch){if(c.measureText(cu+ch).width>w){out.push(cu);cu=ch}else cu+=ch});if(cu)out.push(cu);return out}
+function saveImg(){if(!window._lines)return;var W=1080,pad=56,L=window._lines,cv=document.createElement('canvas'),c=cv.getContext('2d');cv.width=W;var FONT='"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif';
+  c.font='32px '+FONT;var rows=L.map(function(l){return wrap(c,l,W-pad*2)});
+  var H=130+rows.reduce(function(a,ls){return a+ls.length*50+16},0)+90;cv.height=H;
+  c.fillStyle='#E4E9F0';c.fillRect(0,0,W,H);c.fillStyle='#fff';c.fillRect(24,24,W-48,H-48);c.fillStyle='#1B2447';c.fillRect(24,24,W-48,10);
+  c.font='800 40px '+FONT;c.fillText('해외직구 예상 관부가세',pad,100);var y=150;
+  rows.forEach(function(ls,i){var last=i>=L.length-1;c.font=(i===4?'800 36px ':'32px ')+FONT;c.fillStyle=last?'#B3261E':'#1B2447';if(i===0){c.fillStyle='#58627F';c.font='28px '+FONT}
+    ls.forEach(function(l,j){c.fillText(l,pad,y+38+j*50)});y+=ls.length*50+16});
+  c.fillStyle='#58627F';c.font='24px '+FONT;c.fillText('JW의 AI 작업실 · hayanfog9.github.io/direct-tax-9k4w/',pad,H-52);
+  cv.toBlob(function(bl){if(!bl){toast('이미지를 만들지 못했어요');return}var a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='direct-tax.png';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(a.href)},1000);toast('이미지를 저장했어요')},'image/png')}
+$('go').onclick=run;$('save').onclick=saveImg;
+$('copy').onclick=function(){var t=window._txt||'';function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('복사했어요')}catch(e){toast('복사하지 못했어요. 직접 선택해서 복사하세요')}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},fb)}else fb()};
+var NOTE0=$('exnote').innerHTML;
+$('ex').onclick=function(){$('price').value='180';$('ship').value='20';$('rate').value='1400';$('from').value='other';$('excl').value='no';$('duty').selectedIndex=1;$('dutyc').style.display='none';
+  $('exnote').textContent='환율 1달러 = 1,400원은 가상의 예시 값이에요. 실제 과세환율은 관세청 예상세액 조회 화면에서 확인해서 직접 넣어 주세요.';run()};
+$('clr').onclick=function(){['price','ship','rate','dutyc'].forEach(function(i){$(i).value=''});$('from').value='other';$('excl').value='no';$('duty').value='';$('dutyc').style.display='none';$('err').textContent='';
+  $('res').innerHTML='<p class="empty">물품 가격, 환율, 관세율을 넣고 "세금 계산"을 누르세요.</p>';$('copy').disabled=$('save').disabled=true;$('exnote').innerHTML=NOTE0;$('meta').textContent='값을 넣고 "세금 계산"을 누르면 면세 여부와 예상 세금을 보여 줘요.'};
+window.DT={calc:calc};
+</script>
+<script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
