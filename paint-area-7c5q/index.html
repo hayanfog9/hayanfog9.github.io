@@ -1,0 +1,45 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>도배·페인트 면적 계산기 | JW의 AI 작업실</title><meta name="description" content="방의 가로·세로·높이와 문·창문 면적, 페인트 1리터당 칠하는 넓이를 넣으면 벽 면적과 필요한 페인트 리터 수를 계산해 줘요. 입력한 값은 저장하지 않아요."><link rel="canonical" href="https://hayanfog9.github.io/paint-area-7c5q/"><meta property="og:type" content="website"><meta property="og:title" content="도배·페인트 면적 계산기"><meta property="og:description" content="방 크기를 넣으면 벽 면적과 필요한 페인트 양을 바로 계산해요."><meta property="og:url" content="https://hayanfog9.github.io/paint-area-7c5q/"><meta name="robots" content="index,follow">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "도배·페인트 면적 계산기", "url": "https://hayanfog9.github.io/paint-area-7c5q/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "ko", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='7' fill='%230f5c58'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23e6a21a'/%3E%3C/svg%3E">
+<style>:root{--bg:#eaf2f1;--card:#fff;--line:#cfe0de;--text:#16302f;--sub:#52706e;--main:#0f5c58;--main2:#0b4340;--acc:#e6a21a;--sans:system-ui,-apple-system,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--sans);-webkit-text-size-adjust:100%;font-variant-numeric:tabular-nums}
+.wrap{max-width:480px;margin:0 auto;padding:14px 14px 60px}a{color:var(--main)}button,input,select{font:inherit;color:inherit}
+header{background:linear-gradient(180deg,var(--main),var(--main2));color:#fff;border-radius:16px;padding:20px}header .kind{font-size:12px;letter-spacing:.2em;color:#a9e0da}
+header h1{margin:8px 0 6px;font-size:28px;line-height:1.2}header p{margin:0;color:#d4efeb;font-size:15px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:14px}
+label{display:block;font-weight:700;margin:12px 0 6px}label:first-child{margin-top:0}
+.in{display:flex;align-items:center;gap:8px}.in input{flex:1;min-width:0;padding:12px;border:2px solid var(--main);border-radius:10px;font-size:18px;background:#fff}.in span{color:var(--sub);white-space:nowrap}
+.hint{font-size:13px;color:var(--sub);margin:4px 0 0}
+.head{font-size:22px;font-weight:800;line-height:1.35;color:var(--main2)}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:15px}td,th{padding:9px 6px;border-bottom:1px solid var(--line);text-align:left}td:last-child{text-align:right;font-weight:700}
+.warn{background:#fff7e0;border:1px solid #f0d58a;border-radius:10px;padding:10px 12px;margin-top:12px;font-size:14px}
+.btn{display:block;width:100%;margin-top:10px;padding:13px;border:2px solid var(--main);border-radius:10px;background:var(--main);color:#fff;font-weight:700;font-size:16px;cursor:pointer}.btn.line{background:#fff;color:var(--main)}
+.msg{min-height:1.4em;font-size:14px;color:var(--main);margin-top:6px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:14px}summary{font-weight:700;cursor:pointer}details li{margin:6px 0;font-size:14px}
+nav.links{margin-top:14px;display:grid;gap:8px}nav.links a{display:block;padding:12px;border:1px solid var(--line);background:#fff;border-radius:10px;text-decoration:none;font-weight:600}
+footer{margin-top:18px;font-size:13px;color:var(--sub)}
+input:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #f0b400;outline-offset:2px}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1b1a;--card:#14292a;--line:#244342;--text:#e3f2f0;--sub:#9cbab6;--main:#46b8ae;--main2:#e3f2f0}.in input{background:#0e1b1a}.btn{color:#04201e}.btn.line{background:#14292a;color:var(--main)}.warn{background:#2c2610;border-color:#6b5a1e}nav.links a{background:#14292a}header{background:linear-gradient(180deg,#0f5c58,#0b4340)}header h1,header p{color:#fff}}</style></head><body><div class="wrap">
+<header><div class="kind">생활 계산기</div><h1>도배·페인트 면적 계산기</h1><p>방 크기를 넣으면 벽 면적과 필요한 페인트 양을 바로 계산해요.</p></header>
+<section class="box" aria-label="입력"><label for="a">가로</label><div class="in"><input id="a" type="number" inputmode="decimal" min="1" max="30" step="0.1" value="3"><span>m</span></div><label for="b">세로</label><div class="in"><input id="b" type="number" inputmode="decimal" min="1" max="30" step="0.1" value="4"><span>m</span></div><label for="h">높이</label><div class="in"><input id="h" type="number" inputmode="decimal" min="1.5" max="6" step="0.1" value="2.4"><span>m</span></div><label for="o">문·창문 면적</label><div class="in"><input id="o" type="number" inputmode="decimal" min="0" max="50" step="0.5" value="4"><span>㎡</span></div><label for="c">페인트 1L로 칠하는 넓이</label><div class="in"><input id="c" type="number" inputmode="decimal" min="2" max="30" step="0.5" value="10"><span>㎡</span></div><p class="hint">제품 포장에 적혀 있어요.</p><label for="n">칠하는 횟수</label><div class="in"><input id="n" type="number" inputmode="decimal" min="1" max="4" step="1" value="2"><span>번</span></div><p class="hint">입력한 값은 이 기기 안에서만 계산하고 어디에도 보내지 않아요.</p></section>
+<section class="box" aria-live="polite" aria-label="결과"><div class="head" id="head"></div><table id="rows"></table><div class="warn" id="note"></div>
+<button class="btn" id="bLink">이 결과 주소 복사</button><div class="msg" id="msg" role="status"></div></section>
+<details><summary>계산 방법과 출처</summary><ul><li><b>벽 전체 넓이</b> = 2 × (가로 + 세로) × 높이예요.</li><li><b>필요한 양</b> = (벽 전체 − 문·창문) ÷ 1L당 넓이 × 칠하는 횟수이고, 살 때는 올림해요.</li><li>천장, 걸레받이, 벽지 재단 손실은 넣지 않은 어림값이에요.</li></ul></details>
+<nav class="links" aria-label="다른 도구"><a href="https://hayanfog9.github.io/">JW의 AI 작업실 계산기 모음</a><a href="https://blog.naver.com/hayanfog">블로그에서 자세한 설명 보기</a></nav>
+<footer>만든 곳: <a href="https://hayanfog9.github.io/">JW의 AI 작업실</a> · 입력한 값은 서버에 저장하지 않아요. 방문 횟수만 개인정보 없이 세어요(GoatCounter).</footer></div>
+<script>
+const IDS=["a", "b", "h", "o", "c", "n"],LIM={"a": [1, 30], "b": [1, 30], "h": [1.5, 6], "o": [0, 50], "c": [2, 30], "n": [1, 4]};const $=id=>document.getElementById(id);
+function calc(v){const wall=2*(v.a+v.b)*v.h;const net=wall-v.o;const L=net/v.c*v.n;const t=x=>x.toFixed(1).replace(/\.0$/,'');
+return {head:'페인트가 '+Math.ceil(L-1e-9)+'리터 필요해요 (벽 '+t(net)+'㎡)',
+rows:[['벽 전체 넓이',t(wall)+' ㎡'],['문·창문 뺀 넓이',t(net)+' ㎡'],['필요한 양 ('+v.n+'번 칠함)',L.toFixed(2).replace(/0$/,'')+' L'],['사야 할 양(올림)',Math.ceil(L-1e-9)+' L']],
+note:'제품마다 칠해지는 넓이가 달라요. 천장·걸레받이와 벽지 재단 손실은 넣지 않았어요. 포장에 적힌 숫자로 직접 확인하세요.'}}
+function nv(id){const x=parseFloat($(id).value);return isFinite(x)?x:NaN}
+function render(){const v={};let bad=false;IDS.forEach(id=>{const x=nv(id);v[id]=x;if(!(x>=LIM[id][0]&&x<=LIM[id][1]))bad=true});
+ if(bad){$("head").textContent="숫자를 확인해 주세요.";$("rows").innerHTML="";$("note").textContent="각 칸의 허용 범위 안에서 숫자를 넣어 주세요.";return}
+ const r=calc(v);$("head").textContent=r.head;$("rows").innerHTML=r.rows.map(a=>"<tr><td>"+a[0]+"</td><td>"+a[1]+"</td></tr>").join("");$("note").textContent=r.note}
+IDS.forEach(id=>$(id).addEventListener("input",render));
+$("bLink").onclick=()=>{const q=new URLSearchParams();IDS.forEach(id=>q.set(id,$(id).value));const u=location.origin+location.pathname+"?"+q;const ok=()=>{$("msg").textContent="주소를 복사했어요."};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(ok,()=>{$("msg").textContent=u});else $("msg").textContent=u};
+try{const q=new URLSearchParams(location.search);IDS.forEach(id=>{if(q.has(id)){const x=parseFloat(q.get(id));if(x>=LIM[id][0]&&x<=LIM[id][1])$(id).value=x}})}catch(e){}
+render();
+</script><script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script></body></html>

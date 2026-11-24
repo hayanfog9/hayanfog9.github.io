@@ -1,0 +1,45 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>렌탈 vs 구매 비교 | JW의 AI 작업실</title><meta name="description" content="정수기·안마의자처럼 빌릴지 살지 고민될 때, 월 렌탈료·사용 기간·구매가·소모품비를 넣으면 총비용 차이를 계산해 줘요. 입력한 값은 저장하지 않아요."><link rel="canonical" href="https://hayanfog9.github.io/rent-buy-4h6k/"><meta property="og:type" content="website"><meta property="og:title" content="렌탈 vs 구매 비교"><meta property="og:description" content="월 렌탈료와 구매가를 넣으면 몇 년 쓸 때 어느 쪽이 싼지 바로 비교해요."><meta property="og:url" content="https://hayanfog9.github.io/rent-buy-4h6k/"><meta name="robots" content="index,follow">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "렌탈 vs 구매 비교", "url": "https://hayanfog9.github.io/rent-buy-4h6k/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "ko", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='7' fill='%230f5c58'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23e6a21a'/%3E%3C/svg%3E">
+<style>:root{--bg:#eaf2f1;--card:#fff;--line:#cfe0de;--text:#16302f;--sub:#52706e;--main:#0f5c58;--main2:#0b4340;--acc:#e6a21a;--sans:system-ui,-apple-system,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--sans);-webkit-text-size-adjust:100%;font-variant-numeric:tabular-nums}
+.wrap{max-width:480px;margin:0 auto;padding:14px 14px 60px}a{color:var(--main)}button,input,select{font:inherit;color:inherit}
+header{background:linear-gradient(180deg,var(--main),var(--main2));color:#fff;border-radius:16px;padding:20px}header .kind{font-size:12px;letter-spacing:.2em;color:#a9e0da}
+header h1{margin:8px 0 6px;font-size:28px;line-height:1.2}header p{margin:0;color:#d4efeb;font-size:15px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:14px}
+label{display:block;font-weight:700;margin:12px 0 6px}label:first-child{margin-top:0}
+.in{display:flex;align-items:center;gap:8px}.in input{flex:1;min-width:0;padding:12px;border:2px solid var(--main);border-radius:10px;font-size:18px;background:#fff}.in span{color:var(--sub);white-space:nowrap}
+.hint{font-size:13px;color:var(--sub);margin:4px 0 0}
+.head{font-size:22px;font-weight:800;line-height:1.35;color:var(--main2)}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:15px}td,th{padding:9px 6px;border-bottom:1px solid var(--line);text-align:left}td:last-child{text-align:right;font-weight:700}
+.warn{background:#fff7e0;border:1px solid #f0d58a;border-radius:10px;padding:10px 12px;margin-top:12px;font-size:14px}
+.btn{display:block;width:100%;margin-top:10px;padding:13px;border:2px solid var(--main);border-radius:10px;background:var(--main);color:#fff;font-weight:700;font-size:16px;cursor:pointer}.btn.line{background:#fff;color:var(--main)}
+.msg{min-height:1.4em;font-size:14px;color:var(--main);margin-top:6px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:14px}summary{font-weight:700;cursor:pointer}details li{margin:6px 0;font-size:14px}
+nav.links{margin-top:14px;display:grid;gap:8px}nav.links a{display:block;padding:12px;border:1px solid var(--line);background:#fff;border-radius:10px;text-decoration:none;font-weight:600}
+footer{margin-top:18px;font-size:13px;color:var(--sub)}
+input:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #f0b400;outline-offset:2px}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1b1a;--card:#14292a;--line:#244342;--text:#e3f2f0;--sub:#9cbab6;--main:#46b8ae;--main2:#e3f2f0}.in input{background:#0e1b1a}.btn{color:#04201e}.btn.line{background:#14292a;color:var(--main)}.warn{background:#2c2610;border-color:#6b5a1e}nav.links a{background:#14292a}header{background:linear-gradient(180deg,#0f5c58,#0b4340)}header h1,header p{color:#fff}}</style></head><body><div class="wrap">
+<header><div class="kind">생활 계산기</div><h1>렌탈 vs 구매 비교</h1><p>월 렌탈료와 구매가를 넣으면 몇 년 쓸 때 어느 쪽이 싼지 바로 비교해요.</p></header>
+<section class="box" aria-label="입력"><label for="r">월 렌탈료</label><div class="in"><input id="r" type="number" inputmode="decimal" min="1000" max="1000000" step="1000" value="25000"><span>원</span></div><label for="y">사용 기간</label><div class="in"><input id="y" type="number" inputmode="decimal" min="1" max="15" step="1" value="5"><span>년</span></div><label for="b">구매 가격</label><div class="in"><input id="b" type="number" inputmode="decimal" min="10000" max="20000000" step="10000" value="800000"><span>원</span></div><label for="f">소모품비(필터 등) 1년</label><div class="in"><input id="f" type="number" inputmode="decimal" min="0" max="2000000" step="1000" value="60000"><span>원</span></div><p class="hint">렌탈에 점검·소모품이 포함됐다면 구매 쪽에만 넣어요.</p><p class="hint">입력한 값은 이 기기 안에서만 계산하고 어디에도 보내지 않아요.</p></section>
+<section class="box" aria-live="polite" aria-label="결과"><div class="head" id="head"></div><table id="rows"></table><div class="warn" id="note"></div>
+<button class="btn" id="bLink">이 결과 주소 복사</button><div class="msg" id="msg" role="status"></div></section>
+<details><summary>계산 방법과 출처</summary><ul><li><b>렌탈 총비용</b> = 월 렌탈료 × 12 × 사용 기간이에요.</li><li><b>구매 총비용</b> = 구매 가격 + 소모품비 × 사용 기간이에요.</li><li>차이는 렌탈 총비용에서 구매 총비용을 뺀 값이에요. 설치·점검 서비스, 중도 해지 위약금, 중고 판매 가치는 넣지 않았어요.</li></ul></details>
+<nav class="links" aria-label="다른 도구"><a href="https://hayanfog9.github.io/">JW의 AI 작업실 계산기 모음</a><a href="https://blog.naver.com/hayanfog">블로그에서 자세한 설명 보기</a></nav>
+<footer>만든 곳: <a href="https://hayanfog9.github.io/">JW의 AI 작업실</a> · 입력한 값은 서버에 저장하지 않아요. 방문 횟수만 개인정보 없이 세어요(GoatCounter).</footer></div>
+<script>
+const IDS=["r", "y", "b", "f"],LIM={"r": [1000, 1000000], "y": [1, 15], "b": [10000, 20000000], "f": [0, 2000000]};const $=id=>document.getElementById(id);
+function calc(v){const rent=v.r*12*v.y;const buy=v.b+v.f*v.y;const d=rent-buy;const w=n=>Math.round(Math.abs(n)).toLocaleString('ko-KR')+'원';
+return {head:d>=0?(v.y+'년 쓰면 사는 쪽이 '+w(d)+' 이득이에요'):(v.y+'년 쓰면 빌리는 쪽이 '+w(d)+' 이득이에요'),
+rows:[['렌탈 총비용 ('+v.y+'년)',w(rent)],['구매 총비용 (본체+소모품)',w(buy)],['차이',(d>=0?'구매 ':'렌탈 ')+w(d)+' 저렴']],
+note:'설치·방문 점검 같은 서비스 가치는 숫자에 넣지 않았어요. 실제 가격과 약정 조건은 판매처에서 직접 확인하세요.'}}
+function nv(id){const x=parseFloat($(id).value);return isFinite(x)?x:NaN}
+function render(){const v={};let bad=false;IDS.forEach(id=>{const x=nv(id);v[id]=x;if(!(x>=LIM[id][0]&&x<=LIM[id][1]))bad=true});
+ if(bad){$("head").textContent="숫자를 확인해 주세요.";$("rows").innerHTML="";$("note").textContent="각 칸의 허용 범위 안에서 숫자를 넣어 주세요.";return}
+ const r=calc(v);$("head").textContent=r.head;$("rows").innerHTML=r.rows.map(a=>"<tr><td>"+a[0]+"</td><td>"+a[1]+"</td></tr>").join("");$("note").textContent=r.note}
+IDS.forEach(id=>$(id).addEventListener("input",render));
+$("bLink").onclick=()=>{const q=new URLSearchParams();IDS.forEach(id=>q.set(id,$(id).value));const u=location.origin+location.pathname+"?"+q;const ok=()=>{$("msg").textContent="주소를 복사했어요."};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(ok,()=>{$("msg").textContent=u});else $("msg").textContent=u};
+try{const q=new URLSearchParams(location.search);IDS.forEach(id=>{if(q.has(id)){const x=parseFloat(q.get(id));if(x>=LIM[id][0]&&x<=LIM[id][1])$(id).value=x}})}catch(e){}
+render();
+</script><script data-goatcounter="https://hayanfog.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script></body></html>
